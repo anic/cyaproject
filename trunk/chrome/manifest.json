@@ -4,7 +4,7 @@
 
 	"description": "用于改善各种系统的用户体验，减少复杂操作，提升工作效率。",
 	"background_page": "background.html",
-	"permissions": ["tabs", "http://*/*", "notifications"],
+	"permissions": ["tabs", "http://*/*", "notifications", "management"],
 	"content_scripts": [
 		{
 			"matches": ["http://xqp2.gz.gmcc.net/*"],
@@ -28,7 +28,7 @@
 		"64": "image/home64.png"
 	},
 	"browser_action": {
-		"default_icon": "image/home32.png",
+		"default_icon": "image/home.png",
 		"popup": "popup.html",
 		"name": "我的Office助手"
 	}
