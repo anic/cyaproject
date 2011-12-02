@@ -1,0 +1,35 @@
+{
+	"name": "我的Office助手",
+	"version": "0.1",
+
+	"description": "用于改善各种系统的用户体验，减少复杂操作，提升工作效率。",
+	"background_page": "background.html",
+	"permissions": ["tabs", "http://*/*", "notifications"],
+	"content_scripts": [
+		{
+			"matches": ["http://xqp2.gz.gmcc.net/*"],
+			"all_frames": true,
+			"js": ["js/inject_common.js", "js/inject_xqp_search.js"]
+		}, {
+			"matches": ["http://clgl.gz.gmcc.net/application/recordtaxiedit"],
+			"js": ["js/inject_common.js", "js/inject_taxi.js"]
+		}, {
+			"matches": ["http://www.baidu.com/"],
+			"js": ["js/inject_common.js", "js/inject_baidu.js"]
+		}, {
+			"matches": ["http://contacts.services.gmcc.net/*"],
+			"all_frames": true,
+			"css": ["css/inject_albumn.css"]
+		}
+	],
+	"icons": {
+		"32": "image/home32.png",
+		"48": "image/home48.png",
+		"64": "image/home64.png"
+	},
+	"browser_action": {
+		"default_icon": "image/home32.png",
+		"popup": "popup.html",
+		"name": "我的Office助手"
+	}
+}

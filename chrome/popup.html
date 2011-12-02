@@ -1,0 +1,39 @@
+<!DOCTYPE  HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title></title>
+		<script type="text/javascript">
+			
+			function funFetch() {
+				chrome.tabs.executeScript(undefined, {
+					file : "js/fetch.js",
+					allFrames : true
+				});
+				return false;
+			}
+
+			function funClear() {
+				chrome.tabs.executeScript(undefined, {
+					code : "window.localStorage.clear();alert('已清空');"
+				});
+				return false;
+			}
+
+			function funAnalyse() { 
+				chrome.extension.getBackgroundPage().funAnalyse();
+			}
+		</script>
+	</head>
+	<body style="width:200px">
+		<div>
+			<a id="btnFetch" href="javascript:funFetch();"> Fetch </a>
+		</div>
+		<div>
+			<a id="btnAnalyse" href="javascript:funAnalyse();">Analyse </a><span id="spCur">0</span> / <span id="spTotal">0</span>
+		</div>
+		<div>
+			<a id="btnClear" href="javascript:funClear();"> Clear </a>
+		</div>
+	</body>
+</html>
