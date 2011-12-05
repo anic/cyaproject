@@ -46,6 +46,12 @@
 					 * */
 					var cs = gManifest.content_scripts;
 					var url = tab.url;
+					//这个url不像location.href（末尾有/），这个是直接显示的,为了形成匹配，添加“/”
+					var pathMatch = url.match(/\//g);
+					if(pathMatch && pathMatch.length == 2) {
+						url = url + "/";
+					}
+
 					var reg, m;
 
 					for(var i = 0, size = cs.length; i < size; ++i) {
@@ -57,9 +63,7 @@
 
 						for(var j = 0, len = matches.length; j < len; ++j) {
 							m = matches[j];
-							//如果匹配串中包含*，则直接匹配，否则去掉末尾的 "/"，这是match中的path要求有"/"
-							reg = (m.indexOf("*") != -1) ? new RegExp(m) : new RegExp(m.substr(0, m.length - 1));
-
+							reg = new RegExp(m);
 							if(reg.test(url)) {
 
 								//路径匹配，则使用彩色图标，标示运行中
