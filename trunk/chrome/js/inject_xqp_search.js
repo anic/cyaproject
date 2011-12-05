@@ -1,3 +1,9 @@
+/**
+ 优化：
+ 1 搜索。如果搜索工单号，直接重定向到目标；在工单号中回车也可以直接搜索
+ 2 禁用了收缩的按钮，使得可以使用回车进行搜索
+ */
+
 var aSearch;
 function init() {
 
@@ -10,7 +16,7 @@ function init() {
 	//window.frames[4].document.getElementById("ctl00_cphBody_txtWorkId")
 	var txtAVId = document.getElementById("ctl00_cphBody_txtWorkId");
 	aSearch = document.createElement("a");
-	aSearch.innerHTML = "search";
+	aSearch.innerHTML = "搜索";
 	aSearch.href = "#";
 	aSearch.onclick = function() {
 		var avId = txtAVId.value;
@@ -24,7 +30,18 @@ function init() {
 	};
 	txtAVId.parentNode.appendChild(aSearch);
 
-	
+	txtAVId.addEventListener("keyup", function(e) {
+		if(e.keyCode == 13)//ENTER
+		{
+			aSearch.onclick();
+			e.stopPropagation();
+			return false;
+		}
+	});
+	var divTitle = document.getElementsByClassName("searchTitle")[0];
+	var btn = divTitle.children[1];
+	btn.disabled = true;
+
 }
 
 var xmlHttp;
@@ -43,7 +60,7 @@ function searchList(id) {
 		xmlHttp = new XMLHttpRequest();
 	}
 
-	window.log("searching...");
+	window.log("1/3 搜索...");
 	xmlHttp.open("GET", url);
 	xmlHttp.onreadystatechange = callback;
 	xmlHttp.send(null);
@@ -68,14 +85,14 @@ function callback() {
 			 </tr>
 
 			 * */
-			window.log("analyzing...");
+			window.log("2/3 分析...");
 
 			var resultArr = str.match(/(WorkflowView.aspx\?wiid=.*)[\'|\"]/m);
 			//alert(str.indexOf("WorkflowView.aspx"));
 			//alert(resultArr);
 			if(!!resultArr) {
 				var url = resultArr[1];
-				window.log("redirecting...");
+				window.log("3/3 定位...");
 				window.location.href = url;
 
 			} else {
@@ -85,7 +102,6 @@ function callback() {
 		}
 	}
 }
-
 
 function addDate(type, NumDay, vdate) {
 	var date = new Date(vdate);

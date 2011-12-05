@@ -1,3 +1,8 @@
-table {
+/**
+ 1 解决通讯录查询中chrome无法正常显示的问题
+ */
+
+table,div{
 	background: #ffffff;
 }
+

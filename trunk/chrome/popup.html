@@ -10,6 +10,9 @@
 				height: 32px;
 				border: 0;
 			}
+			li {
+				cursor: pointer;
+			}
 		</style>
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript">
@@ -17,7 +20,11 @@
 				var bg = chrome.extension.getBackgroundPage();
 				$("#description").append(bg.gExInfo.description);
 			});
-
+			function openTab(url) {
+				chrome.tabs.create({
+					url : url
+				});
+			}
 		</script>
 	</head>
 	<body style="width:180px">
@@ -27,11 +34,16 @@
 		<div class="products submenu" style="z-index: 90; display: block; ">
 			<ul>
 				<li>
-					<a href="#"><img src="image/app/login.png" class="app" alt=""/><h2>登录Portal</h2> <!-- 					<p>
+					<img src="image/app/login.png" class="app" alt=""/><h2>登录Portal</h2><!-- 					<p>
 					<a href="#">More information about this product</a>
-					</p> --> </a>
+					</p> -->
 				</li>
-				<li><img src="image/app/credit-card.png" class="app" alt=""/><h2>查找人员</h2>
+				<li><img src="image/app/credit-card.png" class="app" alt=""/>
+					<-- http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app 添加f=app参数，方便自动登录-->
+					<h2><a href="javascript:openTab('http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app')"> 查找人员</a></h2>
+				</li>
+				<li>
+					<a href="javascript:openTab('app/doubanfinder.html')">豆瓣爬虫</a>
 				</li>
 			</ul>
 		</div>
