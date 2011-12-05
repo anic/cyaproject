@@ -20,6 +20,9 @@
 			"matches": ["http://contacts.services.gmcc.net/*"],
 			"all_frames": true,
 			"css": ["css/inject_albumn.css"]
+		}, {
+			"matches": ["http://portal.gmcc.net/portal/redirect.htm?*app"],
+			"js": ["js/inject_common.js", "js/jquery.js", "js/inject_portal.js"]
 		}
 	],
 	"icons": {

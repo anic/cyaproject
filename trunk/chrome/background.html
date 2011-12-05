@@ -63,6 +63,8 @@
 
 						for(var j = 0, len = matches.length; j < len; ++j) {
 							m = matches[j];
+							if(m.indexOf("*"))
+								m = m.replace("*", ".*");
 							reg = new RegExp(m);
 							if(reg.test(url)) {
 
