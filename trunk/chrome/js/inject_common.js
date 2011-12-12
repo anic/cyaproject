@@ -8,6 +8,7 @@ window.log = log = function(m, color) {
 	var messageBox = document.getElementById("messageBox"), message = document.getElementById("message");
 	messageBox.style.filter = "alpha(opacity=100)";
 	messageBox.style.visibility = "visible";
+	messageBox.style.zIndex = "1000";
 
 	message.style.visibility = "visible";
 	//录入内容
@@ -26,6 +27,7 @@ var _i = 100;
 function close() {
 	if(_i <= 0) {
 		message.style.visibility = "hidden";
+		message.style.zIndex = "-1000";
 
 		//还原属性和参数
 		_i = 100;
@@ -54,7 +56,7 @@ function close() {
 	messageBox.style.position = "absolute";
 	messageBox.style.top = "10px";
 	messageBox.style.left = "10px";
-	messageBox.style.zIndex = "1000";
+	messageBox.style.zIndex = "-1000";
 	messageBox.style.width = "200px";
 	messageBox.style.height = "30px";
 	messageBox.style.borderRadius = "2px";

@@ -3,6 +3,8 @@
  */
 
 $(function() {
+	
+	
 	form = $("<form></form>");
 	form.attr('action', 'http://portal.gmcc.net/amserver/UI/Login');
 	form.attr('method', 'post');
