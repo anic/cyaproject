@@ -30,14 +30,16 @@ function init() {
 	};
 	txtAVId.parentNode.appendChild(aSearch);
 
-	txtAVId.addEventListener("keyup", function(e) {
+	//不用addEventListener,防止回车直接提交数据
+	txtAVId.onkeyup = function(e) {
 		if(e.keyCode == 13)//ENTER
 		{
 			aSearch.onclick();
 			e.stopPropagation();
+			e.preventDefault();
 			return false;
 		}
-	});
+	};
 	var divTitle = document.getElementsByClassName("searchTitle")[0];
 	var btn = divTitle.children[1];
 	btn.disabled = true;

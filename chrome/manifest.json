@@ -14,7 +14,7 @@
 			"matches": ["http://clgl.gz.gmcc.net/application/recordtaxiedit"],
 			"js": ["js/inject_common.js", "js/inject_taxi.js"]
 		}, {
-			"matches": ["http://www.baidu.com/"],
+			"matches": ["http://www.baidu.com/*"],
 			"js": ["js/inject_common.js", "js/inject_baidu.js"]
 		}, {
 			"matches": ["http://contacts.services.gmcc.net/*"],
