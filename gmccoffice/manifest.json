@@ -5,7 +5,7 @@
 	"description": "用于改善各种系统的用户体验，减少复杂操作，提升工作效率。",
 	"background_page": "background.html",
 	"options_page": "feature.html",
-	"permissions": ["tabs", "http://*/*", "notifications", "management"],
+	"permissions": ["tabs", "http://*/*"],
 	"content_scripts": [
 		{
 			"matches": ["http://contacts.services.gmcc.net/*"],
