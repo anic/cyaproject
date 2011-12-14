@@ -1,5 +1,5 @@
 {
-	"name": "我的Office助手",
+	"name": "GMCC Office助手",
 	"version": "0.1",
 
 	"description": "用于改善各种系统的用户体验，减少复杂操作，提升工作效率。",
@@ -22,15 +22,15 @@
 			"css": ["css/inject_albumn.css"]
 		}, {
 			"matches": ["http://portal.gmcc.net/portal/redirect.htm?*app"],
-			"js": ["js/inject_common.js", "js/jquery.js", "js/inject_portal.js"]
+			"js": ["js/inject_common.js", "js/jquery.js", "js/inject_portal_login.js"]
 		}, {
 			"matches": ["http://pac.gmcc.net/*"],
 			"all_frames": true,
-			"run_at": "document_start",
-			"js": ["js/inject_oa.js"]
+			"run_at": "document_end",
+			"js": ["js/jscssfile_loader.js", "js/inject_oa_middle.js"]
 		}, {
 			"matches": ["http://pac.gmcc.net/"],
-			"js": ["js/inject_portal_login.js"]
+			"js": ["js/inject_pac_login.js"]
 		}
 	],
 	"icons": {
@@ -41,6 +41,6 @@
 	"browser_action": {
 		"default_icon": "image/home.png",
 		"popup": "popup.html",
-		"name": "我的Office助手"
+		"name": "GMCC Office助手"
 	}
 }
