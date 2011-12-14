@@ -1,0 +1,29 @@
+{
+	"name": "GMCC Office助手",
+	"version": "0.1",
+
+	"description": "用于改善各种系统的用户体验，减少复杂操作，提升工作效率。",
+	"background_page": "background.html",
+	"options_page": "feature.html",
+	"permissions": ["tabs", "http://*/*", "notifications", "management"],
+	"content_scripts": [
+		{
+			"matches": ["http://contacts.services.gmcc.net/*"],
+			"all_frames": true,
+			"css": ["css/inject_albumn.css"]
+		}, {
+			"matches": ["http://pac.gmcc.net/*"],
+			"all_frames": true,
+			"run_at": "document_end",
+			"js": ["js/jscssfile_loader.js", "js/inject_oa_middle.js"]
+		}, {
+			"matches": ["http://pac.gmcc.net/"],
+			"js": ["js/inject_pac_login.js"]
+		}
+	],
+	"icons": {
+		"32": "image/home32.png",
+		"48": "image/home48.png",
+		"64": "image/home64.png"
+	}
+}
