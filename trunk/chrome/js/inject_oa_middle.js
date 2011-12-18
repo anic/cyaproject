@@ -11,6 +11,10 @@
 
 	var bodyContent = document.body.innerHTML;
 	var headContent = document.head.innerHTML;
+	
+	//可以访问
+	//alert(document.getElementsByTagName("head")[0].getElementsByTagName("script")[0].outerHTML);
+
 	var linkMatch = headContent.match(/<link [^<]*href="([^"]*)"[^<]*>/);
 	var scriptMatch = headContent.match(/<script[^>]*>([\w\W.\n]*)<\/script>/m);
 
