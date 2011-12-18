@@ -1,6 +1,6 @@
 {
 	"name": "My Office助手",
-	"version": "0.1",
+	"version": "0.1.1",
 
 	"description": "用于改善各种系统的用户体验，减少复杂操作，提升工作效率。",
 	"background_page": "background.html",
@@ -28,10 +28,15 @@
 			"matches": ["http://pac.gmcc.net/*"],
 			"all_frames": true,
 			"run_at": "document_end",
-			"js": ["js/jscssfile_loader.js", "js/inject_oa_middle.js"]
+			"js": ["js/jscssfile_loader.js", "js/inject_oa_middle.js"],
+			"css": ["css/inject_oa_middle.css"]
 		}, {
-			"matches": ["http://pac.gmcc.net/"],
+			"matches": ["http://pac.gmcc.net/", "http://pac.gmcc.net/index.html*"],
 			"js": ["js/inject_pac_login.js"]
+		}, {
+			"matches": ["http://ad.services.gmcc.net/*"],
+			"run_at": "document_end",
+			"js": ["js/inject_oa_ad.js"]
 		}
 	],
 	"icons": {
