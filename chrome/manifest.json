@@ -28,15 +28,19 @@
 			"matches": ["http://pac.gmcc.net/*"],
 			"all_frames": true,
 			"run_at": "document_end",
-			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_middle.js"],
+			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_middle.js", "inject/portal/inject_oa_ad.js"],
 			"css": ["inject/portal/inject_oa_common.css"]
 		}, {
 			"matches": ["http://pac.gmcc.net/", "http://pac.gmcc.net/index.html*"],
 			"js": ["inject/portal/inject_pac_login.js"]
 		}, {
+			"matches": ["http://pac.gmcc.net/smc/*","http://pac.gmcc.net/portal/*"],
+			"all_frames": true,
+			"js": ["inject/portal/inject_oa_frame.js"]
+		}, {
 			"matches": ["http://ad.services.gmcc.net/*"],
 			"run_at": "document_end",
-			"js": ["inject/portal/inject_oa_ad.js"]
+			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_ad.js"]
 		}
 	],
 	"icons": {
