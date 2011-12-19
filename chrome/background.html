@@ -90,6 +90,26 @@
 				chrome.tabs.onUpdated.addListener(function(tabId, selectInfo) {
 					chrome.tabs.get(tabId, onTabChange);
 				});
+
+				chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+					var args = request.args;
+					var result = [];
+					switch(request.cmd) {
+						case"setting":
+							if(args) {
+								for(var i = 0, len = args.length; i < len; ++i) {
+									result.push(setting(args[i]));
+								}
+							}
+							sendResponse({
+								result : result
+							});
+							break;
+						default:
+							sendResponse({});
+							break;
+					}
+				});
 			})();
 
 			var gExInfo;
@@ -129,6 +149,18 @@
 
 			var gManifest;
 			//manifest.json文件
+
+			//用户设置或获取设置
+			window.setting = function(key, value) {
+				if( typeof (value) == "undefined") {
+					//get value
+					return window.localStorage[key];
+				} else {
+					//set value
+					window.localStorage[key] = value;
+					return true;
+				}
+			}
 		</script>
 	</head>
 	<body></body>

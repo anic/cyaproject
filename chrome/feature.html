@@ -1,79 +1,106 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE>
 <html>
 	<head>
-		<title>系统特点</title>
+		<title>特点</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link href="css/transdmin.css" rel="stylesheet" type="text/css" media="screen">
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jNice.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				var bg = chrome.extension.getBackgroundPage();
+				$("#version").append(bg.gExInfo.version);
+			});
+
+		</script>
+		<style type="text/css">
+			.main {
+				width: 900px;
+				float: none;
+			}
+			.main h2 {
+				float: none;
+			}
+			.main li {
+				line-height: 18px;
+			}
+			#version {
+				color: #C66653;
+			}
+
+		</style>
 	</head>
 	<body>
-		<p>系统功能说明（临时）</p>
-		<h1>
-			Version 0.1.1
-		</h1>
-		<ul>
-			<li>
-				Portal
-			</li>
-			<li>
-				1  修正显示错误信息的登录页面的位置错位
-			</li>
-			<li>
-				2 修正新闻页的显示不完全
-			</li>
-		</ul>
-		
-		<h1>
-			Version 0.1
-		</h1>
-		<ul>
-			<li>
-				Portal
-			</li>
-			<li>
-				1 屏蔽首页中间弹窗
-			</li>
-			<li>
-				2 修正登录页面的位置错位
-			</li>
-		</ul>
-		<ul>
-			<li>
-				车行无忧
-			</li>
-			<li>
-				1 允许手动编辑日期
-			</li>
-			<li>
-				2 自动计算里程数，金额 / 2.6
-			</li>
-			<li>
-				3 自动设置出发点和结束点
-			</li>
-			<li>
-				4 提供默认的设置时间
-			</li>
-		</ul>
-			<ul>
+		<div class="wrapper">
+			<h1><a href="#"><span> </span></a></h1>
+			<ul class="mainNav">
 				<li>
-				需求协作平台
-			<li>
-				1 快速根据工单号进行搜索。如果存在搜索，直接重定向到目标；
-			</li>
-			<li>
-				2 禁用了收缩的按钮，使得可以使用回车进行搜索
-			</li>
-		</ul>
-		<ul>
-			<li>
-				通讯录
-			</li>
-			<li>
-				1 优化了通讯录在chrome下的显示 
-			</li>
-		</ul>
-		
+					<a href="#" class="active">特点</a>
+				</li>
+				<!-- Use the "active" class for the active menu item  -->
+				<li>
+					<a href="setting.html">设置</a>
+				</li>
+				<li>
+					<a href="#">帮助</a>
+				</li>
+				<li class="logout">
+					<a href="#">其他</a>
+				</li>
+			</ul>
+			<div class="main">
+				<span>此应用目前的版本是 </span><span id="version"></span>
+				<h2> Version 0.1.1 </h2>
+				<h3> Portal </h3>
+				<ul>
+					<li>
+						修正显示错误信息的登录页面的位置错位
+					</li>
+					<li>
+						修正新闻页的显示不完全
+					</li>
+				</ul>
+				<h2> Version 0.1 </h2>
+				<h3>Portal </h3>
+				<ul>
+					<li>
+						屏蔽首页中间弹窗
+					</li>
+					<li>
+						修正登录页面的位置错位
+					</li>
+				</ul>
+				<h3> 车行无忧 </h3>
+				<ul>
+					<li>
+						允许手动编辑日期
+					</li>
+					<li>
+						自动计算里程数，金额 / 2.6
+					</li>
+					<li>
+						自动设置出发点和结束点
+					</li>
+					<li>
+						提供默认的设置时间
+					</li>
+				</ul>
+				<h3> 需求协作平台 </h3>
+				<ul>
+					<li>
+						快速根据工单号进行搜索。如果存在搜索，直接重定向到目标；
+					</li>
+					<li>
+						禁用了收缩的按钮，使得可以使用回车进行搜索
+					</li>
+				</ul>
+				<h3>通讯录</h3>
+				<ul>
+					<li>
+						优化了通讯录在chrome下的显示
+					</li>
+				</ul>
+			</div>
+		</div>
 	</body>
 </html>
-
-
-
-
-

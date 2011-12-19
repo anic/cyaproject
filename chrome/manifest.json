@@ -2,7 +2,7 @@
 	"name": "My Office助手",
 	"version": "0.1.1",
 
-	"description": "用于改善各种系统的用户体验，减少复杂操作，提升工作效率。",
+	"description": "致力于改善各种系统的用户体验，减少复杂操作，提升工作效率。",
 	"background_page": "background.html",
 	"options_page": "feature.html",
 	"permissions": ["tabs", "http://*/*", "notifications", "management"],
@@ -10,33 +10,33 @@
 		{
 			"matches": ["http://xqp2.gz.gmcc.net/*"],
 			"all_frames": true,
-			"js": ["js/inject_common.js", "js/inject_xqp_search.js"]
+			"js": ["js/log.js", "inject/xqp/inject_xqp_search.js"]
 		}, {
 			"matches": ["http://clgl.gz.gmcc.net/application/recordtaxiedit"],
-			"js": ["js/inject_common.js", "js/inject_taxi.js"]
+			"js": ["js/log.js", "inject/clgl/inject_taxi.js"]
 		}, {
 			"matches": ["http://www.baidu.com/*"],
-			"js": ["js/inject_common.js", "js/inject_baidu.js"]
+			"js": ["js/log.js", "inject/baidu/inject_baidu.js"]
 		}, {
 			"matches": ["http://contacts.services.gmcc.net/*"],
 			"all_frames": true,
-			"css": ["css/inject_albumn.css"]
+			"css": ["inject/contact/inject_contact.css"]
 		}, {
 			"matches": ["http://portal.gmcc.net/portal/redirect.htm?*app"],
-			"js": ["js/inject_common.js", "js/jquery.js", "js/inject_portal_login.js"]
+			"js": ["js/log.js", "js/jquery.js", "inject/portal/inject_portal_login.js"]
 		}, {
 			"matches": ["http://pac.gmcc.net/*"],
 			"all_frames": true,
 			"run_at": "document_end",
-			"js": ["js/jscssfile_loader.js", "js/inject_oa_middle.js"],
-			"css": ["css/inject_oa_middle.css"]
+			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_middle.js"],
+			"css": ["inject/portal/inject_oa_common.css"]
 		}, {
 			"matches": ["http://pac.gmcc.net/", "http://pac.gmcc.net/index.html*"],
-			"js": ["js/inject_pac_login.js"]
+			"js": ["inject/portal/inject_pac_login.js"]
 		}, {
 			"matches": ["http://ad.services.gmcc.net/*"],
 			"run_at": "document_end",
-			"js": ["js/inject_oa_ad.js"]
+			"js": ["inject/portal/inject_oa_ad.js"]
 		}
 	],
 	"icons": {
