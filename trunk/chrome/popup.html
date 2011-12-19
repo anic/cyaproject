@@ -1,25 +1,16 @@
-<!DOCTYPE  HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE>
 <html>
 	<head>
-		<title></title>
-		<link href="css/popup/style.css" rel="stylesheet" type="text/css">
-		<style type="text/css">
-			.app {
-				width: 32px;
-				height: 32px;
-				border: 0;
-			}
-			li {
-				cursor: pointer;
-			}
-		</style>
+		<title>工具目录</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link href="css/transdmin.css" rel="stylesheet" type="text/css" media="screen">
 		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jNice.js"></script>
 		<script type="text/javascript">
-			$(function() {
-				var bg = chrome.extension.getBackgroundPage();
-				$("#description").append(bg.gExInfo.description);
-			});
+			// $(function() {
+			// var bg = chrome.extension.getBackgroundPage();
+			// $("#description").append(bg.gExInfo.description);
+			// });
 			function openTab(url) {
 				chrome.tabs.create({
 					url : url
@@ -31,21 +22,19 @@
 		<!--
 		参考：http://codecanyon.net/item/drop-menu/full_screen_preview/81289?ref=1stwebdesigner&clickthrough_id=38287307&redirect_back=true&ref=1stwebdesigner
 		-->
-		<div class="products submenu" style="z-index: 90; display: block; ">
-			<ul>
+		<div class="sidebar">
+			<ul class="sideNav">
 				<li>
-					<img src="image/app/login.png" class="app" alt=""/><h2>登录Portal</h2><!-- 					<p>
-					<a href="#">More information about this product</a>
-					</p> -->
+					<a href="http://pac.gmcc.net/portal/dt?DISHI_Portal.setSelected=DISHI_guangzhou_workbench1&last=false&provider=DISHI_Portal" target="_blank">工作台</a>
 				</li>
-				<li><img src="image/app/credit-card.png" class="app" alt=""/>
-					<!-- http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app 添加f=app参数，方便自动登录-->
-					<h2><a href="javascript:openTab('http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app')">通讯录</a></h2>
-					<a href="javascript:openTab('http://pac.gmcc.net/portal/dt?DISHI_Portal.setSelected=DISHI_guangzhou_workbench1&last=false&provider=DISHI_Portal')">工作台</a>
-					<p>访问移动通讯录</p>
+				<li>
+					<a href="http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app" target="_blank">通讯录</a>
+				</li>
+				<li>
+					<a href="feature.html" target="_blank">设置</a>
 				</li>
 			</ul>
+			<!-- // .sideNav -->
 		</div>
-		<div class="small" id="description"></div>
 	</body>
 </html>
