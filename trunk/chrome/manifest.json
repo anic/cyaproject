@@ -22,7 +22,7 @@
 			"all_frames": true,
 			"css": ["inject/contact/inject_contact.css"]
 		}, {
-			"matches": ["http://portal.gmcc.net/portal/redirect.htm?*app"],
+			"matches": ["http://portal.gmcc.net/portal/redirect.htm?*app1"],
 			"js": ["js/log.js", "js/jquery.js", "inject/portal/inject_portal_login.js"]
 		}, {
 			"matches": ["http://pac.gmcc.net/*"],
@@ -31,7 +31,7 @@
 			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_middle.js", "inject/portal/inject_oa_ad.js"],
 			"css": ["inject/portal/inject_oa_common.css"]
 		}, {
-			"matches": ["http://pac.gmcc.net/", "http://pac.gmcc.net/index.html*"],
+			"matches": ["http://pac.gmcc.net/", "http://pac.gmcc.net/index.html*","http://portal.gmcc.net/portal/?goto=*"],
 			"js": ["inject/portal/inject_pac_login.js"]
 		}, {
 			"matches": ["http://pac.gmcc.net/smc/*","http://pac.gmcc.net/portal/*"],

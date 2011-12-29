@@ -1,3 +1,6 @@
 td {
-	white-space:nowrap;
+	white-space: nowrap;
+}
+#copyright td {
+	width: 100%;
 }
