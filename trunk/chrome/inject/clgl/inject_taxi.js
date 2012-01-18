@@ -44,7 +44,11 @@
 	stMinute.selectedIndex = 2;
 	edHour.selectedIndex = 17;
 	edMinute.selectedIndex = 2;
-		
+	
+	//设置发票张数
+	var receiptCount = document.getElementById("ReceiptCount");
+	if (receiptCount)
+		receiptCount.value = 1;
 
 })();
 
