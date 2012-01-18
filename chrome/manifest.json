@@ -31,16 +31,25 @@
 			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_middle.js", "inject/portal/inject_oa_ad.js"],
 			"css": ["inject/portal/inject_oa_common.css"]
 		}, {
-			"matches": ["http://pac.gmcc.net/", "http://pac.gmcc.net/index.html*","http://portal.gmcc.net/portal/?goto=*"],
+			"matches": ["http://pac.gmcc.net/", "http://pac.gmcc.net/index.html*", "http://portal.gmcc.net/portal/?goto=*"],
 			"js": ["inject/portal/inject_pac_login.js"]
 		}, {
-			"matches": ["http://pac.gmcc.net/smc/*","http://pac.gmcc.net/portal/*"],
+			"matches": ["http://pac.gmcc.net/smc/*", "http://pac.gmcc.net/portal/*"],
 			"all_frames": true,
 			"js": ["inject/portal/inject_oa_frame.js"]
 		}, {
 			"matches": ["http://ad.services.gmcc.net/*"],
 			"run_at": "document_end",
 			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_ad.js"]
+		}, {
+			"matches": ["http://pac.gmcc.net/*", "http://gzmail.gmcc.net/shareRes.nsf/Portal_Mail_web_sgs"],
+			"all_frames": true,
+			"js": ["inject/gzmail/inject_gzmail.js"],
+			"css": ["inject/gzmail/inject_gzmail.css"]
+		}, {
+			"matches": ["https://dynamic.12306.cn/*", "http://dynamic.12306.cn/*"],
+			"all_frames": true,
+			"js": ["js/jquery.js", "inject/12306/inject_login.js"]
 		}
 	],
 	"icons": {
