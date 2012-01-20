@@ -13,23 +13,34 @@
 				// $("#description").append(bg.gExInfo.description);
 				window.testLogin(function(result) {
 					if(result) {
-						onLoginSuccess();
+						onLoginSuccess(result);
 					}
 				});
 			});
 			function menuLogin() {
+				$("#btnLogin").css("color", "orange").html("登录中...");
 				window.testLogin(function(result) {
 					if(result) {
 						onLoginSuccess();
 					} else {
-						window.login(onLoginSuccess);
+						var bg = chrome.extension.getBackgroundPage();
+						var name = bg.setting("PortalName");
+						var pwd = bg.setting("PortalPwd");
+						if(name && pwd) {
+							window.login(name, pwd, onLoginSuccess);
+						} else
+							$("#btnLogin").css("color", "red").html("未设置用户名密码");
 					}
 				})
 			}
 
-			function onLoginSuccess() {
-				$("#btnLogin").css("color", "green").html("OA已登录")[0].onclick = null;
-				$("#btnLogin").append("<img src='image/popup/check.png'>");
+			function onLoginSuccess(result) {
+				if(result) {
+					$("#btnLogin").css("color", "green").html("OA已登录")[0].onclick = null;
+					$("#btnLogin").append("<img src='image/popup/check.png'>");
+				} else {
+					$("#btnLogin").css("color", "red").html("登录失败");
+				}
 			}
 
 			function openTab(url) {
@@ -49,13 +60,16 @@
 					<a href="#" onclick="menuLogin()" id="btnLogin">登录</a>
 				</li>
 				<li>
-					<a href="app/contact/contact.html" target="_blank">在线通讯录</a>
-				</li>
-				<li>
 					<a href="http://pac.gmcc.net/portal/dt?DISHI_Portal.setSelected=DISHI_guangzhou_workbench1&last=false&provider=DISHI_Portal" target="_blank">工作台</a>
 				</li>
 				<li>
-					<a href="http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app" target="_blank">通讯录</a>
+					<a href="app/contact/contact.html" target="_blank">离线通讯录</a>
+				</li>
+				<li>
+					<a href="http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app" target="_blank">省通讯录</a>
+				</li>
+				<li>
+					<a href="http://lsp2.gz.gmcc.net/OffCommunicate/adress.aspx" target="_blank">市通讯录</a>
 				</li>
 				<li>
 					<a href="feature.html" target="_blank">设置</a>
