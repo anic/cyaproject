@@ -5,12 +5,33 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link href="css/transdmin.css" rel="stylesheet" type="text/css" media="screen">
 		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
 		<script type="text/javascript" src="js/jNice.js"></script>
 		<script type="text/javascript">
-			// $(function() {
-			// var bg = chrome.extension.getBackgroundPage();
-			// $("#description").append(bg.gExInfo.description);
-			// });
+			$(function() {
+				// var bg = chrome.extension.getBackgroundPage();
+				// $("#description").append(bg.gExInfo.description);
+				window.testLogin(function(result) {
+					if(result) {
+						onLoginSuccess();
+					}
+				});
+			});
+			function menuLogin() {
+				window.testLogin(function(result) {
+					if(result) {
+						onLoginSuccess();
+					} else {
+						window.login(onLoginSuccess);
+					}
+				})
+			}
+
+			function onLoginSuccess() {
+				$("#btnLogin").css("color", "green").html("OA已登录")[0].onclick = null;
+				$("#btnLogin").append("<img src='image/popup/check.png'>");
+			}
+
 			function openTab(url) {
 				chrome.tabs.create({
 					url : url
@@ -24,6 +45,12 @@
 		-->
 		<div class="sidebar">
 			<ul class="sideNav">
+				<li>
+					<a href="#" onclick="menuLogin()" id="btnLogin">登录</a>
+				</li>
+				<li>
+					<a href="app/contact/contact.html" target="_blank">在线通讯录</a>
+				</li>
 				<li>
 					<a href="http://pac.gmcc.net/portal/dt?DISHI_Portal.setSelected=DISHI_guangzhou_workbench1&last=false&provider=DISHI_Portal" target="_blank">工作台</a>
 				</li>
