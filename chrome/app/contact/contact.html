@@ -1,39 +1,161 @@
 <!DOCTYPE>
 <html>
 	<head>
-		<title>在线通讯录</title>
+		<title>离线通讯录</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<script type="text/javascript" src="../../js/jquery.js"></script>
 		<script type="text/javascript" src="../../js/login.js"></script>
 		<script type="text/javascript" src="../../js/jlog.js"></script>
 		<script type="text/javascript" src="./js/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="./js/jquery.progressbar.js"></script>
 		<script type="text/javascript">
-			//https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt&Login.Token1=chengyaoan&Login.Token2=cheng!234&module=LDAP
-			var gViewstate;
+			var _viewstate;
 			$(function() {
 				var url = "http://lsp2.gz.gmcc.net/OffCommunicate/AddressUserList.aspx";
 				$.get(url, function(msg) {
 					var str = msg;
 					var result = str.match(/__VIEWSTATE\" value=\"([^\"]+)/);
 					if(result) {
-						gViewstate = result[1];
+						_viewstate = result[1];
 						window.log("已加载状态信息");
 					}
 				});
 			});
-			function loadPersonByDept() {
+			var _cur = 0, _total = -1;
+			function _reset() {
+				_cur = 0;
+				_total = -1;
+			}
+
+			function startLoadPerson() {
+				var loadAll = $("#cbxLoadAll").prop("checked");
+				if(loadAll && confirm("全部加载一个部门需要很长时间，请确认？")) {
+					loadPersonByDept(0);
+				} else
+					loadPersonByDept(0);
+			}
+
+			function loadPersonByDept(cur) {
+				if( typeof (cur) == "undefined")
+					cur = _cur;
+				_cur = _cur + 1;
+
+				if(_total >= 0 && _cur > _total) {
+					$("#sProgress").progressBar(100);
+					_reset();
+					return;
+				}
+
+				if(_total == 0) {
+					$("#sProgress").progressBar(100);
+					return;
+				} else if(_total == -1) {
+					$("#sProgress").progressBar(0);
+				} else
+					$("#sProgress").progressBar(_cur * 100 / _total);
+
 				var deptId = $("#txtDep").val();
 				//http://lsp2.gz.gmcc.net/OffCommunicate/AddressUserList.aspx?DepartId=349204400020112
 				var url = "http://lsp2.gz.gmcc.net/OffCommunicate/AddressUserList.aspx?DepartId=" + deptId;
 				$.ajax({
-					type : "GET",
+					type : "POST",
+					data : {
+						"VirtualPager1$txtGoToPage" : _cur,
+						"VirtualPager1$btnGoToPage" : "跳转",
+						"__VIEWSTATE" : _viewstate,
+						"txtTrueName" : ""
+					},
 					url : url,
 					success : function(msg) {
-						alert(msg);
+						/*
+						 onclick="newClick('9839')">
+						 <td align="left">
+						 tangxiaobo
+						 </td>
+						 <td align="left">xxx</td>
+						 </td>
+						 <td align="left">
+						 <span id="serrepview_ctl04_PhoneNum">13922200699</span>
+						 </td>
+						 <td align="left">业务支持中心 </td>
+						 <td align="left">规划建设室 </td><td align="left">tangxiaobo@gz.gd.chinamobile.com</td>
+						 */
+						d = msg;
+						var r = msg.match(/onclick([^/]+\/){8}/g);
+						var elem, mat;
+						var uid, name, label, phone, dept0, dept1, email, summary;
+						var result = [];
+						var f = function(m, index) {
+							if(!m || index >= m.length)
+								return "";
+
+							return m[index] ? m[index].replace(/[>|<|\s]/g, "") : m[index];
+						};
+						for(var i = 0, len = r.length; i < len; ++i) {
+							elem = r[i];
+							//抽取人员ID
+							mat = elem.match(/newClick\('(\d+)'\)"/);
+							uid = mat[1];
+							//匹配人员信息
+							mat = elem.match(/>([^<]*)</g);
+							//1:账号
+							name = f(mat, 1);
+
+							//3:中文名
+							label = f(mat, 3);
+
+							//7:phone
+							phone = f(mat, 7);
+
+							//10: 中心
+							dep0 = f(mat, 10);
+
+							//12:科室
+							dep1 = f(mat, 12);
+
+							//14:email
+							email = f(mat, 14);
+
+							//make a summary
+							summary = [uid, name, label, phone, dep0, dep1, email].join("|");
+
+							//save it to db
+							window.localStorage["psn:" + uid] = summary;
+
+						}
+
+						// alert(result.join(","));
+
+						//记录总页数
+						r = msg.match(/页次:\s*(\d+)\s*\/\s*(\d+)\s*页/);
+						if(r) {
+							_cur = window.parseInt(r[1]);
+							_total = window.parseInt(r[2]);
+						}
+						window.log(_cur + "/" + _total);
+
+						//更新viewstate
+						r = msg.match(/__VIEWSTATE\" value=\"([^\"]+)/);
+						if(result) {
+							_viewstate = r[1];
+						}
+
+						// alert(msg.match(/onclick[\w\W]+chinamobile\.com/g).join(";"));
+						var loadAll = $("#cbxLoadAll").prop("checked");
+						if(loadAll) {
+							loadPersonByDept();
+						} else {
+							$("#sProgress").progressBar(100);
+							_reset();
+						}
+
 					},
 					error : window.error
 				});
+
 			}
+
+			var d;
 
 			function searchPerson() {
 				var url = "http://lsp2.gz.gmcc.net/OffCommunicate/AddressUserList.aspx";
@@ -98,20 +220,48 @@
 				$("#divDept").empty();
 				var result = [];
 				for(var str in window.localStorage) {
-					result.push([str, window.localStorage[str]]);
+					if(str.indexOf("dept") != -1)
+						result.push([str, window.localStorage[str]]);
 				}
 
-				showData(result);
-			}
-
-			function showData(data) {
 				$('#divDept').html('<table cellpadding="0" cellspacing="0" border="0" class="display" id="example"><\/table>');
 				$('#example').dataTable({
-					"aaData" : data,
+					"aaData" : result,
 					"aoColumns" : [{
 						"sTitle" : "ID"
 					}, {
 						"sTitle" : "名称"
+					}]
+				});
+			}
+
+			function showPerson() {
+				$("#divPerson").empty();
+				var result = [], s;
+				for(var str in window.localStorage) {
+					if(str.indexOf("psn") == -1)
+						continue;
+					s = window.localStorage[str];
+					result.push( s ? s.split("|") : []);
+				}
+
+				$('#divPerson').html('<table cellpadding="0" cellspacing="0" border="0" class="display" id="example1"><\/table>');
+				$('#example1').dataTable({
+					"aaData" : result,
+					"aoColumns" : [{
+						"sTitle" : "ID"
+					}, {
+						"sTitle" : "登录名"
+					}, {
+						"sTitle" : "姓名"
+					}, {
+						"sTitle" : "电话"
+					}, {
+						"sTitle" : "部门"
+					}, {
+						"sTitle" : "科室"
+					}, {
+						"sTitle" : "邮箱"
 					}]
 				});
 			}
@@ -122,21 +272,7 @@
 		</style>
 	</head>
 	<body>
-		<button id="btnLogin" onclick="window.login()">
-			登录
-		</button>
-		<!-- <button id="btnTestLogin" onclick="testLogin();">
-		测试是否登录
-		</button>
-		<button id="btnLogin" onclick="login()">
-		登录
-		</button>
-		<p>
-		<br>
-		<a target="_blank" href="http://pac.gmcc.net/portal/dt">http://pac.gmcc.net/portal/dt</a>
-		<br>
-		<a target="_blank" href="https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt&Login.Token1=chengyaoan&Login.Token2=cheng!234&module=LDAP"> https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt&Login.Token1=chengyaoan&Login.Token2=cheng!234&module=LDAP" </a>
-		</p> -->
+		
 		<br>
 		<button id="btnShowDept" onclick="showDept()">
 			显示组织信息
@@ -148,11 +284,14 @@
 		<button id="btnShowPerson" onclick="showPerson()">
 			显示人员信息
 		</button>
-		<button id="btnLoadPerson" onclick="loadPersonByDept()">
+		<button id="btnLoadPerson" onclick="startLoadPerson()">
 			加载人员信息
 		</button>
 		<label>输入部门编号：</label>
-		<input type="text" id="txtDep" />
+		<input type="text" id="txtDep" value="" />
+		<input type="checkbox" checked="checked" id="cbxLoadAll"/>
+		<label>加载全部页</label>
+		<span id="sProgress"></span>
 		<div id="divDept"></div>
 		<div id="divPerson"></div>
 	</body>
