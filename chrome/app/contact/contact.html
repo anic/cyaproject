@@ -1,0 +1,97 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>在线通讯录</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script type="text/javascript" src="../../js/jquery.js"></script>
+		<script type="text/javascript" src="../../js/login.js"></script>
+		<script type="text/javascript" src="./js/jquery.dataTables.js"></script>
+		<script type="text/javascript">
+			
+
+			function loadUser() {
+				// var url = "http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app";
+				// var data = {
+				// "__VIEW_STATE" : "/wEPDwULLTExMTE4NjQ2NzcPFgIeEVJpZ2h0Q29udGFjdHNOb2RlMrYBAAEAAAD/////AQAAAAAAAAAMAgAAAEZHQ1AuRGF0YS5Db21tb24sIFZlcnNpb249MS4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1udWxsBQEAAAAmR0NQLkRhdGEuQ29tbW9uLkNvcmUuUmlnaHRDb250YWN0c05vZGUDAAAAB19tYW5hZ2ULX2dyb3VwVmlzaXQGX3Zpc2l0AAAAAQEBAgAAAAABAQtkGAEFHl9fQ29udHJvbHNSZXF1aXJlUG9zdEJhY2tLZXlfXxYBBQhpYlNlYXJjaP13wAgoQ8PxOIwxG7hR7aPTALig",
+				// "__EVENTVALIDATION" : "/wEWAwLMrLGHCgLEhISFCwLytKiXDBvNvvikkUDhcvNY7VWyxeI3WvrS",
+				// "__CALLBACKID" : "__Page",
+				// "__CALLBACKPARAM" : "",
+				// "__EVENTTARGET" : "",
+				// "__EVENTARGUMENT" : "",
+				// "txtName" : ""
+				// };
+				//
+				// $.ajax({
+				// type : "POST",
+				// url : url,
+				// data : data,
+				// success : function(msg) {
+				// alert(msg);
+				// }
+				// });
+
+				var url = "http://lsp2.gz.gmcc.net/OffCommunicate/adress.aspx";
+				$.get(url, function(msg) {
+					var str = msg;
+					//<a class="Treeview1_0 Treeview1_1 Treeview1_3" href="javascript:clicknode('AddressUserList.aspx?DepartId=349204400020112')" id="Treeview1t70">业务支持中心</a>
+					//var str = "<a class=\"Treeview1_0 Treeview1_1 Treeview1_3\" href=\"javascript:clicknode('AddressUserList.aspx?DepartId=349204400020112')\" id=\"Treeview1t70\">业务支持中心</a>"
+					var allDept = str.match(/DepartId=[\d]+[^>]*>[^<]+/g), elem;
+					for(var i = 0, size = allDept.length; i < size; ++i) {
+						elem = allDept[i].match(/DepartId=([\d]+)[^>]*>([^<]+)/);
+						window.localStorage["dept:" + elem[1]] = elem[2];
+					}
+					alert("已保存" + allDept.length + "条记录");
+				});
+			}
+
+			function showDept() {
+				$("#divDept").empty();
+				var result = [];
+				for(var str in window.localStorage) {
+					result.push([str, window.localStorage[str]]);
+				}
+
+				showData(result);
+			}
+
+			function showData(data) {
+				$('#divDept').html('<table cellpadding="0" cellspacing="0" border="0" class="display" id="example"><\/table>');
+				$('#example').dataTable({
+					"aaData" : data,
+					"aoColumns" : [{
+						"sTitle" : "ID"
+					}, {
+						"sTitle" : "名称"
+					}]
+				});
+			}
+		</script>
+		<style type="text/css" title="currentStyle">
+			@import "./css/demo_page.css";
+			@import "./css/demo_table.css";
+		</style>
+	</head>
+	<body>
+		<!-- <button id="btnTestLogin" onclick="testLogin();">
+			测试是否登录
+		</button>
+		<button id="btnLogin" onclick="login()">
+			登录
+		</button>
+		<p>
+			<br>
+			<a target="_blank" href="http://pac.gmcc.net/portal/dt">http://pac.gmcc.net/portal/dt</a>
+			<br>
+			<a target="_blank" href="https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt&Login.Token1=chengyaoan&Login.Token2=cheng!234&module=LDAP"> https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt&Login.Token1=chengyaoan&Login.Token2=cheng!234&module=LDAP" </a>
+		</p> -->
+		<br>
+		<button id="btnLoadUser" onclick="loadUser()">
+			加载人员信息
+		</button>
+		<button id="btnShowDept" onclick="showDept()">
+			显示组织信息
+		</button>
+		<div id="divDept"></div>
+		<div id="divPerson"></div>
+	</body>
+</html>
