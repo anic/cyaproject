@@ -46,10 +46,10 @@
 			"all_frames": true,
 			"js": ["inject/gzmail/inject_gzmail.js"],
 			"css": ["inject/gzmail/inject_gzmail.css"]
-		}, {
-			"matches": ["https://dynamic.12306.cn/*", "http://dynamic.12306.cn/*"],
+		},{
+			"matches": ["http://xqp2.gz.gmcc.net/*"],
 			"all_frames": true,
-			"js": ["js/jquery.js", "inject/12306/inject_login.js"]
+			"js": ["js/jquery.js", "inject/xqp/inject_xqp_extractid.js"]
 		}
 	],
 	"icons": {
