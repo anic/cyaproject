@@ -12,7 +12,6 @@
 				$("#txtPortalName").val(bg.setting("PortalName"));
 				$("#txtPortalPwd").val(bg.setting("PortalPwd"));
 			});
-			
 			function savePortal() {
 				var portalName = $("#txtPortalName").val();
 				var portalPwd = $("#txtPortalPwd").val();
@@ -20,6 +19,19 @@
 				bg.setting("PortalName", portalName);
 				bg.setting("PortalPwd", portalPwd);
 				alert("保存成功");
+			}
+
+			function settingLogin() {
+				var bg = chrome.extension.getBackgroundPage();
+				var name = bg.setting("PortalName");
+				var pwd = bg.setting("PortalPwd");
+
+				var loginUrl = "https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt?provider=DISHI_Portal";
+				loginUrl += "&Login.Token1=" + name;
+				loginUrl += "&Login.Token2=" + pwd;
+				loginUrl += "&module=LDAP";
+
+				window.open(loginUrl);
 			}
 		</script>
 		<style type="text/css">
@@ -71,6 +83,10 @@
 						<span><span>保存</span></span>
 					</button>
 				</fieldset>
+				<p>
+					点击 <a onclick="settingLogin()" href="#">测试登录</a> ，如果能够进入Portal，表示登录设置成功
+				</p>
+				
 			</div>
 		</div>
 	</body>

@@ -21,7 +21,7 @@ window.testLogin = function(callback) {
 
 window.login = function(name,pwd,callback) {
 
-	var loginUrl = "https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt";
+	var loginUrl = "https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt?provider=DISHI_Portal";
 	loginUrl += "&Login.Token1=" + name;
 	loginUrl += "&Login.Token2=" + pwd;
 	loginUrl += "&module=LDAP";
