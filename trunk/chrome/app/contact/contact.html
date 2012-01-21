@@ -9,18 +9,16 @@
 		<script type="text/javascript" src="./js/jquery.dataTables.js"></script>
 		<script type="text/javascript" src="./js/jquery.progressbar.js"></script>
 		<script type="text/javascript">
-			var _viewstate;
 			$(function() {
-				var url = "http://lsp2.gz.gmcc.net/OffCommunicate/AddressUserList.aspx";
-				$.get(url, function(msg) {
-					var str = msg;
-					var result = str.match(/__VIEWSTATE\" value=\"([^\"]+)/);
-					if(result) {
-						_viewstate = result[1];
-						window.Log.log("已加载状态信息");
-					}
+				window.Login.testLogin(function(result){
+					if(!result)
+						window.Log.err("请先登录OA再使用本功能");
+					else
+						window.Log.log("已登录，可使用本功能");
 				});
 			});
+			
+			var _viewstate = "";
 			var _cur = 0, _total = -1;
 			function _reset() {
 				_cur = 0;
@@ -36,6 +34,23 @@
 			}
 
 			function loadPersonByDept(cur) {
+				if(_viewstate == "") {
+					var url = "http://lsp2.gz.gmcc.net/OffCommunicate/AddressUserList.aspx";
+					$.get(url, function(msg) {
+						var str = msg;
+						var result = str.match(/__VIEWSTATE\" value=\"([^\"]+)/);
+						if(result) {
+							_viewstate = result[1];
+							window.Log.log("已获取页面状态，开始执行")
+							loadPersonByDept();	
+						}
+						else
+						{
+							window.Log.err("未能获取状态，请登录后刷新本页面。");
+						}
+					});
+				}
+
 				if( typeof (cur) == "undefined")
 					cur = _cur;
 				_cur = _cur + 1;
@@ -209,7 +224,7 @@
 						elem = allDept[i].match(/DepartId=([\d]+)[^>]*>([^<]+)/);
 						window.localStorage["dept:" + elem[1]] = elem[2];
 					}
-					window.Log.log("已保存" + allDept.length + "条记录");
+					window.Log.log("获取" + allDept.length + "个部门的信息");
 				});
 			}
 
@@ -272,12 +287,11 @@
 					}]
 				});
 			}
-			
-			function clearStorage()
-			{
-				if (!window.confirm("即将清除所有缓存的人员信息，请确认？"))
+
+			function clearStorage() {
+				if(!window.confirm("即将清除所有缓存的人员信息，请确认？"))
 					return;
-					
+
 				window.localStorage.clear();
 				alert("已清空，请刷新。");
 			}
@@ -295,7 +309,6 @@
 					}
 					return row;
 				}
-				
 				var table = $('<table cellpadding="0" cellspacing="0" border="1"></table>');
 				table.append(row_func(["ID", "账号", "姓名", "电话", "部门", "科室", "邮箱"]));
 				var s;
