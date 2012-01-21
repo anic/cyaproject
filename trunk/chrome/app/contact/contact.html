@@ -12,9 +12,9 @@
 			$(function() {
 				window.Login.testLogin(function(result){
 					if(!result)
-						window.Log.err("请先登录OA再使用本功能");
+						window.Log.err("可离线用，登录后再更新");
 					else
-						window.Log.log("已登录，可使用本功能");
+						window.Log.log("已登录，可离线与在线使用");
 				});
 			});
 			
