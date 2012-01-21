@@ -11,19 +11,17 @@
 			$(function() {
 				// var bg = chrome.extension.getBackgroundPage();
 				// $("#description").append(bg.gExInfo.description);
-				window.testLogin(function(result) {
+				window.Login.testLogin(function(result) {
 					if(result) {
 						onLoginSuccess(result);
-					}
-					else
-					{
+					} else {
 						$("#btnLogin").html("<< 请登录  >>");
 					}
 				});
 			});
 			function menuLogin() {
 				$("#btnLogin").css("color", "orange").html("登录中...");
-				window.testLogin(function(result) {
+				window.Login.testLogin(function(result) {
 					if(result) {
 						onLoginSuccess();
 					} else {
@@ -31,7 +29,7 @@
 						var name = bg.setting("PortalName");
 						var pwd = bg.setting("PortalPwd");
 						if(name && pwd) {
-							window.login(name, pwd, onLoginSuccess);
+							window.Login.login(name, pwd, onLoginSuccess);
 						} else
 							$("#btnLogin").css("color", "red").html("未设置用户名密码");
 					}
@@ -64,6 +62,9 @@
 					<a href="#" onclick="menuLogin()" id="btnLogin">登录</a>
 				</li>
 				<li>
+					<div style="background-color:orange;height:2px"></div>
+				</li>
+				<li>
 					<a href="http://pac.gmcc.net/portal/dt?DISHI_Portal.setSelected=DISHI_guangzhou_workbench1&last=false&provider=DISHI_Portal" target="_blank">工作台</a>
 				</li>
 				<li>
@@ -77,6 +78,9 @@
 				</li>
 				<li>
 					<a href="feature.html" target="_blank">设置</a>
+				</li>
+				<li>
+					<a href="popup.html" target="_blank">弹出</a>
 				</li>
 			</ul>
 			<!-- // .sideNav -->
