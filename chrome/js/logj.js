@@ -25,7 +25,7 @@ window.Log = {
 	 * err 显示错误提示
 	 */
 	err : function(m) {
-		log(m, "#ef8f00");
+		this.log(m, "#ef8f00");
 	},
 	/**
 	 * 初始化
