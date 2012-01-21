@@ -5,7 +5,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<script type="text/javascript" src="../../js/jquery.js"></script>
 		<script type="text/javascript" src="../../js/login.js"></script>
-		<script type="text/javascript" src="../../js/jlog.js"></script>
+		<script type="text/javascript" src="../../js/logj.js"></script>
 		<script type="text/javascript" src="./js/jquery.dataTables.js"></script>
 		<script type="text/javascript" src="./js/jquery.progressbar.js"></script>
 		<script type="text/javascript">
@@ -17,7 +17,7 @@
 					var result = str.match(/__VIEWSTATE\" value=\"([^\"]+)/);
 					if(result) {
 						_viewstate = result[1];
-						window.log("已加载状态信息");
+						window.Log.log("已加载状态信息");
 					}
 				});
 			});
@@ -80,7 +80,6 @@
 						 <td align="left">业务支持中心 </td>
 						 <td align="left">规划建设室 </td><td align="left">tangxiaobo@gz.gd.chinamobile.com</td>
 						 */
-						d = msg;
 						var r = msg.match(/onclick([^/]+\/){8}/g);
 						var elem, mat;
 						var uid, name, label, phone, dept0, dept1, email, summary;
@@ -132,7 +131,7 @@
 							_cur = window.parseInt(r[1]);
 							_total = window.parseInt(r[2]);
 						}
-						window.log(_cur + "/" + _total);
+						window.Log.log(_cur + "/" + _total);
 
 						//更新viewstate
 						r = msg.match(/__VIEWSTATE\" value=\"([^\"]+)/);
@@ -154,8 +153,6 @@
 				});
 
 			}
-
-			var d;
 
 			function searchPerson() {
 				var url = "http://lsp2.gz.gmcc.net/OffCommunicate/AddressUserList.aspx";
@@ -212,9 +209,17 @@
 						elem = allDept[i].match(/DepartId=([\d]+)[^>]*>([^<]+)/);
 						window.localStorage["dept:" + elem[1]] = elem[2];
 					}
-					window.log("已保存" + allDept.length + "条记录");
+					window.Log.log("已保存" + allDept.length + "条记录");
 				});
 			}
+
+			var oLanguage = {
+				"sLengthMenu" : "每页显示_MENU_  ",
+				"sZeroRecords" : "没有找到数据",
+				"sInfo" : "显示第 _START_ 到  _END_ 页，共  _TOTAL_ 页",
+				"sInfoEmpty" : "显示 0 到 0 页，共  0 页",
+				"sInfoFiltered" : "(筛选出  _MAX_ 条数据)"
+			};
 
 			function showDept() {
 				$("#divDept").empty();
@@ -226,6 +231,7 @@
 
 				$('#divDept').html('<table cellpadding="0" cellspacing="0" border="0" class="display" id="example"><\/table>');
 				$('#example').dataTable({
+					"oLanguage" : oLanguage,
 					"aaData" : result,
 					"aoColumns" : [{
 						"sTitle" : "ID"
@@ -247,11 +253,12 @@
 
 				$('#divPerson').html('<table cellpadding="0" cellspacing="0" border="0" class="display" id="example1"><\/table>');
 				$('#example1').dataTable({
+					"oLanguage" : oLanguage,
 					"aaData" : result,
 					"aoColumns" : [{
 						"sTitle" : "ID"
 					}, {
-						"sTitle" : "登录名"
+						"sTitle" : "账号"
 					}, {
 						"sTitle" : "姓名"
 					}, {
@@ -265,33 +272,83 @@
 					}]
 				});
 			}
+			
+			function clearStorage()
+			{
+				if (!window.confirm("即将清除所有缓存的人员信息，请确认？"))
+					return;
+					
+				window.localStorage.clear();
+				alert("已清空，请刷新。");
+			}
+
+			function exportPerson() {
+				if(!window.confirm("导出全部人员需要比较长的处理时间，请确认？"))
+					return;
+
+				$("#btnExport").attr("disabled", true);
+
+				var row_func = function(arr) {
+					var row = $("<tr></tr>");
+					for(var i = 0, len = arr.length; i < len; ++i) {
+						row.append("<td>" + arr[i] + "</td>");
+					}
+					return row;
+				}
+				
+				var table = $('<table cellpadding="0" cellspacing="0" border="1"></table>');
+				table.append(row_func(["ID", "账号", "姓名", "电话", "部门", "科室", "邮箱"]));
+				var s;
+				for(var str in window.localStorage) {
+					if(str.indexOf("psn") == -1)
+						continue;
+					s = window.localStorage[str];
+					table.append(row_func( s ? s.split("|") : []));
+				}
+				$("body").empty();
+				$("body").append(table);
+
+			}
 		</script>
 		<style type="text/css" title="currentStyle">
 			@import "./css/demo_page.css";
 			@import "./css/demo_table.css";
+			@import "./css/demo_table_jui.css";
 		</style>
+		<link href="css/button.css" rel="stylesheet" type="text/css" media="screen">
 	</head>
 	<body>
-		
 		<br>
-		<button id="btnShowDept" onclick="showDept()">
-			显示组织信息
-		</button>
-		<button id="btnLoadDept" onclick="loadDept()">
-			加载组织信息
-		</button>
 		<br>
-		<button id="btnShowPerson" onclick="showPerson()">
-			显示人员信息
-		</button>
-		<button id="btnLoadPerson" onclick="startLoadPerson()">
-			加载人员信息
-		</button>
-		<label>输入部门编号：</label>
-		<input type="text" id="txtDep" value="" />
-		<input type="checkbox" checked="checked" id="cbxLoadAll"/>
-		<label>加载全部页</label>
-		<span id="sProgress"></span>
+		<div>
+			<button id="btnShowDept" onclick="showDept()">
+				显示组织信息
+			</button>
+			<button id="btnLoadDept" onclick="loadDept()">
+				<span><span>加载组织信息</span></span>
+			</button>
+		</div>
+		<div>
+			<button id="btnShowPerson" onclick="showPerson()">
+				显示人员信息
+			</button>
+			<button id="btnLoadPerson" onclick="startLoadPerson()">
+				加载人员信息
+			</button>
+			<label>输入部门编号：</label>
+			<input type="text" id="txtDep" value="" />
+			<input type="checkbox" checked="checked" id="cbxLoadAll"/>
+			<label>加载全部页</label>
+			<span id="sProgress"></span>
+			<div style="float:right">
+				<button id="btnExport" onclick="exportPerson()">
+					导出人员信息
+				</button>
+				<button id="btnClear" onclick="clearStorage()">
+					清空数据
+				</button>
+			</div>
+		</div>
 		<div id="divDept"></div>
 		<div id="divPerson"></div>
 	</body>

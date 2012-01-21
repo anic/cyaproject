@@ -6,6 +6,7 @@
 		<link href="css/transdmin.css" rel="stylesheet" type="text/css" media="screen">
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/jNice.js"></script>
+		<script type="text/javascript" src="js/login.js"></script>
 		<script type="text/javascript">
 			$(function() {
 				var bg = chrome.extension.getBackgroundPage();
@@ -26,13 +27,20 @@
 				var name = bg.setting("PortalName");
 				var pwd = bg.setting("PortalPwd");
 
-				var loginUrl = "https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt?provider=DISHI_Portal";
-				loginUrl += "&Login.Token1=" + name;
-				loginUrl += "&Login.Token2=" + pwd;
-				loginUrl += "&module=LDAP";
-
+				var loginUrl = window.Login.buildUrl(name,pwd);
 				window.open(loginUrl);
 			}
+			
+			function buildUrl()
+			{
+				var bg = chrome.extension.getBackgroundPage();
+				var name = bg.setting("PortalName");
+				var pwd = bg.setting("PortalPwd");
+
+				var loginUrl = window.Login.buildUrl(name,pwd);
+				alert(loginUrl);
+			}
+			
 		</script>
 		<style type="text/css">
 			.main {
@@ -84,9 +92,11 @@
 					</button>
 				</fieldset>
 				<p>
-					点击 <a onclick="settingLogin()" href="#">测试登录</a> ，如果能够进入Portal，表示登录设置成功
+					点击 <a onclick="settingLogin()" href="#">测试登录</a> ，如果能够进入Portal，表示登录设置成功。
 				</p>
-				
+				<p>
+					点击<a onclick="buildUrl()" href="#">这里</a>弹出登录链接
+				</p>
 			</div>
 		</div>
 	</body>
