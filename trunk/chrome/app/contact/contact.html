@@ -10,14 +10,13 @@
 		<script type="text/javascript" src="./js/jquery.progressbar.js"></script>
 		<script type="text/javascript">
 			$(function() {
-				window.Login.testLogin(function(result){
+				window.Login.testLogin(function(result) {
 					if(!result)
 						window.Log.err("可离线用，登录后再更新");
 					else
 						window.Log.log("已登录，可离线与在线使用");
 				});
 			});
-			
 			var _viewstate = "";
 			var _cur = 0, _total = -1;
 			function _reset() {
@@ -42,10 +41,8 @@
 						if(result) {
 							_viewstate = result[1];
 							window.Log.log("已获取页面状态，开始执行")
-							loadPersonByDept();	
-						}
-						else
-						{
+							loadPersonByDept();
+						} else {
 							window.Log.err("未能获取状态，请登录后刷新本页面。");
 						}
 					});
@@ -296,19 +293,46 @@
 				alert("已清空，请刷新。");
 			}
 
+			/**
+			 * 构造表的一行
+			 */
+			function row_func(arr) {
+				var row = $("<tr></tr>");
+				for(var i = 0, len = arr.length; i < len; ++i) {
+					row.append("<td>" + arr[i] + "</td>");
+				}
+				return row;
+			}
+
+			/**
+			 * 导出部门信息
+			 */
+			function exportDept() {
+				if(!window.confirm("导出全部部门需要比较长的处理时间，请确认？"))
+					return;
+
+				var table = $('<table cellpadding="0" cellspacing="0" border="1"></table>');
+				table.append(row_func(["ID", "部门"]));
+				var s;
+				for(var str in window.localStorage) {
+					if(str.indexOf("dept:") == -1)
+						continue;
+					s = window.localStorage[str];
+					table.append(row_func([str.substring(5), s]));
+				}
+				$("body").empty();
+				$("body").append(table);
+			}
+
+			/**
+			 * 导出人员信息
+			 */
 			function exportPerson() {
 				if(!window.confirm("导出全部人员需要比较长的处理时间，请确认？"))
 					return;
 
 				$("#btnExport").attr("disabled", true);
 
-				var row_func = function(arr) {
-					var row = $("<tr></tr>");
-					for(var i = 0, len = arr.length; i < len; ++i) {
-						row.append("<td>" + arr[i] + "</td>");
-					}
-					return row;
-				}
 				var table = $('<table cellpadding="0" cellspacing="0" border="1"></table>');
 				table.append(row_func(["ID", "账号", "姓名", "电话", "部门", "科室", "邮箱"]));
 				var s;
@@ -356,6 +380,9 @@
 			<div style="float:right">
 				<button id="btnExport" onclick="exportPerson()">
 					导出人员信息
+				</button>
+				<button id="btnDept" onclick="exportDept()">
+					导出部门信息
 				</button>
 				<button id="btnClear" onclick="clearStorage()">
 					清空数据
