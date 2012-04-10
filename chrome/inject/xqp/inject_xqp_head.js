@@ -12,6 +12,7 @@ oPopup.frameborder = "0";
 oPopup.style.zIndex = 1000;
 oPopup.style.display = "none";
 oPopup.style.borderStyle = "none";
+
 //竟然没有body，所以只能在html后添加iframe
 window.parent.document.getElementsByTagName("html")[0].appendChild(oPopup);
 
@@ -33,7 +34,17 @@ window.showMenu = function(theId, reference) {
 	// 设置显示的位置、大小、参照物
 	// left, top, width, height: 38 + 25*(n-1)
 	//oPopup.show(l, t, 156, 500, document.body);
-	oPopup.contentDocument.documentElement.getElementsByTagName("body")[0].innerHTML = menu.innerHTML;
+	var menuHTML = menu.innerHTML;
+	/**
+	 * <td background="/images/menu_popup_normal.gif" onmouseover="background='/images/menu_popup_hover.gif';" onmouseout="background='/images/menu_popup_normal.gif';"
+	 * onclick="top.rightFrame.location = '/Admin/Membership/ListRole.aspx';"><span style="padding-left:26px;">权限管理</span></td>
+	 */
+
+	var menuHTML = menu.innerHTML;
+	menuHTML = menuHTML.replace(/top.rightFrame.location/g, "window.parent.document.getElementById('oPop').style.display = 'none';top.rightFrame.location");
+	menuHTML = menuHTML.replace(/\"background='/g, "\"this.style.backgroundImage='url(" + window.location.origin);
+	menuHTML = menuHTML.replace(/gif'/g, "gif)'");
+	oPopup.contentDocument.documentElement.getElementsByTagName("body")[0].innerHTML = menuHTML;
 
 	//toggle menu
 	if(oPopup.style.display == "none")

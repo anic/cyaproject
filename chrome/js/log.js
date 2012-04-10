@@ -66,6 +66,7 @@ function close() {
 	messageBox.appendChild(message);
 	message.id = "message";
 
-	document.body.appendChild(messageBox);
+	if (document.body)
+		document.body.appendChild(messageBox);
 })();
 
