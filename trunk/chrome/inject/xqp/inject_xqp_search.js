@@ -15,8 +15,31 @@ function init() {
 	//这是frame 4
 	//window.frames[4].document.getElementById("ctl00_cphBody_txtWorkId")
 	var txtAVId = document.getElementById("ctl00_cphBody_txtWorkId");
+	//1 增加判断，如果输入内容为标准工单号的形式，将开始日期调整至工单发起日期
+
+	//不用addEventListener,防止回车直接提交数据（目前未能生效）
+	txtAVId.onkeyup = txtAVId.onblur = function(e) {
+		// if(e.keyCode == 13)//ENTER,
+		// {
+		// aSearch.onclick();
+		// e.stopPropagation();
+		// e.preventDefault();
+		// return false;
+		// } else//非回车
+		var avid = txtAVId.value;
+		console.log(avid);
+		if(/[A-z]{2}\d{9}/.test(avid))//满足工单的格式
+		{
+			var y = avid.substr(2, 2);
+			var m = avid.substr(4, 2);
+			var d = avid.substr(6, 2);
+			var date = "20" + y + "-" + m + "-" + d;
+			document.getElementById("ctl00_cphBody_dtpStart1_txtDate").value = date;
+		}
+		// }
+	};
 	aSearch = document.createElement("a");
-	aSearch.innerHTML = "搜索";
+	aSearch.innerHTML = "详细";
 	aSearch.href = "#";
 	aSearch.onclick = function() {
 		var avId = txtAVId.value;
@@ -30,16 +53,6 @@ function init() {
 	};
 	txtAVId.parentNode.appendChild(aSearch);
 
-	//不用addEventListener,防止回车直接提交数据
-	txtAVId.onkeyup = function(e) {
-		if(e.keyCode == 13)//ENTER
-		{
-			aSearch.onclick();
-			e.stopPropagation();
-			e.preventDefault();
-			return false;
-		}
-	};
 	var divTitle = document.getElementsByClassName("searchTitle")[0];
 	var btn = divTitle.children[1];
 	btn.disabled = true;
