@@ -1,0 +1,17 @@
+<HTML>
+<HEAD>
+<TITLE>Scriptable Plug-in Test</TITLE>
+</HEAD>
+<BODY id="bodyId">
+ 
+<object id="pluginobj" type="application/mozilla-npsqlite-plugin"></object>
+ 
+<br>
+<form name="formname">
+<input type=button value="Call pluginobj.foo()" onclick='pluginobj.foo()'>
+<input type=button value="Call pluginobj.sqlite()" onclick="alert(pluginobj.sqlite('gmcc.db','select * from t1'))">
+<input type=button value="Get pluginobj.bar" onclick='alert(pluginobj.bar)'>
+</form>
+ 
+</BODY>
+</HTML>

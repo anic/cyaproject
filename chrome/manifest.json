@@ -1,6 +1,6 @@
 {
-	"name": "GMCC助手",
-	"version": "0.1.1",
+	"name": "GMCC Office",
+	"version": "0.1.2",
 	"update-url": "http://cyaproject.googlecode.com/files/gmccoffice_update.xml",
 	"description": "致力于改善GMCC各种系统的用户体验，减少复杂操作，提升工作效率。",
 	"background_page": "background.html",
@@ -69,6 +69,10 @@
 	"browser_action": {
 		"default_icon": "image/home.png",
 		"popup": "popup.html",
-		"name": "GMCC助手"
-	}
+		"name": "GMCC Office"
+	},
+	"plugins": [
+	    { "path": "plugins/npgmccplugin.dll", "public": true },
+	    { "path": "plugins/sqlite3.dll" }
+  	]
 }

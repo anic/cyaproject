@@ -11,8 +11,40 @@
 			$(function() {
 				var bg = chrome.extension.getBackgroundPage();
 				$("#txtPortalName").val(bg.setting("PortalName"));
-				$("#txtPortalPwd").val(bg.setting("PortalPwd"));
+
+				if(bg.isExtensionAdmin()) {
+					$("#pAdminDecription").html("您已经是此应用的管理员，可以访问所有功能。");
+					$("#btnDeactivateAdmin").show();
+				} else {
+					$("#pAdminDecription").html("您不是此应用的管理员，不可访问管理员功能。");
+					$("#btnActivateAdmin").show();
+				}
 			});
+			
+			
+			
+			function activateAdmin() {
+				var bg = chrome.extension.getBackgroundPage();
+				//TODO:加强口令
+				if(prompt("请输入管理员口令") == "gmccwebsitesucks") {
+					bg.setting(bg.EXTENSION_IS_ADMIN, "true");
+					alert("管理员功能开启成功");
+					window.location.reload();
+				} else {
+					alert("管理员口令错误");
+				}
+			}
+
+			function deactivateAdmin() {
+				var bg = chrome.extension.getBackgroundPage();
+				if(confirm("确认关闭管理员功能？"))
+				{
+					bg.setting(bg.EXTENSION_IS_ADMIN, null);
+					alert("管理员功能关闭成功");
+					window.location.reload();
+				}
+			}
+
 			function savePortal() {
 				var portalName = $("#txtPortalName").val();
 				var portalPwd = $("#txtPortalPwd").val();
@@ -27,20 +59,18 @@
 				var name = bg.setting("PortalName");
 				var pwd = bg.setting("PortalPwd");
 
-				var loginUrl = window.Login.buildUrl(name,pwd);
+				var loginUrl = window.Login.buildUrl(name, pwd);
 				window.open(loginUrl);
 			}
-			
-			function buildUrl()
-			{
+
+			function buildUrl() {
 				var bg = chrome.extension.getBackgroundPage();
 				var name = bg.setting("PortalName");
 				var pwd = bg.setting("PortalPwd");
 
-				var loginUrl = window.Login.buildUrl(name,pwd);
+				var loginUrl = window.Login.buildUrl(name, pwd);
 				alert(loginUrl);
 			}
-			
 		</script>
 		<style type="text/css">
 			.main {
@@ -91,12 +121,25 @@
 						<span><span>保存</span></span>
 					</button>
 				</fieldset>
-				<p>
-					点击 <a onclick="settingLogin()" href="#">测试登录</a> ，如果能够进入Portal，表示登录设置成功。
-				</p>
-				<p>
-					点击<a onclick="buildUrl()" href="#">这里</a>弹出登录链接
-				</p>
+				<div style="float: right;margin-top:-50px">
+					<p>
+						点击 <a onclick="settingLogin()" href="#">测试登录</a> ，如果能够进入Portal，表示登录设置成功。
+					</p>
+					<p>
+						点击<a onclick="buildUrl()" href="#">这里</a>弹出登录链接
+					</p>
+				</div>
+				<h3> 应用管理 </h3>
+				<fieldset>
+					<p id="pAdminDecription"></p>
+					<div id="divIsAdmin"></div>
+					<button id="btnActivateAdmin" name="" onclick="activateAdmin();" style="display: none;">
+						<span><span>开启管理员功能</span></span>
+					</button>
+					<button id="btnDeactivateAdmin" name="" onclick="deactivateAdmin();" style="display: none;">
+						<span><span>关闭管理员功能</span></span>
+					</button>
+				</fieldset>
 			</div>
 		</div>
 	</body>

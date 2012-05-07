@@ -26,6 +26,8 @@
 			}
 			#version {
 				color: #C66653;
+				font-weight:bold;
+				
 			}
 
 		</style>
@@ -49,12 +51,37 @@
 				</li>
 			</ul>
 			<div class="main">
-				<span>此应用目前的版本是 </span><span id="version"></span>
+				<span>此应用目前的版本是 </span><span id="version"></span>，各版本的更新内容见下面。
+				<h2> Version 0.1.2 </h2>
+				
+				<h3>系统</h3>
+				<ul>
+					<li>
+						改名为GmccOffice
+					</li>
+					<li>
+						新增管理员功能，可以看到管理员的菜单，例如离线通讯录等。下一步计划加强安全性，对管理员密码进行简单加密。
+					</li>
+				</ul>
+				
+				<h3>离线通讯录</h3>
+				<ul>
+					<li>
+						添加插件功能的开发，chrome可以与sqlite数据库进行交互
+					</li>
+					<li>
+						用户信息导入了sqlite数据库，可以较快速查询
+					</li>
+					<li>
+						计划：计划以后引入CLucene，强化模糊搜索。
+					</li>
+				</ul>
+				
 				<h2> Version 0.1.1 </h2>
 				<h3>系统功能</h3>
 				<ul>
 					<li>
-						本系统正式更名为GMCC助手，不在与原来进行分支
+						本系统正式更名为GMCC助手，不在与myoffice进行分支
 					</li>
 					<li>
 						弹出菜单增加登录功能，判断是否已经登录Portal（OA）的功能
