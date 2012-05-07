@@ -27,7 +27,7 @@ function init() {
 		// return false;
 		// } else//非回车
 		var avid = txtAVId.value;
-		console.log(avid);
+		avid = avid.replace(/^\s+|\s+$/g, "");
 		if(/[A-z]{2}\d{9}/.test(avid))//满足工单的格式
 		{
 			var y = avid.substr(2, 2);
@@ -35,6 +35,8 @@ function init() {
 			var d = avid.substr(6, 2);
 			var date = "20" + y + "-" + m + "-" + d;
 			document.getElementById("ctl00_cphBody_dtpStart1_txtDate").value = date;
+			
+			txtAVId.value = avid;
 		}
 		// }
 	};

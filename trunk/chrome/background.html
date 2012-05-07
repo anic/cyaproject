@@ -158,9 +158,20 @@
 				} else {
 					//set value
 					window.localStorage[key] = value;
-					return true;
+					return value;
 				}
 			}
+			
+			//判断是否是应用的管理员
+			
+			var EXTENSION_IS_ADMIN = "Extension.IsAdmin";
+			window.isExtensionAdmin = function()
+			{
+				return setting(EXTENSION_IS_ADMIN) == "true";
+			}
+			
+			
+			
 		</script>
 	</head>
 	<body></body>

@@ -16,12 +16,58 @@
 					else
 						window.Log.log("已登录，可离线与在线使用");
 				});
+
+				$("#txtSearchPerson").focus();
+
 			});
+			var DB_NAME = "gmcc.sqlite";
+
 			var _viewstate = "";
 			var _cur = 0, _total = -1;
 			function _reset() {
 				_cur = 0;
 				_total = -1;
+			}
+
+			//将人员信息存入数据库
+			function sqlitePerson() {
+				if(!confirm("全部人员导入数据库需要较长时间，请确认？"))
+					return;
+
+				var db = document.getElementById("dbplugin");
+				// return;
+				// db.sqlite(DB_NAME,"delete from person");
+
+				var tmp, result;
+				for(var str in window.localStorage) {
+					if(str.indexOf("psn") == -1)
+						continue;
+					s = window.localStorage[str];
+					tmp = s ? s.split("|") : [];
+					result = db.sqlite_exec(DB_NAME, "insert into person(ID,username,name,phone,department,room,email) values('" + tmp[0] + "','" + tmp[1] + "','" + tmp[2] + "','" + tmp[3] + "','" + tmp[4] + "','" + tmp[5] + "','" + tmp[6] + "')");
+					console.log(result);
+				}
+				alert("已完成人员导入");
+			}
+
+			function searchSqlitePerson() {
+				var db = dbplugin;
+				var key = $.trim(document.getElementById("txtSearchPerson").value);
+				
+				var keystring = "'%" + key + "%'";
+				var result = db.sqlite_exec(DB_NAME, "select * from person where username like " + keystring + " or name like " + keystring + " or phone like " + keystring);
+				if(result.indexOf("ERROR") == 0) {
+					alert(result);
+					return;
+				} else {
+					var data = [], item = null;
+					window.eval("window._q=(" + result + ")");
+					for(var i = 0, size = _q.length; i < size; ++i) {
+						item = _q[i];
+						data.push([item.ID, item.username, item.name, item.phone, item.department, item.room, item.email]);
+					}
+					showPersonData(data);
+				}
 			}
 
 			function startLoadPerson() {
@@ -254,7 +300,6 @@
 			}
 
 			function showPerson() {
-				$("#divPerson").empty();
 				var result = [], s;
 				for(var str in window.localStorage) {
 					if(str.indexOf("psn") == -1)
@@ -263,10 +308,16 @@
 					result.push( s ? s.split("|") : []);
 				}
 
+				showPersonData(result);
+			}
+
+			//根据数据显示员工信息
+			function showPersonData(data) {
+				$("#divPerson").empty();
 				$('#divPerson').html('<table cellpadding="0" cellspacing="0" border="0" class="display" id="example1"><\/table>');
 				$('#example1').dataTable({
 					"oLanguage" : oLanguage,
-					"aaData" : result,
+					"aaData" : data,
 					"aoColumns" : [{
 						"sTitle" : "ID"
 					}, {
@@ -357,39 +408,56 @@
 	<body>
 		<br>
 		<br>
-		<div>
-			<button id="btnShowDept" onclick="showDept()">
-				显示组织信息
-			</button>
-			<button id="btnLoadDept" onclick="loadDept()">
-				<span><span>加载组织信息</span></span>
-			</button>
-		</div>
-		<div>
-			<button id="btnShowPerson" onclick="showPerson()">
-				显示人员信息
-			</button>
-			<button id="btnLoadPerson" onclick="startLoadPerson()">
-				加载人员信息
-			</button>
-			<label>输入部门编号：</label>
-			<input type="text" id="txtDep" value="" />
-			<input type="checkbox" checked="checked" id="cbxLoadAll"/>
-			<label>加载全部页</label>
-			<span id="sProgress"></span>
-			<div style="float:right">
-				<button id="btnExport" onclick="exportPerson()">
-					导出人员信息
-				</button>
-				<button id="btnDept" onclick="exportDept()">
-					导出部门信息
-				</button>
-				<button id="btnClear" onclick="clearStorage()">
-					清空数据
-				</button>
+		<div style="border-bottom: 1px solid #DDD;">
+			<h2 >离线通讯录</h2>
+			<div style="float:right;margin-top:-20px;cursor:hand" onclick="$('#divTool').toggle()">
+				工具
 			</div>
 		</div>
+		<div id="divTool" style="display:none">
+			<div>
+				<button id="btnShowDept" onclick="showDept()">
+					显示组织信息
+				</button>
+				<button id="btnLoadDept" onclick="loadDept()">
+					<span><span>爬取组织信息</span></span>
+				</button>
+			</div>
+			<div>
+				<button id="btnShowPerson" onclick="showPerson()">
+					显示人员信息
+				</button>
+				<button id="btnLoadPerson" onclick="startLoadPerson()">
+					爬取人员信息
+				</button>
+				<button id="btnPersonDB" onclick="sqlitePerson()">
+					存入数据库
+				</button>
+				<label>输入部门编号：</label>
+				<input type="text" id="txtDep" value="" />
+				<input type="checkbox" checked="checked" id="cbxLoadAll"/>
+				<label>加载全部页</label>
+				<span id="sProgress"></span>
+				<div style="float:right">
+					<button id="btnExport" onclick="exportPerson()">
+						导出人员信息
+					</button>
+					<button id="btnDept" onclick="exportDept()">
+						导出部门信息
+					</button>
+					<button id="btnClear" onclick="clearStorage()">
+						清空数据
+					</button>
+				</div>
+			</div>
+		</div>
+		<input id="txtSearchPerson" value="" style="margin-top: 20px;height:30px;width:250px" onkeyup="if (event.keyCode == 13){searchSqlitePerson();} "/>
+		<button id="btnSearchPerson" onclick="searchSqlitePerson()">
+			搜索
+		</button>
 		<div id="divDept"></div>
 		<div id="divPerson"></div>
+		<!--<object id="dbplugin" type="application/mozilla-npsqlite-plugin"></object>-->
+		<object id="dbplugin" type="application/x-gmccplugin"></object>
 	</body>
 </html>
