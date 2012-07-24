@@ -5,7 +5,7 @@
 	"description": "致力于改善GMCC各种系统的用户体验，减少复杂操作，提升工作效率。",
 	"background_page": "background.html",
 	"options_page": "feature.html",
-	"permissions": ["tabs", "http://*/*", "notifications", "management"],
+	"permissions": ["tabs", "http://*/*", "https://*/*", "notifications", "management"],
 	"content_scripts": [
 		{
 			"matches": ["http://xqp2.gz.gmcc.net/*"],
@@ -72,7 +72,11 @@
 		"name": "GMCC Office"
 	},
 	"plugins": [
-	    { "path": "plugins/npgmccplugin.dll", "public": true },
-	    { "path": "plugins/sqlite3.dll" }
-  	]
+		{
+			"path": "plugins/npgmccplugin.dll",
+			"public": true
+		}, {
+			"path": "plugins/sqlite3.dll"
+		}
+	]
 }
