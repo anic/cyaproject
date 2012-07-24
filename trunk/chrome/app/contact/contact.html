@@ -53,7 +53,7 @@
 			function searchSqlitePerson() {
 				var db = dbplugin;
 				var key = $.trim(document.getElementById("txtSearchPerson").value);
-				
+
 				var keystring = "'%" + key + "%'";
 				var result = db.sqlite_exec(DB_NAME, "select * from person where username like " + keystring + " or name like " + keystring + " or phone like " + keystring);
 				if(result.indexOf("ERROR") == 0) {
@@ -402,6 +402,7 @@
 			@import "./css/demo_page.css";
 			@import "./css/demo_table.css";
 			@import "./css/demo_table_jui.css";
+			@import "./custom.css";
 		</style>
 		<link href="css/button.css" rel="stylesheet" type="text/css" media="screen">
 	</head>
@@ -412,6 +413,9 @@
 			<h2 >离线通讯录</h2>
 			<div style="float:right;margin-top:-20px;cursor:hand" onclick="$('#divTool').toggle()">
 				工具
+			</div>
+			<div style="float:right;margin-right:50px;margin-top:-20px;cursor:hand" >
+				<a href="contact_online.html">在线地址簿</a> |
 			</div>
 		</div>
 		<div id="divTool" style="display:none">
@@ -451,7 +455,7 @@
 				</div>
 			</div>
 		</div>
-		<input id="txtSearchPerson" value="" style="margin-top: 20px;height:30px;width:250px" onkeyup="if (event.keyCode == 13){searchSqlitePerson();} "/>
+		<input id="txtSearchPerson" value="" class="searchInput" onkeyup="if (event.keyCode == 13){searchSqlitePerson();} "/>
 		<button id="btnSearchPerson" onclick="searchSqlitePerson()">
 			搜索
 		</button>
