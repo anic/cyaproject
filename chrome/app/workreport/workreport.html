@@ -1,0 +1,284 @@
+<!DOCTYPE>
+<html>
+	<head>
+		<title>工单统计</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="./themes/blue/style.css" type="text/css" id="" media="print, projection, screen">
+		<script type="text/javascript" src="../../js/jquery.js"></script>
+		<script type="text/javascript" src="../../js/jquery.tablesorter.min.js"></script>
+		<script type="text/javascript">
+			//use table sorter
+			var db;
+			$(document).ready(function() {
+				db = window.localStorage["DbPath"];
+				$("#txtDb").val(db);
+
+				$("#subclass_detail").tablesorter();
+				$("#subclass_detail > tbody > tr:odd").attr("class", "odd");
+				$("#subclass_detail > tbody > tr:even").attr("class", "even");
+
+				$("#dev_detail").tablesorter();
+
+				if(!db) {
+					alert("未设置数据库路径");
+					return;
+				}
+
+				loadDetailData();
+				loadDevData();
+
+			});
+			function loadDevData() {
+				var plugin = document.getElementById("dbplugin");
+				var result, item, rows, arr;
+				rows = $("#dev_detail > tbody > tr");
+				loadQueryData(db, rows, "select * from [AS已结算工作量]", 1, "已结算");
+				loadQueryData(db, rows, "select * from [AS未结算的已完结需求单]", 2, "已完结");
+				loadQueryData(db, rows, "select * from [AS未结算的开发中需求单]", 3, "开发中");
+				loadQueryData(db, rows, "select * from [AS未结算的评审中需求单]", 4, "工作量");
+
+			}
+
+			function loadDetailData() {
+
+				var plugin = document.getElementById("dbplugin");
+				var result, item, rows, arr;
+				//加载已排版的详细
+
+				result = plugin.msaccess_exec(db, "select * from [S全排版工作量统计]");
+				console.log(result);
+				arr = window.eval("(" + result + ")");
+				rows = $("#subclass_detail > tbody > tr");
+				for(var i = 0, size = arr.length; i < size; ++i) {
+					item = arr[i];
+					rows[i].children[1].innerHTML = item["开发商"];
+					rows[i].children[2].innerHTML = item["合同工作量"];
+					rows[i].children[3].innerHTML = item["排版工作量"];
+
+					//公式
+					//rows[i].children[4].innerHTML = parseInt(item["排版工作量"] / item["合同工作量"] * 100) + "%";
+				}
+
+				//加载未排版的详细
+				loadQueryData(db, rows, "select * from [S预计固定工作量统计]", 4, "工作量");
+				loadQueryData(db, rows, "select * from [S预计新需求工作量统计]", 5, "工作量");
+				loadQueryData(db, rows, "select * from [S预计非固定工作量统计]", 6, "工作量");
+				
+			}
+
+			function loadQueryData(db, rows, sql, index, name) {
+				var plugin = document.getElementById("dbplugin");
+				var result = plugin.msaccess_exec(db, sql);
+				console.log(result);
+				var arr = window.eval("(" + result + ")");
+				var item;
+				for(var i = 0, size = arr.length; i < size; ++i) {
+					item = arr[i];
+					rows[i].children[index].innerHTML = item[name];
+				}
+			}
+
+			function saveDBPath() {
+				var path = document.getElementById("txtDb").value;
+				window.localStorage["DbPath"] = path;
+				alert("请刷新页面以生效");
+			}
+		</script>
+	</head>
+	<body>
+		<input id="txtDb" style="width:400px">
+		</input>
+		<button onclick="saveDBPath();">
+			设置
+		</button>
+		<table id="subclass_detail" class="tablesorter" >
+			<thead>
+				<tr>
+					<th> 子类 </th>
+					<th> 开发商 </th>
+					<th> 合同工作量 </th>
+					<th> 排版工作量 </th>
+					<th> 预计固定维护 </th>
+					<th> 预计新需求 </th>
+					<th> 预计弹性维护（AF单） </th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>业务资源管理</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>电子渠道客户交互</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>安全防御</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>协同办公</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>企业资源计划</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>营销管理</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>实体渠道客户交互</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>安全容灾</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>客户资料及帐务管理</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>平台类</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>渠道及合作伙伴管理</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				</tr>
+				<tr>
+					<td>数据分析</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		<table id="dev_detail" class="tablesorter">
+			<thead>
+				<tr>
+					<th>开发商</th>
+					<th>已结算</th>
+					<th>已完结</th>
+					<th>开发中</th>
+					<th>评审中</th>
+					<th>预计固定维护</th>
+					<th>预计新需求</th>
+					<th>预计弹性维护</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td> 从兴 </td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td> 品高 </td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td> 道一 </td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td> 东软 </td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+		<object id="dbplugin" type="application/x-gmccplugin"></object>
+	</body>
+</html>
