@@ -5,9 +5,11 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 		<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-		<script type="text/javascript" src="js/jquery.js"></script>
-		<script type="text/javascript" src="js/jNice.js"></script>
+		<script type="text/javascript" src="./bootstrap/js/jquery.js"></script>
+		<script type="text/javascript" src="./bootstrap/js/bootstrap.js"></script>
+
 		<script type="text/javascript" src="js/login.js"></script>
+		<script type="text/javascript" src="js/toolbar.js"></script>
 		<script type="text/javascript">
 			$(function() {
 				var bg = chrome.extension.getBackgroundPage();
@@ -82,8 +84,11 @@
 						<li class="active">
 							<a href="#">设置</a>
 						</li>
-						<li>
-							<a href="#">帮助</a>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 工具 <b class="caret"></b> </a>
+							<ul class="dropdown-menu" id="ulTool">
+								
+							</ul>
 						</li>
 						<li>
 							<a href="others.html">其他</a>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>系统缩略图生成</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../../bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+		<script type="text/javascript" src="../../bootstrap/js/jquery.js"></script>
+		<script type="text/javascript" src="../../bootstrap/js/bootstrap.js"></script>
+		<script type="text/javascript" src="../../bootstrap/extend/log.js"></script>
+		<script type="text/javascript">
+			$(function() {
+
+				$('.dropdown-toggle').dropdown();
+			});
+
+		</script>
+		<style type="text/css">
+
+		</style>
+		<link href="css/button.css" rel="stylesheet" type="text/css" media="screen">
+	</head>
+	<body>
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#"> GmccOffice </a>
+					<ul class="nav">
+						<li>
+							<a href="../../feature.html">首页</a>
+						</li>
+						<li>
+							<a href="../../setting.html">设置</a>
+						</li>
+						<li>
+							<a href="system.html">刷新</a>
+						</li>
+						<li>
+							<a href="../../others.html">其他</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2">
+					<!--Sidebar content-->
+					<ul class="nav nav-list">
+					</ul>
+				</div>
+				<div class="span10">
+					<!--Body content-->
+					<div class="page-header">
+						<h1>系统缩略图生成</h1>
+					</div>
+					<input id="txtUrl"></input>
+					<button id="btnGen" onclick="genThumb();"></button>
+					<img id="imgTarget" src=""/>
+				</div>
+			</div>
+			<!--<object id="dbplugin" type="application/mozilla-npsqlite-plugin"></object>-->
+			<object id="dbplugin" type="application/x-gmccplugin" style="width:1px;height:1px"></object>
+	</body>
+</html>

@@ -1,15 +1,23 @@
 //AF单的脚本里，写了一句“null != document.frames.ifAttachment”，只有IE和Opera可以读取，因此此处为调整
 (function adjustTemplate() {
+	var framesFunc = function(id) {
+		var f = document.getElementById(id);
+		if(f)
+			return f.contentWindow;
+		else
+			return {};
+	};
+	//适配document.frames('test')
+	document.frames = framesFunc;
+	
 	var ifAttachment = document.getElementById("ifAttachment");
 	if(ifAttachment) {
 		//如果存在表单，则定义之，是if可以进入
-		document.frames = {
-			ifAttachment : {
-				document : {
-					all : {
-						ucAttachment_trTemplateHeader : {
-							parentElement : null
-						}
+		framesFunc.ifAttachment = {
+			document : {
+				all : {
+					ucAttachment_trTemplateHeader : {
+						parentElement : null
 					}
 				}
 			}
@@ -21,13 +29,13 @@
 		 var template = document.frames.ifAttachment.document.all.ucAttachment_trTemplateHeader.parentElement;
 		 template.style.display = "none";
 		 }*/
+
 		$(ifAttachment).load(function() {
-			document.frames.ifAttachment.document.all.ucAttachment_trTemplateHeader.parentElement = ifAttachment.contentWindow.document.getElementById("tbTemplate");
+			framesFunc.ifAttachment.document.all.ucAttachment_trTemplateHeader.parentElement = ifAttachment.contentWindow.document.getElementById("tbTemplate");
 		});
 	} else {
 		//否则，跳过if判断
-		document.frames = {
-			ifAttachment : null
-		};
+		framesFunc.ifAttachment = null;
 	}
+
 })();

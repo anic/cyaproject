@@ -15,7 +15,8 @@
 			"matches": ["http://xqp2.gz.gmcc.net/*"],
 			"all_frames": true,
 			"run_at": "document_start",
-			"js": ["js/jquery.js", "inject/xqp/inject_xqp_common.js"]
+			"js": ["js/jquery.js", "inject/xqp/inject_xqp_common.js"],
+			"css": ["inject/xqp/inject_xqp_css.css"]
 		}, {
 			"matches": ["http://clgl.gz.gmcc.net/application/recordtaxiedit"],
 			"js": ["js/log.js", "inject/clgl/inject_taxi.js"]
@@ -30,13 +31,13 @@
 			"matches": ["http://portal.gmcc.net/portal/redirect.htm?*app1"],
 			"js": ["js/log.js", "js/jquery.js", "inject/portal/inject_portal_login.js"]
 		}, {
-			"matches": ["http://pac.gmcc.net/*"],
+			"matches": ["http://pac.gmcc.net/*", "https://pac.gmcc.net/*"],
 			"all_frames": true,
 			"run_at": "document_end",
 			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_middle.js", "inject/portal/inject_oa_ad.js"],
 			"css": ["inject/portal/inject_oa_common.css"]
 		}, {
-			"matches": ["http://pac.gmcc.net/", "http://pac.gmcc.net/index.html*", "http://portal.gmcc.net/portal/?goto=*"],
+			"matches": ["http://pac.gmcc.net/", "https://pac.gmcc.net/", "http://pac.gmcc.net/index.html*", "http://portal.gmcc.net/portal/?goto=*"],
 			"js": ["inject/portal/inject_pac_login.js"]
 		}, {
 			"matches": ["http://pac.gmcc.net/smc/*", "http://pac.gmcc.net/portal/*"],
