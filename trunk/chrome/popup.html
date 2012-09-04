@@ -7,7 +7,7 @@
 		<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/login.js"></script>
-		<script type="text/javascript" src="js/jNice.js"></script>
+		
 		<script type="text/javascript">
 			$(function() {
 				// var bg = chrome.extension.getBackgroundPage();
@@ -59,21 +59,23 @@
 			}
 		</script>
 	</head>
-	<body style="width:180px">
+	<body style="width:150px">
 		<!--
 		参考：http://codecanyon.net/item/drop-menu/full_screen_preview/81289?ref=1stwebdesigner&clickthrough_id=38287307&redirect_back=true&ref=1stwebdesigner
 		-->
-		<ul class="nav nav-list" style="width:100%">
+		<ul class="nav nav-list" style="width:170px;margin-left:-20px;">
 			<li class="nav-header">
-				OA登录状态
+				<i class="icon-user"></i>OA登录状态
 			</li>
 			<li>
+				
 				<a href="#" onclick="menuLogin()" id="btnLogin">登录</a>
 			</li>
 			<li>
 				<a href="http://pac.gmcc.net/portal/dt?DISHI_Portal.setSelected=DISHI_guangzhou_workbench1&last=false&provider=DISHI_Portal" target="_blank">工作台</a>
 			</li>
 			<li class="nav-header">
+				<i class="icon-book"></i>
 				通讯录
 			</li>
 			<li class="adminMenu">
@@ -86,6 +88,7 @@
 				<a href="http://lsp2.gz.gmcc.net/OffCommunicate/adress.aspx" target="_blank">市通讯录</a>
 			</li>
 			<li class="nav-header">
+				<i class="icon-cog"></i>
 				设置
 			</li>
 			<li>
@@ -95,7 +98,11 @@
 				<a href="#" onclick="javascript:openTab('chrome://settings/extensionSettings')">Chrome</a>
 			</li>
 			<li class="nav-header">
+				<i class="icon-plus"></i>
 				其他
+			</li>
+			<li class="adminMenu">
+				<a href="app/workreport/index.html" target="_blank">需求监控</a>
 			</li>
 			<li class="adminMenu">
 				<a href="app/appscan/index.html" target="_blank">Query构造器</a>

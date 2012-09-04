@@ -7,7 +7,6 @@
 		<link href="../../bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 		<script type="text/javascript" src="../../bootstrap/js/jquery.js"></script>
 		<script type="text/javascript" src="../../bootstrap/js/bootstrap.js"></script>
-		<script type="text/javascript" src="../../bootstrap/js/bootstrap-dropdown.js"></script>
 		<script type="text/javascript" src="../../bootstrap/extend/log.js"></script>
 		<script type="text/javascript" src="../../js/login.js"></script>
 		<script type="text/javascript" src="./js/jquery.dataTables.js"></script>
@@ -23,6 +22,12 @@
 			$(function() {
 
 				$('.dropdown-toggle').dropdown();
+
+				var bg = chrome.extension.getBackgroundPage();
+				if(bg.isExtensionAdmin()) {
+					$("#divTool").show();
+				}
+
 			});
 
 		</script>
@@ -51,7 +56,7 @@
 							<a href="../../setting.html">设置</a>
 						</li>
 						<li>
-							<a href="#">帮助</a>
+							<a href="contact.html">刷新</a>
 						</li>
 						<li>
 							<a href="../../others.html">其他</a>
@@ -75,19 +80,23 @@
 				</div>
 				<div class="span10">
 					<!--Body content-->
-					<h2 id="tip" >离线通讯录</h2>
-					<input id="txtSearchPerson" class="input-medium search-query" value="" onkeyup="if (event.keyCode == 13){searchSqlitePerson();} "/>
-					<button class="btn" id="btnSearchPerson" onclick="searchSqlitePerson()">
+					<div class="page-header">
+						<h1>离线通讯录</h1>
+					</div>
+					<input id="txtSearchPerson" class="input-medium search-query" value="" onkeyup="if (event.keyCode == 13){search();} "/>
+					<button class="btn" id="btnSearchPerson" onclick="search()" >
 						搜索
 					</button>
+					<input type="checkbox" id="cbxOnlineSearch" checked="checked"/>
+					在线搜索
 					<div id="divTool" style="display:none;" class="row-fluid">
-						<div class="span8">
+						<div class="span4">
 							<ul class="nav nav-pills">
 								<li class="dropdown" id="menutest1">
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#menutest1"> 组织 <b class="caret"></b> </a>
 									<ul class="dropdown-menu">
 										<li>
-											<a id="btnShowDept" onclick="showDept()" href="#">显示组织信息</a>
+											<a id="btnShowDept" onclick="showDept();" href="#">显示组织信息</a>
 										</li>
 										<li>
 											<a id="btnLoadDept" onclick="loadDept()" href="#">爬取组织信息</a>
@@ -122,6 +131,9 @@
 										</li>
 									</ul>
 								</li>
+								<li class="dropdown" id="menutest3">
+									<a class="dropdown-toggle" data-toggle="dropdown" href="#menutest4" onclick="OnlineContact.search('chengyaoan');"> 测试</a>
+								</li>
 							</ul>
 						</div>
 						<div id="loadPersonOption" class="span4">
@@ -132,8 +144,21 @@
 							<span id="sProgress"></span>
 						</div>
 					</div>
-					<div id="divDept"></div>
-					<div id="divPerson"></div>
+					<ul class="nav nav-tabs" style="margin-top:20px" id="myTab">
+						<li class="active">
+							<a href="#divPerson" id="aTabPerson" data-toggle="tab" >人员</a>
+						</li>
+						<li>
+							<a href="#divDept" id="aTabDept" data-toggle="tab">组织</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="divPerson">
+							<div id="divOffline"></div>
+							<div id="divOnline"></div>
+						</div>
+						<div class="tab-pane" id="divDept"></div>
+					</div>
 				</div>
 			</div>
 			<!--<object id="dbplugin" type="application/mozilla-npsqlite-plugin"></object>-->

@@ -1,10 +1,10 @@
 $(function() {
 	window.Login.testLogin(function(result) {
 		if(!result) {
-			
-			window.Log.info("可离线用，登录后再更新",$("#tip"));
+
+			window.Log.info("可离线用，登录后再更新", $("#tip"));
 		} else
-			window.Log.log("已登录，可离线与在线使用",$("#tip"));
+			window.Log.log("已登录，可离线与在线使用", $("#tip"));
 	});
 
 	$("#txtSearchPerson").focus();
@@ -40,10 +40,9 @@ function sqlitePerson() {
 	alert("已完成人员导入");
 }
 
-function searchSqlitePerson() {
+function searchSqlitePerson(key) {
 	var db = dbplugin;
-	var key = $.trim(document.getElementById("txtSearchPerson").value);
-
+	
 	var keystring = "'%" + key + "%'";
 	var result = db.sqlite_exec(DB_NAME, "select * from person where username like " + keystring + " or name like " + keystring + " or phone like " + keystring);
 	if(result.indexOf("ERROR") == 0) {
@@ -76,7 +75,7 @@ function loadPersonByDept(cur) {
 			var result = str.match(/__VIEWSTATE\" value=\"([^\"]+)/);
 			if(result) {
 				_viewstate = result[1];
-				window.Log.log("已获取页面状态，开始执行")
+				window.Log.log("已获取页面状态，开始执行");
 				loadPersonByDept();
 			} else {
 				window.Log.err("未能获取状态，请登录后刷新本页面。");
@@ -267,8 +266,8 @@ var oLanguage = {
 	"sInfo" : "显示第 _START_ 到  _END_ 页，共  _TOTAL_ 页",
 	"sInfoEmpty" : "显示 0 到 0 页，共  0 页",
 	"sInfoFiltered" : "(筛选出  _MAX_ 条数据)",
-	"sSearch":"查找"
-	
+	"sSearch" : "查找"
+
 };
 
 function showDept() {
@@ -290,6 +289,10 @@ function showDept() {
 			"sTitle" : "名称"
 		}]
 	});
+
+	//switch tab
+	$('#aTabDept').tab('show');
+
 }
 
 function showPerson() {
@@ -306,8 +309,8 @@ function showPerson() {
 
 //根据数据显示员工信息
 function showPersonData(data) {
-	$("#divPerson").empty();
-	$('#divPerson').html('<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered"id="example1"><\/table>');
+	$("#divOffline").empty();
+	$('#divOffline').html('<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered"id="example1"><\/table>');
 	$('#example1').dataTable({
 		"oLanguage" : oLanguage,
 		"aaData" : data,
@@ -327,6 +330,9 @@ function showPersonData(data) {
 			"sTitle" : "邮箱"
 		}]
 	});
+
+	//switch person
+	$('#aTabPerson').tab('show');
 }
 
 function clearStorage() {
@@ -389,4 +395,123 @@ function exportPerson() {
 	$("body").empty();
 	$("body").append(table);
 
+}
+
+function search()
+{
+	var key = $.trim(document.getElementById("txtSearchPerson").value);
+	if ($("#cbxOnlineSearch").attr('checked') == "checked")
+		OnlineContact.search(key);
+		
+	searchSqlitePerson(key);
+}
+
+var OnlineContact = {
+	search : function(key,pageSize) {
+		var url = "http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app";
+		$.get(url, function(msg) {
+			//console.log(msg);
+			//window.s = msg;
+
+			var result = msg.match(/__VIEWSTATE\" value=\"([^\"]+)/);
+			if(result) {
+				OnlineContact.__VIEWSTATE = result[1];
+			}
+			result = msg.match(/__EVENTVALIDATION\" value=\"([^\"]+)/);
+			if(result) {
+				OnlineContact.__EVENTVALIDATION = result[1];
+			}
+
+			window.Log.log("已获取页面状态");
+
+			$.post("http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app", {
+				__VIEWSTATE : OnlineContact.__VIEWSTATE,
+				__EVENTVALIDATION : OnlineContact.__EVENTVALIDATION,
+				__CALLBACKID : "__Page",
+				__CALLBACKPARAM : key + "#" + "0" + "#",
+				__EVENTTARGET : "",
+				__EVENTARGUMENT : "",
+				txtName : ""
+			}, function(msg) {
+				console.log(msg);
+				window.s = msg;
+
+				// var start = msg.indexOf('<table');
+				// var end = msg.lastIndexOf('</table>');
+				// var xmlString = msg.substr(start, end + 8 - start);
+				//格式化为xml对象
+
+				// <tr class="dg_alternatingitemstyle">
+				// <td class="col1"><input type="checkbox" value="chenyulin" /></td>
+				// <td class="col2">
+				// <a target="_blank" href="http://ims.gmcc.net/api/msgrd.ashx?uid=chenyulin&action=chat"><img name="imsStatus" onload="getOnlineStatus(this)" style="border: none; vertical-align: text-bottom;" imsImgUrl="http://ims.gmcc.net/api/UserStatusImage.ashx?uid=chenyulin" src="http://contacts.services.gmcc.net/Images/nodisturb.ico" alt="发起IMS会话" /></a> <a class="user" onclick="showUserInfoPage('0221350253');return false;"
+				// href="#" title="陈玉麟">陈玉麟</a>
+				// </td>
+				// <td class="col3"><span title="广州分公司-番禺分公司-中区服务销售中心">广州-中区服务销售中心</span>
+				// </td>
+				// <td class="col4">
+				// <span title="13922330333">13922330333</span>
+				// </td>
+				// </tr>
+
+				var matches = msg.match(/<tr class="[\w\W.\n]*?<\/tr>/mg);
+				var m,mat, name, id, dept, phone, item;
+				var data = [];
+				if (!matches)
+					matches = [];
+					
+				for(var i = 0, size = matches.length; i < size; ++i) {
+					window.m = m = matches[i];
+					mat = m.match(/value="(\w+)"/m);
+					if(!mat)
+						continue;
+					name = mat[1];
+					id = m.match(/showUserInfoPage\('(\d+)'\)/)[1];
+					label = m.match(/href="#" title="(\W+)">/m)[1];
+					mat = m.match(/span title="([^"]*)"/mg);
+					
+					if(mat && mat.length == 2) {
+						dept = mat[0].match(/span title="([^"]*)"/m)[1]
+						phone = mat[1].match(/span title="([^"]*)"/m)[1]
+					} else {
+						dept = "";
+						phone = "";
+					}
+					console.log([id, name, label, phone, dept, "", ""].join(","));
+					data.push([id, name, label, phone, dept, "", ""]);
+				}
+
+				OnlineContact._showOnlinePersonData(data);
+
+			});
+		});
+	},
+	__VIEWSTATE : "",
+	__EVENTVALIDATION : "",
+	_showOnlinePersonData : function(data) {
+		$('#divOnline').empty();
+		$('#divOnline').html('<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered"id="example2"><\/table>');
+		$('#example2').dataTable({
+			"oLanguage" : oLanguage,
+			"aaData" : data,
+			"aoColumns" : [{
+				"sTitle" : "ID"
+			}, {
+				"sTitle" : "账号"
+			}, {
+				"sTitle" : "姓名"
+			}, {
+				"sTitle" : "电话"
+			}, {
+				"sTitle" : "部门"
+			}, {
+				"sTitle" : "科室"
+			}, {
+				"sTitle" : "邮箱"
+			}]
+		});
+
+		//switch person
+		$('#aTabPerson').tab('show');
+	}
 }

@@ -8,11 +8,20 @@ window.Log = (function() {
 			// </div>
 			if (!element)
 				element = document.body;
-			$(element).after(' <div class="alert ' + className + '">' + m + '</div>');
+			$(element).after(' <div id="msg" class="alert ' + className + '">' + m + '</div>');
+			$("#msg").fadeOut(2000);
 		},
 		/**
 		 * log 提示用户信息
 		 */
+		log:function(m){
+			var element = document.getElementById("tip");
+			if (!element)
+				element = document.body;
+			
+			this.info(m,element);
+		},
+		 
 		success : function(m, element) {
 			this._alert(m, element, "alert-success");
 		},

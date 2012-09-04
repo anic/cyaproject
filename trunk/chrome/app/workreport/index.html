@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>需求监控</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<!-- bootstrap -->
+		<link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../../bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+		<script type="text/javascript" src="../../bootstrap/js/jquery.js"></script>
+		<script type="text/javascript" src="../../bootstrap/js/bootstrap.js"></script>
+		<script type="text/javascript" src="../../bootstrap/extend/log.js"></script>
+		<script type="text/javascript" src="../../js/login.js"></script>
+		<!-- wijmo -->
+		<link href="../../wijmo/themes/rocket/jquery-wijmo.css" rel="stylesheet" type="text/css" />
+		<link href="../../wijmo/themes/wijmo/jquery.wijmo-open.2.1.6.css" rel="stylesheet" type="text/css" />
+		<link href="../../wijmo/themes/wijmo/jquery.wijmo.wijgrid.css" rel="stylesheet" type="text/css" />
+		<!--<script src="../../wijmo/external/jquery-1.7.1.min.js" type="text/javascript"></script>-->
+		<script src="../../wijmo/external/jquery-ui-1.8.18.custom.min.js" type="text/javascript"></script>
+		<script src="../../wijmo/external/globalize.min.js" type="text/javascript"></script>
+		<script src="../../wijmo/external/jquery.mousewheel.min.js" type="text/javascript"></script>
+		<script src="../../wijmo/external/jquery.wijmo-open.all.2.1.6.min.js" type="text/javascript"></script>
+		<script src="../../wijmo/wijmo/jquery.wijmo.wijdatasource.js" type="text/javascript"></script>
+		<script src="../../wijmo/wijmo/jquery.wijmo.wijgrid.js" type="text/javascript"></script>
+		<!-- my app -->
+		<script type="text/javascript" src="js/accessdb.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				try {
+					AccessDb.init("dbplugin");
+					Monitor.updateMonitor();
+					Monitor.updateMySearch();
+				} catch(e) {
+					console.log(e);
+				}
+
+				$("#spPath").text(AccessDb.dbpath);
+
+			});
+			var Monitor = {
+				updateMonitor : function() {
+					$(".db-monitor-item").remove();
+					//校验监控列表
+					var monitor = AccessDb.exec("select * from _monitor where type='monitor' ");
+					var target_count, type;
+					for(var i = 0, len = monitor.length; i < len; ++i) {
+						target_count = AccessDb.exec(monitor[i].content).length;
+						console.log(target_count);
+						if(target_count == 0) {
+							$("#lstMonitor").append('<li class="db-monitor-item"><a href="#" onclick="Monitor.showResult(\'' + monitor[i].name + '\')">' + monitor[i].name + '</a></li>');
+						} else {
+							type = monitor[i].level == "warn" ? "warning" : "error";
+							$("#lstMonitor").append('<li class="db-monitor-item"><a href="#" onclick="Monitor.showResult(\'' + monitor[i].name + '\')">' + monitor[i].name + ' <i class="badge badge badge-' + type + '">' + target_count + '</i></a></li>');
+						}
+					}
+				},
+				updateMySearch:function(){
+					var mysearch = AccessDb.exec("select name from _monitor where type='mysearch' ");
+					for(var i = 0, len = mysearch.length; i < len; ++i) {
+						$("#lstMysearch").append('<li class="db-monitor-item"><a href="#" onclick="Monitor.showResult(\'' + mysearch[i].name + '\')">' + mysearch[i].name + '</a></li>');
+					}
+				},
+				
+				showResult : function(name) {
+					var monitor_content = AccessDb.exec("select content from _monitor where name = '" + name + "'");
+					if(monitor_content.length == 0) {
+						alert("无法获取监控脚本");
+						return;
+					}
+
+					var result = AccessDb.exec(monitor_content[0].content);
+					$("#hResultTitle").text(name);
+					$("#spResult").text("返回" + result.length + "条结果");
+					if(result.length > 0) {
+						$("#divResultContent").append('<table id="tbResult"></table>');
+						$("#tbResult").wijgrid({
+							allowSorting : true,
+							scrollMode : "auto",
+							allowColSizing : true,
+							allowEditing : true,
+							data : result
+						});
+					} else {
+						$("#divResultContent").empty();
+					}
+				}
+			};
+
+			var Tool = {
+				config : function() {
+					$("#divConfig").toggle();
+					if($("#divConfig").css("display") == "block")
+						$("#curDbpath").val(AccessDb.dbpath);
+				},
+				configSave : function() {
+					window.localStorage["DbPath"] = $("#curDbpath").val();
+					alert("设置成功，请刷新页面生效");
+					$("#divConfig").hide();
+				},
+				configCancel : function() {
+					$("#divConfig").hide();
+				}
+			};
+
+		</script>
+		<style type="text/css">
+		</style>
+	</head>
+	<body>
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="brand" href="#"> GmccOffice </a>
+					<ul class="nav">
+						<li>
+							<a href="../../feature.html">首页</a>
+						</li>
+						<li>
+							<a href="../../setting.html">设置</a>
+						</li>
+						<li>
+							<a href="index.html">刷新</a>
+						</li>
+						<li>
+							<a href="../../others.html">其他</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2">
+					<!--Sidebar content-->
+					<ul class="nav nav-list">
+						<li class="nav-header">
+							工具
+						</li>
+						<li>
+							<a href="#" onclick="Tool.config();">设置工单数据库</a>
+						</li>
+						<li>
+							<a href="#">图形分析</a>
+						</li>
+					</ul>
+					<ul style="margin-top: 10px" class="nav nav-list" id="lstMonitor">
+						<li class="nav-header">
+							监控列表 <span></span>
+							<i class="icon-refresh" style="cursor:pointer" onclick="Monitor.updateMonitor();"></i>
+						</li>
+					</ul>
+					<ul style="margin-top: 10px" class="nav nav-list" id="lstMysearch">
+						<li class="nav-header">
+							我的查询 <span></span>
+						</li>
+					</ul>
+				</div>
+				<div class="span10">
+					<!--Body content-->
+					<div class="page-header">
+						<h1>需求监控 <small>结合Access监控信息化工单情况</small></h1>
+					</div>
+					<div id="divConfig" style="display:none">
+						<form class="form-horizontal">
+							<fieldset>
+								<legend>
+									设置
+								</legend>
+								<div class="control-group">
+									<label class="control-label" for="curDbpath">数据库路径</label>
+									<div class="controls">
+										<input type="text" class="input-xlarge" id="curDbpath">
+									</div>
+								</div>
+							</fieldset>
+							<div class="form-actions">
+								<button type="submit" class="btn btn-primary" onclick="Tool.configSave();">
+									保存
+								</button>
+								<button class="btn" onclick="Tool.configCancel();">
+									取消
+								</button>
+							</div>
+						</form>
+					</div>
+					<div id="divResult">
+						<h3 id="hResultTitle"></h3><span id="spResult"></span>
+						<div id="divResultContent">
+							
+						</div>
+					</div>
+					<!--<object id="dbplugin" type="application/mozilla-npsqlite-plugin"></object>-->
+					<object id="dbplugin" type="application/x-gmccplugin" style="width:1px;height:1px"></object>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
