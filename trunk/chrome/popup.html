@@ -12,13 +12,16 @@
 			$(function() {
 				// var bg = chrome.extension.getBackgroundPage();
 				// $("#description").append(bg.gExInfo.description);
-				window.Login.testLogin(function(result) {
-					if(result) {
-						onLoginSuccess(result);
-					} else {
-						$("#btnLogin").html("<< 请登录  >>");
-					}
-				});
+				
+				//暂时不开启自动登录
+				// window.Login.testLogin(function(result) {
+					// if(result) {
+						// onLoginSuccess(result);
+					// } else {
+						// $("#btnLogin").html("<< 请登录  >>");
+					// }
+				// });
+				
 				//屏蔽管理员菜单
 				var bg = chrome.extension.getBackgroundPage();
 				if(!bg.isExtensionAdmin()) {
