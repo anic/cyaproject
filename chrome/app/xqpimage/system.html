@@ -10,17 +10,28 @@
 		<script type="text/javascript" src="../../bootstrap/extend/log.js"></script>
 		<script type="text/javascript">
 			$(function() {
-
 				$('.dropdown-toggle').dropdown();
 			});
-
+			function genThumb() {
+				var url = $("#txtUrl").val();
+				$("#fmTarget").attr("src", url);
+				$("#fmTarget").css("width", "100%").css("height", "100%").css("top", "0").css("left", "0");
+				$("#fmTarget").load(function() {
+					chrome.tabs.captureVisibleTab(chrome.windows.WINDOW_ID_CURRENT, {
+						"format" : "png"
+					}, function(imgUrl) {
+						console.log(imgUrl);
+						$("#imgTarget").attr("src", imgUrl);
+						$("#fmTarget").css("width", "1px").css("height", "1px").css("top", "-1").css("left", "-1");
+					});
+				})
+			};
 		</script>
 		<style type="text/css">
-
 		</style>
-		<link href="css/button.css" rel="stylesheet" type="text/css" media="screen">
 	</head>
 	<body>
+		<iframe id="fmTarget" style="position:absolute;left:-1px;top:-1px;width:1px;height:1px;z-index: 1000" scrolling="no" src=""></iframe>
 		<div class="navbar">
 			<div class="navbar-inner">
 				<div class="container">
@@ -46,16 +57,17 @@
 			<div class="row-fluid">
 				<div class="span2">
 					<!--Sidebar content-->
-					<ul class="nav nav-list">
-					</ul>
+					<ul class="nav nav-list"></ul>
 				</div>
 				<div class="span10">
 					<!--Body content-->
 					<div class="page-header">
 						<h1>系统缩略图生成</h1>
 					</div>
-					<input id="txtUrl"></input>
-					<button id="btnGen" onclick="genThumb();"></button>
+					<input id="txtUrl" value="http://www.baidu.com"/>
+					<button id="btnGen" onclick="genThumb();">
+						生成
+					</button>
 					<img id="imgTarget" src=""/>
 				</div>
 			</div>
