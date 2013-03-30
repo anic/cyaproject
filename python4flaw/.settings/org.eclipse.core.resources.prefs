@@ -1,0 +1,21 @@
+#Wed Mar 20 21:02:02 CST 2013
+eclipse.preferences.version=1
+encoding//src/captchabreak/crawler.py=utf-8
+encoding//src/captchabreak/crawler3.py=utf-8
+encoding//src/flawtest/gzdh/test.py=utf-8
+encoding//src/flawtest/jboss/CNVD201000821.py=utf-8
+encoding//src/flawtest/weibo/sniffer.py=utf-8
+encoding//src/flawtest/weibo/weibo.py=utf-8
+encoding//src/gzdh/importer.py=utf-8
+encoding//src/gzdh/importer_4g.py=utf-8
+encoding//src/gzdh/importer_filter.py=utf-8
+encoding//src/gzdh/importer_lovers.py=utf-8
+encoding//src/gzdh/ip.py=utf-8
+encoding//src/gzdh/ip_lovers.py=utf-8
+encoding//src/gzdh/testproc.py=utf-8
+encoding//src/hello.py=utf-8
+encoding//src/searcher/dao.py=utf-8
+encoding//src/searcher/reportparse.py=utf-8
+encoding//src/searcher/test.py=utf-8
+encoding//src/test/mysetup.py=utf-8
+encoding//src/test/reportparse.py=utf-8
