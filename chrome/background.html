@@ -19,6 +19,7 @@
 					window.gManifest = json;
 				});
 				var onTabChange = function(tab) {
+
 					/*
 
 					 Tab
@@ -47,6 +48,21 @@
 					 * */
 					var cs = gManifest.content_scripts;
 					var url = tab.url;
+					console.log(url);
+
+					//减少google重定向被墙的概率
+					if(url.match(/https?\:\/\/www\.google\.com\/url/)) {
+						var mat = url.match(/url=([^&|$]*)/);
+						if(mat) {
+							var target = mat[1];
+							target = decodeURIComponent(target);
+							console.log("redirect to " + target);
+							chrome.tabs.update(tab.id, {
+								url : target
+							});
+						}
+					}
+
 					//这个url不像location.href（末尾有/），这个是直接显示的,为了形成匹配，添加“/”
 					var pathMatch = url.match(/\//g);
 					if(pathMatch && pathMatch.length == 2) {
@@ -161,17 +177,12 @@
 					return value;
 				}
 			}
-			
 			//判断是否是应用的管理员
-			
+
 			var EXTENSION_IS_ADMIN = "Extension.IsAdmin";
-			window.isExtensionAdmin = function()
-			{
+			window.isExtensionAdmin = function() {
 				return setting(EXTENSION_IS_ADMIN) == "true";
 			}
-			
-			
-			
 		</script>
 	</head>
 	<body></body>
