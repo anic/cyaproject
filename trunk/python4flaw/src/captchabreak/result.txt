@@ -1,0 +1,423 @@
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+GCFS
+Try login with code  GCFS
+Login Fail
+wait for a while
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+EBBLI
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+JGLIM
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+FHHL
+Try login with code  FHHL
+Login Fail
+wait for a while
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+LIIEI
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+1.J32
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+NDSH
+Try login with code  NDSH
+Login Fail
+wait for a while
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+THE
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+UFEC
+Try login with code  UFEC
+Login Fail
+wait for a while
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+HGCMI
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+SHHC!
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+G?Y~I~
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+IEMH
+Try login with code  IEMH
+Login Success
+load page loadBeautifulNumber.do
+Done:  D:\Program\chromescript\python4flaw\src\captchabreak\downlaod\code.jpg
+download end...
+LFJU
+<table align="center" border="0" cellpadding="4" cellspacing="1" class="selNumber" width="540">
+ <tr>
+  <th>
+   全球通号码
+  </th>
+  <th>
+   预存话费(元)
+  </th>
+  <th>
+   套餐要求
+  </th>
+  <th>
+   全球通号码
+  </th>
+  <th>
+   预存话费(元)
+  </th>
+  <th>
+   套餐要求
+  </th>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13926057011"/>
+   13926057011
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924274900"/>
+   13924274900
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13922715911"/>
+   13922715911
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924059700"/>
+   13924059700
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924063266"/>
+   13924063266
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13926446966"/>
+   13926446966
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13922185722"/>
+   13922185722
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13922417622"/>
+   13922417622
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13902308422"/>
+   13902308422
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13926453611"/>
+   13926453611
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13928754466"/>
+   13928754466
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924084033"/>
+   13924084033
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924067300"/>
+   13924067300
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13922129100"/>
+   13922129100
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13922143700"/>
+   13922143700
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13926253200"/>
+   13926253200
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13926448300"/>
+   13926448300
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924201100"/>
+   13924201100
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924067566"/>
+   13924067566
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13928749122"/>
+   13928749122
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13925095300"/>
+   13925095300
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13903075211"/>
+   13903075211
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924062099"/>
+   13924062099
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924049766"/>
+   13924049766
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13925067722"/>
+   13925067722
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924086500"/>
+   13924086500
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13928703533"/>
+   13928703533
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924131133"/>
+   13924131133
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13922191700"/>
+   13922191700
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+  <td>
+   <input id="photoNumber" name="photoNumber" onclick="CheckClick(this)" type="checkbox" value="13924049166"/>
+   13924049166
+  </td>
+  <td class="red">
+   500
+  </td>
+  <td>
+   128元及以上
+  </td>
+ </tr>
+ <tr>
+ </tr>
+</table>
+<div class="numberPage" id="numberPage">
+ <a style="cursor:pointer;">
+  <img align="absmiddle" onclick="searchNumber2();" src="images/pageFirst.jpg"/>
+ </a>
+ <a style="cursor:pointer;">
+  <img align="absmiddl" onclick="searchNumber2();" src="images/pageLast.jpg"/>
+ </a>
+</div>
+<div style="color: blue;">
+ 您搜索的结果分页显示，如本页无您满意的号码，可尝试点击【下一页】继续获取号码。
+</div>
+

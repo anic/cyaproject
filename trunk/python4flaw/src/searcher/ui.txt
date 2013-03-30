@@ -1,0 +1,18 @@
+Python开发Gui程序的框架选择
+
+打算用python写点gui程序, 之前听说过python的gui库有 wxPython, pyQt,  查Google后, 又有两个候选项目, pygtk, Tkinter. 选项真够多的, 有时候选项太多, 也不是什么好事. 花了我大把时间搜索和试用.  
+
+选项:
+1. pyQt 听说有个很好用的Designer, 但pyQt的license不怎么友好. 只支持GPL和收费 license.
+2. pygtk 的license为LGPL, Glade这个Designer也不错, 只是pygtk设计出的gui在windows显示爆丑.
+3. wxPython 的 Designer 一大堆, 比较下来 wxFormBuilder 算是最好的一个Designer了, 不仅能提供所见即所得的功能,还能生成python源码, 其他designer多生成xrc(xml格式)文件. wxPython自带的Demos是一个不错的资源, 可以参照着学习.  
+4. Tkinter这个比较冷门
+5. 开源Python UI框架：Kivy影响特别深,  跨平台:win/linux/mac os/Android, 可通过代码建构和模版两种方式完成gui生成.  值得一试.
+6. 使用Jython的话, 可用SWT/Swing
+7. 如果使用IronPython的话, 可用WinForm
+
+简单分析:
+如果是用cpython的话, 从开发角度看, pyQt应该是支持度最好的选项了. 
+对我来讲, 对于WinForm是比较熟悉的, 另外, 开发的程序是在windows上用, 所以 IronPython +WinForm就是最终的选择了. 
+
+我将详细写一个文章记录IronPython+WinForm的开发经验.
