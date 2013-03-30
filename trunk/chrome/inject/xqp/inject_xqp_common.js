@@ -11,5 +11,4 @@
 		url = chrome.extension.getURL("inject/xqp/inject_xqp_head.js");
 		jQuery('body').append(scriptStr1 + url + scriptStr2);
 	}
-
 })();
