@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'D:\Program\python\breadrobber\src\main.ui'
 #
-# Created: Sat Mar 30 16:15:47 2013
+# Created: Sun Mar 31 21:00:50 2013
 #      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!

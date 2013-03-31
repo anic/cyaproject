@@ -19,6 +19,15 @@ class Facade(QObject):
         br.set_proxies(proxy)
         self.br = br 
     
+    def debug(self,text):
+#        try:
+#            f = open('log.txt', 'a')
+#            f.write(unicode(str(text)) + '\n')
+#            f.close()
+#        except Exception,ex:
+#            print ex
+        pass
+    
     def msg(self, text):
         strMsg = unicode('{0} {1}'.format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                                   , unicode(str(text))))
@@ -73,9 +82,12 @@ class Facade(QObject):
         result = []
         
         try:
-            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=11#'
+#            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=11#'
+            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
             self.br.open(urlProductList)
             contentHtml = self.br.response().read()
+            
+            self.debug(contentHtml)
             
             #<a href="/gzxz/M000127000011.html" target="_blank"><span class="goodscolor">（金海）东北大馒头</span></a>
             import re
@@ -91,10 +103,13 @@ class Facade(QObject):
 
 if __name__ == '__main__':
     facade = Facade()
-    facade.msg('hello')
-    facade.msg('你好')
-    facade.msg(u'你好')
-    facade.msg({'id':1, 'name':'你好'})
+    facade.performLogin('chengyaoan', 'cya!@#45')
+    facade.getProductList()
+    
+#    facade.msg('hello')
+#    facade.msg('你好')
+#    facade.msg(u'你好')
+#    facade.msg({'id':1, 'name':'你好'})
 #    print facade.performLogin('chengyaoan', 'cya!@#a45')
 #    facade.getProductList()
 #    result = facade.checkProductVault('M000127000015')
