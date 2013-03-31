@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project breadrobber -->
-<!-- Saved: 2013-03-30, 17:50:27 -->
+<!-- Saved: 2013-03-31, 23:45:57 -->
 <!-- Copyright (C) 2013 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -14,10 +14,12 @@
   <Sources>
     <Source>Ui_login.py</Source>
     <Source>Ui_main.py</Source>
+    <Source>Ui_task.py</Source>
   </Sources>
   <Forms>
     <Form>login.ui</Form>
     <Form>main.ui</Form>
+    <Form>task.ui</Form>
   </Forms>
   <Translations>
   </Translations>
