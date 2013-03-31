@@ -15,3 +15,5 @@ class LoginDlg(QDialog, Ui_Dialog):
         super(LoginDlg, self).__init__()
         self.setupUi(self)
         self.setFixedSize(200, 125)
+        self.buttonBox.button(QDialogButtonBox.Ok).setText(u"确定");
+        self.buttonBox.button(QDialogButtonBox.Cancel).setText(u"取消");

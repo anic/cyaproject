@@ -4,12 +4,13 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 import re, time, ConfigParser
+from encrypt import Code
 from login import *
 from Ui_main import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from facade import *
-
+from facadethread import *
 
 class MainDlg(QDialog, Ui_Dialog):
     
@@ -26,7 +27,7 @@ class MainDlg(QDialog, Ui_Dialog):
         #加载数据线程
         self.facadeThread2 = FacadeThread(self.facade)
         self.facadeThread2.sinOutProductList.connect(self.onProductLoad)
-        self.facadeThread2.sinOutNotify.connect(self.onProductChecked)
+        self.facadeThread2.sinOutNotifyOne.connect(self.onProductChecked)
 
         #初始化打印信号/槽
         self.facade.sinOutMsg.connect(self.onMsg)
@@ -41,7 +42,6 @@ class MainDlg(QDialog, Ui_Dialog):
         
         #设置标题栏样式
         self.setWindowFlags(Qt.Window)
-#        self.setWindowState(Qt.WindowNoState)
         
         #绑定设置用户
         self.btnConfigUser.clicked.connect(self.showLoginDlg) 
@@ -123,7 +123,7 @@ class MainDlg(QDialog, Ui_Dialog):
         productId = self.cmbProduct.itemData(curIndex).toString()
         productName = self.cmbProduct.currentText()
         if not self.facadeThread2.isRunning():
-            self.facadeThread2.startAction('NotifyMission', [productId, productName])
+            self.facadeThread2.startAction('NotifyOne', [productId, productName])
             self.cmbProduct.setEnabled(False)
             
             #启动计时器
@@ -153,7 +153,7 @@ class MainDlg(QDialog, Ui_Dialog):
             self.facadeThread2.startAction('ProductList')
             self.facade.msg(u'正在加载商品数据')
         else:
-            userText = username + u'[未登录]';
+            userText = username + u'[登录失败]';
             self.lblUser.setText(userText)
     
     def onProductLoad(self, productList):
@@ -188,92 +188,74 @@ class MainDlg(QDialog, Ui_Dialog):
             bSave = loginDlg.cbxSave.isChecked()
             if bSave:
                 self.saveToIni({'user':user, 'password':password})
-                
+
+            userText = user + u'[登录中]';
+            self.lblUser.setText(userText)
             form.facadeThread.startAction('Login', [user, password])
     
+    #加载以保存的用户名和密码进行自动登录
     def autoLogin(self):
         config = self.loadFromIni()
         user = config['user']
         if user == '':
             self.showLoginDlg()
         else:
+            userText = config['user'] + u'[登录中]';
+            self.lblUser.setText(userText)
             self.facadeThread.startAction('Login', [config['user'], config['password']])
 
+    #保存到配置文件ini
     def loadFromIni(self):
         try:
             config = ConfigParser.ConfigParser()
             config.readfp(open('config.ini'))
             user = config.get("UserInfo", "user")
             password = config.get("UserInfo", "password")
+            
+            if user != '':
+                code = Code(user)
+                password = code.decode(password)
+                #如果解析错了，则重置为空
+                if password is None:
+                    password = ''
+            
             return {'user':user, 'password':password}
         except:
             return {'user':'', 'password':''}
 
     def saveToIni(self, param):
         try:
+            
+            if param['user'] != '':
+                code = Code(unicode(param['user']))
+                encrypted = code.encode(unicode(param['password']))
+            else:
+                encrypted = param['password']
+            
+            
             config = ConfigParser.ConfigParser()
-    
+            
             # set a number of parameters
             config.add_section("UserInfo")
             config.set("UserInfo", "user", param['user'])
-            config.set("UserInfo", "password", param['password'])
+            config.set("UserInfo", "password", encrypted)
     
             config.write(open('config.ini', "w"))
         except Exception, ex:
             self.facade.msg(ex)
             
-class FacadeThread(QThread):
-     
-    sinOutLogin = pyqtSignal(str, bool)
-    sinOutProductList = pyqtSignal(list)
-    sinOutNotify = pyqtSignal()
-    
-    def __init__(self, facade, parent=None):
-        super(FacadeThread, self).__init__(parent)
-        self.facade = facade
-        self.action = 'Login'
-        self.params = []
-    
-    def startAction(self, action, params=[]):
-        self.action = action
-        self.params = params
-        self.start()
-        
-    def run(self):
-        if self.action == 'Login':
-            loginResult = self.facade.performLogin(self.params[0], self.params[1])
-            self.sinOutLogin.emit(self.params[0], loginResult)
-        elif self.action == 'ProductList':
-            productList = self.facade.getProductList()
-            self.sinOutProductList.emit(productList)
-        elif self.action == 'NotifyMission':
-            while True:
-                hasVault = self.facade.checkProductVault(self.params[0])
-                if hasVault:
-                    msgText = self.params[0] + " " + self.params[1] + u" 有货"
-                else:
-                    msgText = self.params[0] + " " + self.params[1] + u" 无货"
-                self.facade.msg(msgText)
-                
-                if hasVault:
-                    break
-                time.sleep(30)
-            
-            self.sinOutNotify.emit()
+
     
     
 
 if __name__ == "__main__":
     import sys
-    
     app = QApplication(sys.argv)
-    
     form = MainDlg()
     form.show()
     #自动登录
     form.autoLogin()
     
-    app.exec_()
-    
+    app.exec_()    
     
     
