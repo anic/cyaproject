@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'D:\Program\python\breadrobber\src\task.ui'
 #
-# Created: Sun Mar 31 23:32:21 2013
+# Created: Mon Apr 01 23:34:52 2013
 #      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,11 +27,8 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(267, 493)
-        self.gridLayout = QtGui.QGridLayout(Dialog)
-        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.btnStartTask = QtGui.QPushButton(Dialog)
-        self.btnStartTask.setObjectName(_fromUtf8("btnStartTask"))
-        self.gridLayout.addWidget(self.btnStartTask, 4, 0, 1, 1)
+        self.verticalLayout = QtGui.QVBoxLayout(Dialog)
+        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.scrollArea = QtGui.QScrollArea(Dialog)
         self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         self.scrollArea.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
@@ -47,7 +44,7 @@ class Ui_Dialog(object):
         self.taskContent.setAutoFillBackground(True)
         self.taskContent.setObjectName(_fromUtf8("taskContent"))
         self.scrollArea.setWidget(self.taskContent)
-        self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
+        self.verticalLayout.addWidget(self.scrollArea)
         self.frame = QtGui.QFrame(Dialog)
         self.frame.setFrameShape(QtGui.QFrame.NoFrame)
         self.frame.setFrameShadow(QtGui.QFrame.Plain)
@@ -63,16 +60,19 @@ class Ui_Dialog(object):
         self.label.setOpenExternalLinks(True)
         self.label.setObjectName(_fromUtf8("label"))
         self.horizontalLayout.addWidget(self.label)
-        self.gridLayout.addWidget(self.frame, 2, 0, 1, 1)
+        self.verticalLayout.addWidget(self.frame)
+        self.btnStartTask = QtGui.QPushButton(Dialog)
+        self.btnStartTask.setObjectName(_fromUtf8("btnStartTask"))
+        self.verticalLayout.addWidget(self.btnStartTask)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "多目标", None))
-        self.btnStartTask.setText(_translate("Dialog", "开始", None))
         self.cbxCheckAll.setText(_translate("Dialog", "全选/反选", None))
         self.label.setText(_translate("Dialog", "<html><head/><body><p><a href=\"http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action\"><span style=\" text-decoration: underline; color:#0000ff;\">商品列表</span></a></p></body></html>", None))
+        self.btnStartTask.setText(_translate("Dialog", "开始", None))
 
 
 if __name__ == "__main__":

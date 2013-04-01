@@ -14,11 +14,18 @@ from facadethread import *
 
 class MainDlg(QDialog, Ui_Dialog):
     
+    product_types = [{'name':u'全部 ', 'id':''},
+                   {'name':u'点心坊 ', 'id':'11'},
+                   {'name':u'手工面类 ', 'id':'12'},
+                   {'name':u'净菜类 ', 'id':'10'},
+                   {'name':u'鲜肉档 ', 'id':'13'}
+                   ]
+    
+    
     def __init__(self, parent=None):
         super(MainDlg, self).__init__()
         self.facade = Facade()
         self.setupUi(self)
-        self.setFixedSize(250, 331)
         
         #构造后台逻辑线程
         self.facadeThread = FacadeThread(self.facade)
@@ -27,7 +34,9 @@ class MainDlg(QDialog, Ui_Dialog):
         #加载数据线程
         self.facadeThread2 = FacadeThread(self.facade)
         self.facadeThread2.sinOutProductList.connect(self.onProductLoad)
-        self.facadeThread2.sinOutNotifyOne.connect(self.onProductChecked)
+        self.facadeThread2.sinOutNotifyMany.connect(self.onProductChecked)
+        self.facadeThread2.sinOutNotifyFinish.connect(self.finishMission)
+        
 
         #初始化打印信号/槽
         self.facade.sinOutMsg.connect(self.onMsg)
@@ -45,6 +54,15 @@ class MainDlg(QDialog, Ui_Dialog):
         
         #绑定设置用户
         self.btnConfigUser.clicked.connect(self.showLoginDlg) 
+        
+        #记录增加的checkbox控件
+        self.controls = []
+        self.isNotified = True
+        
+        #记录是否准备好分类信息
+        self.bTypeReady = False
+        
+        self.cmbProduct.currentIndexChanged.connect(self.onTypeChanged)
         
     def init_trayicon(self):
         #设置一个iconComboBox
@@ -70,14 +88,15 @@ class MainDlg(QDialog, Ui_Dialog):
         self.iconComboBox.setCurrentIndex(1)
         self.trayIcon.activated.connect(self.iconActivated)
     
+    #修改关闭时的函数，为了可以最小化到托盘
     def closeEvent(self, event):
         event.ignore()
         #强制退出
         sys.exit()
         
-    
+    #修改关闭时的函数，为了可以最小化到托盘
     def changeEvent(self, event):
-    # 判断是否为最小化事件
+        # 判断是否为最小化事件
         if event.type() == QtCore.QEvent.WindowStateChange and self.isMinimized():
             # 设置隐藏
             self.setVisible(False)
@@ -109,57 +128,116 @@ class MainDlg(QDialog, Ui_Dialog):
         self.setWindowIcon(icon)
         self.trayIcon.setToolTip(self.iconComboBox.itemText(index))
  
+    #显示气泡信息
     def showMessage(self, msg):
         #这里是可以设置弹出对话气泡的icon的，作为实验就省略了
         icon = QtGui.QSystemTrayIcon.MessageIcon()
         self.trayIcon.showMessage(u'提示', msg, icon, 1000)
  
-    def getTasksNum(self):
-        self.showMessage()
- 
-
+    def onTypeChanged(self):
+        if not self.bTypeReady:
+            return
+        #好像变化前和变化后会重复
+        index = self.cmbProduct.currentIndex()
+        sortId = self.cmbProduct.itemData(index).toString()
+            
+        self.facadeThread2.startAction('ProductList', [sortId])
+        self.facade.msg(u'正在加载商品数据[{0}]'.format(sortId))
+    
     def on_btnNotifyMission_pressed(self):
-        curIndex = self.cmbProduct.currentIndex()
-        productId = self.cmbProduct.itemData(curIndex).toString()
-        productName = self.cmbProduct.currentText()
-        if not self.facadeThread2.isRunning():
-            self.facadeThread2.startAction('NotifyOne', [productId, productName])
-            self.cmbProduct.setEnabled(False)
             
-            #启动计时器
-            self.timerCount = 0
-            self.appTimer.start(1000)
-            
-        else:
+        if self.facadeThread2.isRunning():
             self.facadeThread2.terminate()
-            self.onProductChecked(True)
+            
+            self.finishMission()
+            
+            return
+
+        targetIds = []
+        targetNames = []            
+        bContinue = self.cbxContinue.isChecked()
+        for c in self.controls:
+            if c.isChecked():
+                targetIds.append(str(c.objectName())[3:]) #prefix is 'cbx'
+                #去掉文本中的[有货]
+                text = unicode(str(c.text()))
+                index = text.find('[')
+                if index != -1:
+                    text = text[:index]
+                targetNames.append(text)
         
-    def onProductChecked(self, manual=False):
-        self.cmbProduct.setEnabled(True)
-        self.btnNotifyMission.setText(u'有货通知我');
-        self.appTimer.stop()
+        if len(targetIds) == 0:
+           QtGui.QMessageBox.warning(self, u'警告', u'至少选择一类商品')
+           return
         
-        if not manual:
-            if self.isMinimized():
-                self.showMessage(u'你要的货已经有了')
-            else:
-                QtGui.QMessageBox.information(self, u'提示', u'你要的货已经有了')
+        #确定可以开始执行
+        for c in self.controls:
+           c.setEnabled(False)
+           
+        self.cbxCheckAll.setEnabled(False)
+        self.cmbProduct.setEnabled(False)
+        
+        self.isNotified = False
+        self.btnNotifyMission.setText(u'运行中')
+        self.facadeThread2.startAction('NotifyMany', [targetIds, targetNames, bContinue])
+        
+        #启动计时器
+        self.timerCount = 0
+        self.appTimer.start(1000)
+        
         
     def onLogon(self, username, loginResult):
         #update 
         if loginResult:
             userText = username + u'[已登录]';
             self.lblUser.setText(userText)
-            self.facadeThread2.startAction('ProductList')
-            self.facade.msg(u'正在加载商品数据')
+            
+            #添加静态的分类信息
+            self.onProductTypeLoad(self.product_types)
+            #设置默认为点心坊,1
+            self.bTypeReady = True
+            self.cmbProduct.setCurrentIndex(1)
+#            sortId = self.cmbProduct.itemData(1).toString()
+#            self.facadeThread2.startAction('ProductList', [sortId])
+#            self.facade.msg(u'正在加载商品数据')
         else:
             userText = username + u'[登录失败]';
             self.lblUser.setText(userText)
     
-    def onProductLoad(self, productList):
-        for p in productList:
+    def onProductTypeLoad(self, types):
+        for p in types:
             self.cmbProduct.addItem(unicode(p['name']), p['id'])
+        
         self.gbxStep2.setEnabled(True)
+    
+    def onProductLoad(self, products):
+        #清空controls
+        for c in self.controls:
+            c.hide()
+            c.destroy()
+        
+        #清空controls
+        del self.controls[:]
+        
+        #初始化全选按钮
+        self.cbxCheckAll.setChecked(False)
+        
+        for i in range(0, len(products)):
+            checkBox = QtGui.QCheckBox(self.taskContent)
+            checkBox.setGeometry(QtCore.QRect(10, 10 + 20 * i, 250, 20))
+            checkBox.setText(unicode(products[i]['name']))
+            checkBox.setObjectName(u'cbx{0}'.format(products[i]['id']))
+            checkBox.show()
+            self.controls.append(checkBox)
+        
+        #计算最小高度
+        self.taskContent.setMinimumHeight(10 + 20 * len(products) + 20)
+        
+    #全选和反选的功能
+    def on_cbxCheckAll_released(self):
+        val = self.cbxCheckAll.isChecked()
+        for c in self.controls:
+            c.setChecked(val)
     
     def onMsg(self, msg):
         text = self.txtMsg.toPlainText()
@@ -167,9 +245,66 @@ class MainDlg(QDialog, Ui_Dialog):
         self.txtMsg.setPlainText(text)
     
     def updateNotifyButton(self):
-        title = u'   有货通知我{0}{1}'.format('.' * self.timerCount, ' ' * (3 - self.timerCount))
+        title = u'   运行中{0}{1}'.format('.' * self.timerCount, ' ' * (3 - self.timerCount))
         self.btnNotifyMission.setText(title)
         self.timerCount = (self.timerCount + 1) % 4 
+    
+    def finishMission(self):
+        self.appTimer.stop()
+        self.btnNotifyMission.setText(u'有货通知我')
+        
+        for c in self.controls:
+            c.setEnabled(True)
+    
+        self.cbxCheckAll.setEnabled(True)
+        self.cmbProduct.setEnabled(True)
+        
+        
+    def onProductChecked(self, id, instock):
+        
+        for c in self.controls:
+            if c.isChecked():
+                text = c.text()
+                text = unicode(str(text)) #QString转换为str
+                index = text.find('<')
+                if index != -1:
+                    text = text[0:index]
+                c.setText(text)
+        
+        #找到目标控件
+        cbx = self.findItemControl(id)
+        if cbx != None:
+            text = cbx.text()
+            text = unicode(str(text)) #QString转换为str
+            index = text.find('[')
+            if index != -1:
+                text = text[0:index]
+            
+            if instock > 0:
+                cbx.setStyleSheet("color: rgb(0, 85, 0);")
+                cbx.setText(text + u'[有货,{0}]<<'.format(instock))
+                
+            else:
+                cbx.setStyleSheet("color: rgb(85, 0, 0);") 
+                cbx.setText(text + u'[缺货]<<')
+        
+        if instock and not self.isNotified:
+            self.isNotified = True
+            if self.isMinimized():
+                self.showMessage(u'你要的货已经有了')
+            else:
+                QtGui.QMessageBox.information(self, u'提示', u'你要的货已经有了')
+    
+    
+    
+    #根据商品编号查找控件
+    def findItemControl(self, id):
+        for c in self.controls:
+            cid = str(c.objectName())[3:] #prefix is 'cbx'
+            if cid == id:
+                return c
+        
+        return None
     
     #显示登录框
     def showLoginDlg(self):

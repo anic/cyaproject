@@ -89,16 +89,17 @@ class Facade(QObject):
 
 
                 
-    def getProductList(self):
+    def getProductList(self, sortId=''):
         #TODO:增加分页，分类获取
         
         
+        baseUrl = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
+        urlProductList = '{0}?svo.sortId={1}'.format(baseUrl, sortId)
+                                                         
         #获取商品列表
         result = []
         
         try:
-#            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=11'
-            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
             self.br.open(urlProductList)
             contentHtml = self.br.response().read()
             
@@ -119,7 +120,7 @@ class Facade(QObject):
 if __name__ == '__main__':
     facade = Facade()
     facade.performLogin('chengyaoan', 'cya!@#45')
-#    facade.getProductList()
+    facade.getProductList(11)
     
 #    facade.msg('hello')
 #    facade.msg('你好')
@@ -129,8 +130,8 @@ if __name__ == '__main__':
 #    facade.getProductList()
 #    result = facade.checkProductVault('M000127000015')
 #    print 'M000127000015',result
-    result = facade.checkProductVault('M000127000025')
-    print 'M000127000025', result
+#    result = facade.checkProductVault('M000127000025')
+#    print 'M000127000025', result
 
 #    input = ''' 商品分类：点心坊<br>
 #    商品库存： 

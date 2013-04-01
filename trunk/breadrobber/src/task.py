@@ -65,13 +65,13 @@ class TaskDlg(QDialog, Ui_Dialog):
     
     def onProductLoad(self, products):
         for i in range(0, len(products)):
-            checkBox = QtGui.QCheckBox(ui.taskContent)
+            checkBox = QtGui.QCheckBox(self.taskContent)
             checkBox.setGeometry(QtCore.QRect(10, 10 + 20 * i, 250, 17))
             checkBox.setText(unicode(products[i]['name']))
             checkBox.setObjectName(u'cbx{0}'.format(products[i]['id']))
+            checkBox.show()
             self.controls.append(checkBox)
         
-        self.show()
         
     #根据商品编号查找控件
     def findItemControl(self, id):
@@ -124,28 +124,29 @@ if __name__ == '__main__':
     import sys
     app = QtGui.QApplication(sys.argv)
     ui = TaskDlg()
+    ui.show()
     
-#    products = [{'id':"M000162000001", 'name':"喜尔宾测试"},
-#    {'id':"M000139000050", 'name':"绿色菜篮农家初生蛋（30枚）"},
-#    {'id':"M000139000051", 'name':"绿色菜篮农家土鸡蛋（30枚）"},
-#    {'id':"M000127000015", 'name':"（金海）御品核桃酥"},
-#    {'id':"M000127000017", 'name':"(金海)燕麦小馒头"},
-#    {'id':"M000001000629", 'name':"（金海）北方小馒头"},
-#    {'id':"M000127000020", 'name':"（金海）吐司大面包"},
-#    {'id':"M000001000631", 'name':"（金海）燕麦大馒头"},
-#    {'id':"M000146000018", 'name':"年货测试"},
-#    {'id':"M000001000622", 'name':"（金海）蜜汁焗餐包"},
-#    {'id':"M000127000022", 'name':"（金海）牛角包"},
-#    {'id':"M000127000005", 'name':"（金海）酥皮包"},
-#    {'id':"M000001000625", 'name':"（金海）古法鸡蛋糕"},
-#    {'id':"M000127000023", 'name':"（金海）糯米鸡"},
-#    {'id':"M000001000627", 'name':"（金海）清香靓花卷"},
-#    {'id':"M000001000628", 'name':"（金海）新鲜生肉包"},
-#    {'id':"M000127000011", 'name':"（金海）东北大馒头"},
-#    {'id':"M000127000025", 'name':"(金海)风味川西饼"}]
-#    ui.onProductLoad(products)
+    products = [{'id':"M000162000001", 'name':"喜尔宾测试"},
+    {'id':"M000139000050", 'name':"绿色菜篮农家初生蛋（30枚）"},
+    {'id':"M000139000051", 'name':"绿色菜篮农家土鸡蛋（30枚）"},
+    {'id':"M000127000015", 'name':"（金海）御品核桃酥"},
+    {'id':"M000127000017", 'name':"(金海)燕麦小馒头"},
+    {'id':"M000001000629", 'name':"（金海）北方小馒头"},
+    {'id':"M000127000020", 'name':"（金海）吐司大面包"},
+    {'id':"M000001000631", 'name':"（金海）燕麦大馒头"},
+    {'id':"M000146000018", 'name':"年货测试"},
+    {'id':"M000001000622", 'name':"（金海）蜜汁焗餐包"},
+    {'id':"M000127000022", 'name':"（金海）牛角包"},
+    {'id':"M000127000005", 'name':"（金海）酥皮包"},
+    {'id':"M000001000625", 'name':"（金海）古法鸡蛋糕"},
+    {'id':"M000127000023", 'name':"（金海）糯米鸡"},
+    {'id':"M000001000627", 'name':"（金海）清香靓花卷"},
+    {'id':"M000001000628", 'name':"（金海）新鲜生肉包"},
+    {'id':"M000127000011", 'name':"（金海）东北大馒头"},
+    {'id':"M000127000025", 'name':"(金海)风味川西饼"}]
+    ui.onProductLoad(products)
     
-#    ui.show()
-    ui.facade.performLogin('chengyaoan', 'cya!@#45')
-    ui.thread.startAction('ProductList')
+    
+#    ui.facade.performLogin('chengyaoan', 'cya!@#45')
+#    ui.thread.startAction('ProductList',[''])
     sys.exit(app.exec_())
