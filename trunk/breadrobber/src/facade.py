@@ -3,7 +3,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-import mechanize, datetime
+import mechanize, datetime,re
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -42,6 +42,7 @@ class Facade(QObject):
 
         self.sinOutMsg.emit(strMsg)
     
+    #如果返回库存数
     def checkProductVault(self, id):
         url = str.format('http://ygjy.gz.gmcc.net/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode={0}&&num=1&&type=undefined'
                          , id)
@@ -50,11 +51,20 @@ class Facade(QObject):
             html = self.br.response().read()
             
             #<script>alert('该商品库存不足!暂时无法购买!');history.go(-1);</script>
-            empty = html.find('history.go(-1);</script>') != -1
-            return not empty
+            if html.find('history.go(-1);</script>') != -1:
+                return 0 #empty
+            else:
+                pattern = re.compile(r'商品库存：\W*<span class="fRed fb">([\d.]+)')
+                match = pattern.search(html)
+                if match:
+                    stock = int(float(match.groups()[0]))
+                else:
+                    stock = 0
+                
+                return stock
         except Exception, e:
             self.msg(e)
-            return None
+            return 0
     
     def performLogin(self, username, password):    
         urlLogin = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmember!login.action'
@@ -82,8 +92,8 @@ class Facade(QObject):
         result = []
         
         try:
-#            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=11#'
-            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
+            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=11'
+#            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
             self.br.open(urlProductList)
             contentHtml = self.br.response().read()
             
@@ -104,7 +114,7 @@ class Facade(QObject):
 if __name__ == '__main__':
     facade = Facade()
     facade.performLogin('chengyaoan', 'cya!@#45')
-    facade.getProductList()
+#    facade.getProductList()
     
 #    facade.msg('hello')
 #    facade.msg('你好')
@@ -114,5 +124,36 @@ if __name__ == '__main__':
 #    facade.getProductList()
 #    result = facade.checkProductVault('M000127000015')
 #    print 'M000127000015',result
-#    result = facade.checkProductVault('M000127000017')
-#    print 'M000127000017',result
+    result = facade.checkProductVault('M000127000025')
+    print 'M000127000025',result
+
+#    input = ''' 商品分类：点心坊<br>
+#    商品库存： 
+#                             
+#                            <span class="fRed fb">11.0&nbsp;个</span>
+#                             
+#                             
+#                        <br>
+#   每天最大购买数量：
+#                       
+#                           <span class="fRed fb">10.0&nbsp;个</span>
+#                       
+#                       
+#                 <br>
+#   今天已经订购数量：
+#                    <span class="fRed fb">0.0&nbsp;个</span>
+#                    <br>
+#   商品状态： 
+#                             
+#                            正常购买
+#                            
+#                             
+#                       </ul>'''
+
+#    import re                       
+#    pattern = re.compile(r'商品库存：\W*<span class="fRed fb">([\d.]+)')
+#    
+#    print pattern.search(input).groups()
+#    print int(float(pattern.search(input).groups()[0]))
+
+

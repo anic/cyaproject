@@ -8,7 +8,7 @@ class FacadeThread(QThread):
     sinOutLogin = pyqtSignal(str, bool)
     sinOutProductList = pyqtSignal(list)
     sinOutNotifyOne = pyqtSignal()
-    sinOutNotifyMany = pyqtSignal(str, bool)
+    sinOutNotifyMany = pyqtSignal(str, int)
     sinOutNotifyFinish = pyqtSignal()
     
     def __init__(self, facade, parent=None):
@@ -32,13 +32,13 @@ class FacadeThread(QThread):
         elif self.action == 'NotifyOne':
             while True:
                 inStock = self.facade.checkProductVault(self.params[0])
-                if inStock:
-                    msgText = self.params[0] + " " + self.params[1] + u" 有货"
+                if inStock == 0:
+                    msgText = u'{0} {1} 缺货'.format(ids[i], names[i])
                 else:
-                    msgText = self.params[0] + " " + self.params[1] + u" 缺货"
+                    msgText = u'{0} {1} 有货[{2}]'.format(ids[i], names[i], inStock)
                 self.facade.msg(msgText)
                 
-                if inStock:
+                if inStock > 0:
                     break
                 
                 #每30秒刷新一次
@@ -49,21 +49,25 @@ class FacadeThread(QThread):
             ids = self.params[0]
             names = self.params[1]
             bGlobal = True
+            bFirstRound = True
             while bGlobal:
                 for i in range(0, len(ids)):
                     inStock = self.facade.checkProductVault(ids[i])
-                    if inStock:
-                        msgText = ids[i] + " " + names[i] + u" 有货"
+                    if inStock == 0:
+                        msgText = u'{0} {1} 缺货'.format(ids[i], names[i])
                     else:
-                        msgText = ids[i] + " " + names[i] + u" 缺货"
+                        msgText = u'{0} {1} 有货[{2}]'.format(ids[i], names[i], inStock)
+                        
                     self.facade.msg(msgText)
                     self.sinOutNotifyMany.emit(ids[i], inStock)
                     
                     #完成这一轮的扫描                    
-                    if inStock and bGlobal:
-                        bGlobal = False
+#                    if inStock and bGlobal:
+#                        bGlobal = False
                     
-                    #每10秒刷新一次
-                    time.sleep(1)
+                    #第一圈停留时间短一些
+                    if not bFirstRound:
+                        time.sleep(30)
             
+                bFirstRound = False
             self.sinOutNotifyFinish.emit()
