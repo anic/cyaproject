@@ -68,7 +68,7 @@ class FacadeThread(QThread):
                     
                     #第一轮不滞留，后面的轮训停留时间长一些
                     if not bFirstRound:
-                        time.sleep(5)
+                        time.sleep(30)
                 
                 #第一轮标识取消
                 bFirstRound = False
