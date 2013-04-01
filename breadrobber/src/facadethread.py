@@ -27,7 +27,7 @@ class FacadeThread(QThread):
             loginResult = self.facade.performLogin(self.params[0], self.params[1])
             self.sinOutLogin.emit(self.params[0], loginResult)
         elif self.action == 'ProductList':
-            productList = self.facade.getProductList()
+            productList = self.facade.getProductList(self.params[0])
             self.sinOutProductList.emit(productList)
         elif self.action == 'NotifyOne':
             while True:
@@ -48,6 +48,7 @@ class FacadeThread(QThread):
         elif self.action == 'NotifyMany':
             ids = self.params[0]
             names = self.params[1]
+            bContinue = self.params[2] 
             bGlobal = True
             bFirstRound = True
             while bGlobal:
@@ -62,12 +63,14 @@ class FacadeThread(QThread):
                     self.sinOutNotifyMany.emit(ids[i], inStock)
                     
                     #完成这一轮的扫描                    
-#                    if inStock and bGlobal:
-#                        bGlobal = False
+                    if (not bContinue) and inStock and bGlobal:
+                        bGlobal = False
                     
-                    #第一圈停留时间短一些
+                    #第一轮不滞留，后面的轮训停留时间长一些
                     if not bFirstRound:
-                        time.sleep(30)
-            
+                        time.sleep(5)
+                
+                #第一轮标识取消
                 bFirstRound = False
+                
             self.sinOutNotifyFinish.emit()
