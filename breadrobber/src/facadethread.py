@@ -33,9 +33,9 @@ class FacadeThread(QThread):
             while True:
                 inStock = self.facade.checkProductVault(self.params[0])
                 if inStock == 0:
-                    msgText = u'{0} {1} 缺货'.format(ids[i], names[i])
+                    msgText = u'{0} {1} 缺货'.format(self.params[0], self.params[1])
                 else:
-                    msgText = u'{0} {1} 有货[{2}]'.format(ids[i], names[i], inStock)
+                    msgText = u'{0} {1} 有货[{2}]'.format(self.params[0], self.params[1], inStock)
                 self.facade.msg(msgText)
                 
                 if inStock > 0:

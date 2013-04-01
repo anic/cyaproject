@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'D:\Program\python\breadrobber\src\main.ui'
 #
-# Created: Sun Mar 31 21:00:50 2013
+# Created: Mon Apr 01 14:10:38 2013
 #      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
@@ -84,7 +84,7 @@ class Ui_Dialog(object):
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(_translate("Dialog", "抢包子", None))
+        Dialog.setWindowTitle(_translate("Dialog", "抢包子助手", None))
         self.groupBox.setTitle(_translate("Dialog", "步骤1：登录", None))
         self.lblUser.setText(_translate("Dialog", "请设定用户", None))
         self.btnConfigUser.setText(_translate("Dialog", "...", None))

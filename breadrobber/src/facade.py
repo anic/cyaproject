@@ -3,7 +3,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-import mechanize, datetime,re
+import mechanize, datetime, re
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -19,7 +19,7 @@ class Facade(QObject):
         br.set_proxies(proxy)
         self.br = br 
     
-    def debug(self,text):
+    def debug(self, text):
 #        try:
 #            f = open('log.txt', 'a')
 #            f.write(unicode(str(text)) + '\n')
@@ -37,7 +37,7 @@ class Facade(QObject):
             f = open('log.txt', 'a')
             f.write(strMsg + '\n')
             f.close()
-        except Exception,ex:
+        except Exception, ex:
             strMsg = strMsg + '\r\n' + unicode(str(ex)) 
 
         self.sinOutMsg.emit(strMsg)
@@ -86,14 +86,19 @@ class Facade(QObject):
         except Exception, ex:
             self.msg(ex)
             return False
-            
+
+
+                
     def getProductList(self):
+        #TODO:增加分页，分类获取
+        
+        
         #获取商品列表
         result = []
         
         try:
-            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=11'
-#            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
+#            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=11'
+            urlProductList = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
             self.br.open(urlProductList)
             contentHtml = self.br.response().read()
             
@@ -125,7 +130,7 @@ if __name__ == '__main__':
 #    result = facade.checkProductVault('M000127000015')
 #    print 'M000127000015',result
     result = facade.checkProductVault('M000127000025')
-    print 'M000127000025',result
+    print 'M000127000025', result
 
 #    input = ''' 商品分类：点心坊<br>
 #    商品库存： 
