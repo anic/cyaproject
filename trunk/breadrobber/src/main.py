@@ -247,7 +247,12 @@ class MainDlg(QDialog, Ui_Dialog):
     def updateNotifyButton(self):
         title = u'   运行中{0}{1}'.format('.' * self.timerCount, ' ' * (3 - self.timerCount))
         self.btnNotifyMission.setText(title)
-        self.timerCount = (self.timerCount + 1) % 4 
+        self.timerCount = (self.timerCount + 1) % 4
+        
+        #发现运行已经停止
+        if not self.facadeThread2.isRunning():
+            self.facadeThread2.start()
+         
     
     def finishMission(self):
         self.appTimer.stop()
@@ -383,7 +388,12 @@ class MainDlg(QDialog, Ui_Dialog):
     
     
 
+
 if __name__ == "__main__":
+    
+    from singleton import *
+    me = SingleInstance()
+    
     import sys
     app = QApplication(sys.argv)
     form = MainDlg()
