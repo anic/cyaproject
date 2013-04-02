@@ -40,13 +40,16 @@ class Facade(QObject):
         except Exception, ex:
             strMsg = strMsg + '\r\n' + unicode(str(ex)) 
 
-        self.sinOutMsg.emit(strMsg)
+        try:
+            self.sinOutMsg.emit(strMsg)
+        except:
+            pass
     
     #如果返回库存数
     def checkProductVault(self, id):
-        url = str.format('http://ygjy.gz.gmcc.net/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode={0}&&num=1&&type=undefined'
-                         , id)
+            
         try:
+            url = str.format('http://ygjy.gz.gmcc.net/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode={0}&&num=1&&type=undefined', id)
             self.br.open(url)
             html = self.br.response().read()
             
@@ -90,37 +93,50 @@ class Facade(QObject):
 
                 
     def getProductList(self, sortId=''):
-        #TODO:增加分页，分类获取
-        
-        
-        baseUrl = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
-        urlProductList = '{0}?svo.sortId={1}'.format(baseUrl, sortId)
-                                                         
-        #获取商品列表
-        result = []
-        
-        try:
-            self.br.open(urlProductList)
-            contentHtml = self.br.response().read()
+        #尝试3次，防止bad file descriptor
+        for t in range(0, 3):
+            try:
+                #增加分页，分类获取
+                baseUrl = 'http://ygjy.gz.gmcc.net/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'
+                urlProductList = '{0}?svo.sortId={1}'.format(baseUrl, sortId)
+                                                                 
+                #获取商品列表
+                result = []
+                
+                self.br.open(urlProductList)
+                contentHtml = self.br.response().read()
+                
+                self.debug(contentHtml)
+                
+                #<a href="/gzxz/M000127000011.html" target="_blank"><span class="goodscolor">（金海）东北大馒头</span></a>
+                import re
+                pattern_page = re.compile(r'共:(\d+)页')
+                match = re.search(pattern_page, contentHtml)
+                pages = 1
+                if match:
+                    pages = int(match.groups()[0])
+                
+                for pageIndex in range(1, pages + 1):
+                    if pageIndex != 1:
+                        self.br.open(u'{0}&page={1}'.format(urlProductList, pageIndex))
+                        contentHtml = self.br.response().read()
+                    
+                    pattern = re.compile(r'<a href="/gzxz/(\w+)\.html" target="_blank"><span class="goodscolor">([^<]+)</span></a>')
+                    matches = re.findall(pattern, contentHtml)
+                    for m in matches:
+                        self.msg(m[0] + " " + m[1])
+                        result.append({'id':m[0], 'name':m[1]})
+                
+                return result 
+            except Exception, ex:
+                self.msg(ex)
             
-            self.debug(contentHtml)
-            
-            #<a href="/gzxz/M000127000011.html" target="_blank"><span class="goodscolor">（金海）东北大馒头</span></a>
-            import re
-            pattern = re.compile(r'<a href="/gzxz/(\w+)\.html" target="_blank"><span class="goodscolor">([^<]+)</span></a>')
-            matches = re.findall(pattern, contentHtml)
-            for m in matches:
-                self.msg(m[0] + " " + m[1])
-                result.append({'id':m[0], 'name':m[1]}) 
-        except Exception, ex:
-            self.msg(ex)
-        
-        return result
+        return []
 
 if __name__ == '__main__':
     facade = Facade()
     facade.performLogin('chengyaoan', 'cya!@#45')
-    facade.getProductList(11)
+    facade.getProductList('')
     
 #    facade.msg('hello')
 #    facade.msg('你好')
