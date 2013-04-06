@@ -3,7 +3,9 @@
 	"manifest_version": 2,
 	"version": "0.1.2",
 	"description": "致力于改善GMCC各种系统的用户体验，减少复杂操作，提升工作效率。",
-	"background": "background.html",
+	"background": {
+		"page": "background.html"
+	},
 	"options_page": "feature.html",
 	"permissions": ["tabs", "http://*/*", "https://*/*", "notifications", "management"],
 	"content_scripts": [
@@ -28,17 +30,17 @@
 			"all_frames": true,
 			"css": ["inject/contact/inject_contact.css"]
 		}, {
+			"matches": ["*://pac.gmcc.net/*"],
+			"js": ["inject/portal/inject_pac_login.js"]
+		}, {
 			"matches": ["http://portal.gmcc.net/portal/redirect.htm?*app1"],
 			"js": ["js/log.js", "js/jquery.js", "inject/portal/inject_portal_login.js"]
 		}, {
-			"matches": ["http://pac.gmcc.net/*", "https://pac.gmcc.net/*"],
+			"matches": ["*://pac.gmcc.net/portal/*"],
 			"all_frames": true,
 			"run_at": "document_end",
 			"js": ["js/jscssfile_loader.js", "inject/portal/inject_oa_middle.js", "inject/portal/inject_oa_ad.js"],
 			"css": ["inject/portal/inject_oa_common.css"]
-		}, {
-			"matches": ["http://pac.gmcc.net/", "https://pac.gmcc.net/", "http://pac.gmcc.net/index.html*", "http://portal.gmcc.net/portal/?goto=*"],
-			"js": ["inject/portal/inject_pac_login.js"]
 		}, {
 			"matches": ["http://pac.gmcc.net/smc/*", "http://pac.gmcc.net/portal/*"],
 			"all_frames": true,
@@ -69,7 +71,7 @@
 	},
 	"browser_action": {
 		"default_icon": "image/home.png",
-		"popup": "popup.html",
+		"default_popup": "popup.html",
 		"name": "GMCC Office"
 	},
 	"plugins": [
@@ -79,5 +81,7 @@
 		}, {
 			"path": "plugins/sqlite3.dll"
 		}
-	]
+	],
+	"web_accessible_resources": ["inject/*"],
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

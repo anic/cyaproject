@@ -1,10 +1,44 @@
 $(function() {
+
+	$('.dropdown-toggle').dropdown();
+
+	var bg = chrome.extension.getBackgroundPage();
+	if(bg.isExtensionAdmin()) {
+		$("#divTool").show();
+	}
+
+	$("#btnOffline").click(function() {
+		$('#divTool').toggle()
+	});
+
+	$("#btnSearchPerson").click(search);
+
+	$("#btnShowDept").click(showDept);
+	$("#btnLoadDept").click(loadDept);
+	$("#btnShowPerson").click(showPerson);
+	$("#btnLoadPerson").click(startLoadPerson);
+	$("#btnInitDB").click(initDb);
+	$("#btnPersonDB").click(sqlitePerson);
+	$("#btnExport").click(exportPerson)
+	$("#btnDept").click(exportDept)
+	$("#btnClear").click(clearStorage)
+	$("#mnuTest").click(function() {
+		OnlineContact.search('chengyaoan');
+	});
+
+	$("#txtSearchPerson").keyup(function(e) {
+		if(e.keyCode == 13) {
+			search();
+		}
+	});
+});
+$(function() {
 	window.Login.testLogin(function(result) {
 		if(!result) {
 
-			window.Log.info("可离线用，登录后再更新", $("#tip"));
+			window.Log.info("可离线用，登录后再更新");
 		} else
-			window.Log.log("已登录，可离线与在线使用", $("#tip"));
+			window.Log.log("已登录，可离线与在线使用");
 	});
 
 	$("#txtSearchPerson").focus();
@@ -17,6 +51,14 @@ var _cur = 0, _total = -1;
 function _reset() {
 	_cur = 0;
 	_total = -1;
+}
+
+function initDb() {
+	var db = document.getElementById("dbplugin");
+	initSql = 'CREATE TABLE IF NOT EXISTS "main"."person" (' + '"ID" TEXT PRIMARY KEY,"username" TEXT,"name" TEXT,"phone" TEXT,' + '"department" TEXT,"room" TEXT,"email" TEXT);'
+
+	db.sqlite_exec(DB_NAME, initSql);
+	alert('初始化完成');
 }
 
 //将人员信息存入数据库
@@ -42,7 +84,7 @@ function sqlitePerson() {
 
 function searchSqlitePerson(key) {
 	var db = dbplugin;
-	
+
 	var keystring = "'%" + key + "%'";
 	var result = db.sqlite_exec(DB_NAME, "select * from person where username like " + keystring + " or name like " + keystring + " or phone like " + keystring);
 	if(result.indexOf("ERROR") == 0) {
@@ -397,17 +439,16 @@ function exportPerson() {
 
 }
 
-function search()
-{
+function search() {
 	var key = $.trim(document.getElementById("txtSearchPerson").value);
-	if ($("#cbxOnlineSearch").attr('checked') == "checked")
+	if($("#cbxOnlineSearch").attr('checked') == "checked")
 		OnlineContact.search(key);
-		
+
 	searchSqlitePerson(key);
 }
 
 var OnlineContact = {
-	search : function(key,pageSize) {
+	search : function(key, pageSize) {
 		var url = "http://contacts.services.gmcc.net/UserInfoSimple.aspx?nid=61ca46b7-0b76-41ae-9e1a-cd9adba8c86c&sid=11&f=app";
 		$.get(url, function(msg) {
 			//console.log(msg);
@@ -455,11 +496,11 @@ var OnlineContact = {
 				// </tr>
 
 				var matches = msg.match(/<tr class="[\w\W.\n]*?<\/tr>/mg);
-				var m,mat, name, id, dept, phone, item;
+				var m, mat, name, id, dept, phone, item;
 				var data = [];
-				if (!matches)
+				if(!matches)
 					matches = [];
-					
+
 				for(var i = 0, size = matches.length; i < size; ++i) {
 					window.m = m = matches[i];
 					mat = m.match(/value="(\w+)"/m);
@@ -469,7 +510,7 @@ var OnlineContact = {
 					id = m.match(/showUserInfoPage\('(\d+)'\)/)[1];
 					label = m.match(/href="#" title="(\W+)">/m)[1];
 					mat = m.match(/span title="([^"]*)"/mg);
-					
+
 					if(mat && mat.length == 2) {
 						dept = mat[0].match(/span title="([^"]*)"/m)[1]
 						phone = mat[1].match(/span title="([^"]*)"/m)[1]

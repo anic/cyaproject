@@ -8,7 +8,7 @@ window.Log = (function() {
 			// </div>
 			if (!element)
 				element = document.body;
-			$(element).after(' <div id="msg" class="alert ' + className + '">' + m + '</div>');
+			$(element).before(' <div id="msg" class="alert ' + className + '">' + m + '</div>');
 			$("#msg").fadeOut(2000);
 		},
 		/**

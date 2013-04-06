@@ -4,8 +4,9 @@ window.Login = {
 	buildUrl : function(name, pwd) {
 		var loginUrl = "https://pac-am.gmcc.net/amserver/UI/Login?goto=http://pac.gmcc.net/portal/dt?provider=DISHI_Portal";
 		loginUrl += "&Login.Token1=" + name;
-		loginUrl += "&Login.Token2=" + pwd;
+		loginUrl += "&Login.Token2=" + encodeURIComponent(pwd);
 		loginUrl += "&module=LDAP";
+
 		return loginUrl;
 	},
 	testLogin : function(callback) {

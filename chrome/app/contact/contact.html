@@ -18,19 +18,6 @@
 			@import "./css/demo_table_jui.css";
 			@import "./custom.css";
 		</style>
-		<script type="text/javascript">
-			$(function() {
-
-				$('.dropdown-toggle').dropdown();
-
-				var bg = chrome.extension.getBackgroundPage();
-				if(bg.isExtensionAdmin()) {
-					$("#divTool").show();
-				}
-
-			});
-
-		</script>
 		<style type="text/css">
 			.dataTables_filter input, .dataTables_length select {
 				display: inline
@@ -71,7 +58,7 @@
 					<!--Sidebar content-->
 					<ul class="nav nav-list">
 						<li>
-							<a href="#" onclick="$('#divTool').toggle()">离线工具</a>
+							<a href="#" id="btnOffline" >离线工具</a>
 						</li>
 						<li>
 							<a href="contact_online.html">在线地址簿</a>
@@ -83,8 +70,8 @@
 					<div class="page-header">
 						<h1>离线通讯录</h1>
 					</div>
-					<input id="txtSearchPerson" class="input-medium search-query" value="" onkeyup="if (event.keyCode == 13){search();} "/>
-					<button class="btn" id="btnSearchPerson" onclick="search()" >
+					<input id="txtSearchPerson" class="input-medium search-query" value="" />
+					<button class="btn" id="btnSearchPerson" >
 						搜索
 					</button>
 					<input type="checkbox" id="cbxOnlineSearch" checked="checked"/>
@@ -96,10 +83,10 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#menutest1"> 组织 <b class="caret"></b> </a>
 									<ul class="dropdown-menu">
 										<li>
-											<a id="btnShowDept" onclick="showDept();" href="#">显示组织信息</a>
+											<a id="btnShowDept" href="#">显示组织信息</a>
 										</li>
 										<li>
-											<a id="btnLoadDept" onclick="loadDept()" href="#">爬取组织信息</a>
+											<a id="btnLoadDept" href="#">爬取组织信息</a>
 										</li>
 									</ul>
 								</li>
@@ -107,13 +94,16 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#menutest2"> 人员 <b class="caret"></b> </a>
 									<ul class="dropdown-menu">
 										<li>
-											<a id="btnShowPerson" onclick="showPerson()" href="#">显示人员信息</a>
+											<a id="btnShowPerson" href="#">显示人员信息</a>
 										</li>
 										<li>
-											<a id="btnLoadDept" id="btnLoadPerson" onclick="startLoadPerson()" href="#">爬取人员信息</a>
+											<a id="btnLoadPerson" href="#">爬取人员信息</a>
 										</li>
 										<li>
-											<a id="btnPersonDB" onclick="sqlitePerson()" href="#">存入数据库</a>
+											<a id="btnInitDB" href="#">初始化数据库</a>
+										</li>
+										<li>
+											<a id="btnPersonDB" href="#">存入数据库</a>
 										</li>
 									</ul>
 								</li>
@@ -121,18 +111,18 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" href="#menutest3"> 导出<b class="caret"></b> </a>
 									<ul class="dropdown-menu">
 										<li>
-											<a id="btnExport" onclick="exportPerson()"href="#">导出人员信息息</a>
+											<a id="btnExport" href="#">导出人员信息息</a>
 										</li>
 										<li>
-											<a id="btnDept" onclick="exportDept()" href="#">导出部门信息</a>
+											<a id="btnDept" href="#">导出部门信息</a>
 										</li>
 										<li>
-											<a id="btnClear" onclick="clearStorage()" href="#">清空数据</a>
+											<a id="btnClear" href="#">清空数据</a>
 										</li>
 									</ul>
 								</li>
 								<li class="dropdown" id="menutest3">
-									<a class="dropdown-toggle" data-toggle="dropdown" href="#menutest4" onclick="OnlineContact.search('chengyaoan');"> 测试</a>
+									<a class="dropdown-toggle" data-toggle="dropdown" href="#menutest4" id="mnuTest"> 测试</a>
 								</li>
 							</ul>
 						</div>
