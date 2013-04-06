@@ -17,12 +17,20 @@
 	}, function(response) {
 		if(response.result) {
 			var txtName = document.getElementById("ext-comp-1002");
-			if (txtName.value != response.result[0])
+			if(txtName.value != response.result[0])
 				return;
-			
+
 			var txtPwd = document.getElementById("ext-comp-1003");
 			txtPwd.value = response.result[1];
 		}
 		// response.result;
+
+		//auto login
+		if(location.href.indexOf('autologin') != -1) {
+			var btnLogin = document.getElementById('ext-gen21');
+			if (btnLogin)
+				btnLogin.click();
+		}
+
 	});
 })();

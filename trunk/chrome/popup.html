@@ -7,60 +7,7 @@
 		<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 		<script type="text/javascript" src="js/jquery.js"></script>
 		<script type="text/javascript" src="js/login.js"></script>
-		
-		<script type="text/javascript">
-			$(function() {
-				// var bg = chrome.extension.getBackgroundPage();
-				// $("#description").append(bg.gExInfo.description);
-				
-				//暂时不开启自动登录
-				// window.Login.testLogin(function(result) {
-					// if(result) {
-						// onLoginSuccess(result);
-					// } else {
-						// $("#btnLogin").html("<< 请登录  >>");
-					// }
-				// });
-				
-				//屏蔽管理员菜单
-				var bg = chrome.extension.getBackgroundPage();
-				if(!bg.isExtensionAdmin()) {
-					$(".adminMenu").hide();
-				}
-
-			});
-			function menuLogin() {
-				$("#btnLogin").css("color", "orange").html("登录中...");
-				window.Login.testLogin(function(result) {
-					if(result) {
-						onLoginSuccess();
-					} else {
-						var bg = chrome.extension.getBackgroundPage();
-						var name = bg.setting("PortalName");
-						var pwd = bg.setting("PortalPwd");
-						if(name && pwd) {
-							window.Login.login(name, pwd, onLoginSuccess);
-						} else
-							$("#btnLogin").css("color", "red").html("未设置用户名密码");
-					}
-				})
-			}
-
-			function onLoginSuccess(result) {
-				if(result) {
-					$("#btnLogin").css("color", "green").html("OA已登录")[0].onclick = null;
-					$("#btnLogin").append("<img src='image/popup/check.png'>");
-				} else {
-					$("#btnLogin").css("color", "red").html("登录失败");
-				}
-			}
-
-			function openTab(url) {
-				chrome.tabs.create({
-					url : url
-				});
-			}
-		</script>
+		<script type="text/javascript" src="popup.js"></script>
 	</head>
 	<body style="width:150px">
 		<!--
@@ -71,8 +18,7 @@
 				<i class="icon-user"></i>OA登录状态
 			</li>
 			<li>
-				
-				<a href="#" onclick="menuLogin()" id="btnLogin">登录</a>
+				<a href="#" id="btnLogin">登录</a>
 			</li>
 			<li>
 				<a href="http://pac.gmcc.net/portal/dt?DISHI_Portal.setSelected=DISHI_guangzhou_workbench1&last=false&provider=DISHI_Portal" target="_blank">工作台</a>
@@ -98,7 +44,7 @@
 				<a href="feature.html" target="_blank">应用设置</a>
 			</li>
 			<li class="adminMenu">
-				<a href="#" onclick="javascript:openTab('chrome://settings/extensionSettings')">Chrome</a>
+				<a href="#" id="btnChromeSetting">Chrome</a>
 			</li>
 			<li class="nav-header">
 				<i class="icon-plus"></i>

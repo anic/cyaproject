@@ -10,67 +10,7 @@
 
 		<script type="text/javascript" src="js/login.js"></script>
 		<script type="text/javascript" src="js/toolbar.js"></script>
-		<script type="text/javascript">
-			$(function() {
-				var bg = chrome.extension.getBackgroundPage();
-				$("#txtPortalName").val(bg.setting("PortalName"));
-
-				if(bg.isExtensionAdmin()) {
-					$("#pAdminDecription").html("您已经是此应用的管理员，可以访问所有功能。");
-					$("#btnDeactivateAdmin").show();
-				} else {
-					$("#pAdminDecription").html("您不是此应用的管理员，不可访问管理员功能。");
-					$("#btnActivateAdmin").show();
-				}
-			});
-			function activateAdmin() {
-				var bg = chrome.extension.getBackgroundPage();
-				//TODO:加强口令
-				if(prompt("请输入管理员口令") == "gmccwebsitesucks") {
-					bg.setting(bg.EXTENSION_IS_ADMIN, "true");
-					alert("管理员功能开启成功");
-					window.location.reload();
-				} else {
-					alert("管理员口令错误");
-				}
-			}
-
-			function deactivateAdmin() {
-				var bg = chrome.extension.getBackgroundPage();
-				if(confirm("确认关闭管理员功能？")) {
-					bg.setting(bg.EXTENSION_IS_ADMIN, null);
-					alert("管理员功能关闭成功");
-					window.location.reload();
-				}
-			}
-
-			function savePortal() {
-				var portalName = $("#txtPortalName").val();
-				var portalPwd = $("#txtPortalPwd").val();
-				var bg = chrome.extension.getBackgroundPage();
-				bg.setting("PortalName", portalName);
-				bg.setting("PortalPwd", portalPwd);
-				alert("保存成功");
-			}
-
-			function settingLogin() {
-				var bg = chrome.extension.getBackgroundPage();
-				var name = bg.setting("PortalName");
-				var pwd = bg.setting("PortalPwd");
-
-				var loginUrl = window.Login.buildUrl(name, pwd);
-				window.open(loginUrl);
-			}
-
-			function buildUrl() {
-				var bg = chrome.extension.getBackgroundPage();
-				var name = bg.setting("PortalName");
-				var pwd = bg.setting("PortalPwd");
-
-				var loginUrl = window.Login.buildUrl(name, pwd);
-				alert(loginUrl);
-			}
-		</script>
+		<script type="text/javascript" src="setting.js"></script>
 	</head>
 	<body>
 		<div class="navbar">
@@ -115,17 +55,17 @@
 					<div class="control-group">
 						<label class="control-label" for="input01">密码</label>
 						<div class="controls">
-							<input type="password" class="input-xlarge" id="txtPortalPwd"  placeholder="***">
+							<input type="password" class="input-xlarge" id="txtPortalPwd"  placeholder="**********">
 						</div>
 					</div>
 					<div class="form-actions">
-						<button id="btnSave" class="btn btn-primary" name="" onclick="savePortal();">
+						<button id="btnSave" class="btn btn-primary" name="">
 							保存
 						</button>
-						<button class="btn" onclick="settingLogin()" >
+						<button id="btnTestLogin" class="btn">
 							测试登录
 						</button>
-						<button class="btn" onclick="buildUrl()" >
+						<button id="btnBuilUrl" class="btn">
 							登录链接
 						</button>
 					</div>
@@ -143,10 +83,10 @@
 						</div>
 					</div>
 					<div class="form-actions">
-						<button id="btnActivateAdmin" name="" onclick="activateAdmin();" class="btn btn-success" style="display: none;">
+						<button id="btnActivateAdmin" name=""  class="btn btn-success" style="display: none;">
 							开启管理员功能
 						</button>
-						<button id="btnDeactivateAdmin" name="" onclick="deactivateAdmin();" class="btn btn-warning" style="display: none;">
+						<button id="btnDeactivateAdmin" name="" class="btn btn-warning" style="display: none;">
 							关闭管理员功能
 						</button>
 					</div>
