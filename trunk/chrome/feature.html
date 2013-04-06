@@ -8,13 +8,7 @@
 		<script type="text/javascript" src="./bootstrap/js/jquery.js"></script>
 		<script type="text/javascript" src="./bootstrap/js/bootstrap.js"></script>
 		<script type="text/javascript" src="js/toolbar.js"></script>
-		<script type="text/javascript">
-$.ready(function() {
-var bg=chrome.extension.getBackgroundPage();
-$("#version").append(bg.gExInfo.version);
-});
-
-		</script>
+		<script type="text/javascript" src="feature.js"></script>
 	</head>
 	<body>
 		<div class="navbar">
@@ -29,7 +23,7 @@ $("#version").append(bg.gExInfo.version);
 							<a href="setting.html">设置</a>
 						</li>
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 工具 <b class="caret"></b> </a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 工具 <b class="caret"> </b> </a>
 							<ul class="dropdown-menu" id="ulTool"></ul>
 						</li>
 						<li>
@@ -41,7 +35,16 @@ $("#version").append(bg.gExInfo.version);
 		</div>
 		<div class="container">
 			<div class="main">
-				<span>此应用目前的版本是 </span><span id="version"></span>，各版本的更新内容见下面。 <h2> Version 0.1.2 </h2>
+				<span>此应用目前的版本是 </span>
+				<h2>Version <span id="version"></span></h2> 
+				
+				<h3>系统</h3>
+				<ul>
+					<li>
+						使用Manifest 2进行了改版，支持最新版的Chrome浏览器
+					</li>
+				</ul>
+				<h2> Version 0.1.2 </h2>
 				<h3>系统</h3>
 				<ul>
 					<li>
