@@ -1,0 +1,934 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>员工家园-商品列表</title>
+<script src="/gzxz/js/jquery/jquery-1.4.2.js" type="text/javascript"></script>
+<script src="/gzxz/js/portal/div.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	//提交表单，搜索商品
+	function submitSearch(param){
+		var price = document.getElementById("orderByPrice");
+		var time = document.getElementById("orderByUpFrameDate");
+		var sort = document.getElementById("sortId");
+		
+		if(param == "priceAsc"){//价格升序
+			price.value = "asc";
+			time.value = "";
+		}else if(param == "priceDesc"){//价格降序
+			price.value = "desc";
+			time.value = "";
+		}else if(param == "byTime"){//上架时间
+			time.value = "desc";
+			price.value = "";
+		}else{
+			time.value = "";
+			price.value = "";
+		}
+		searchmerchandise.submit();
+		return false;
+	}
+	function addToShopCartByAjax(merchandiseId){
+		// from shopCartAddDiv.js
+		shopCarFn("/gzxz",merchandiseId);
+	}
+	$(function(){
+		if($.trim($("table.productText").html())==""){
+			$("table.productText").html("<tr><td style='font-size:12px;'>暂无分类</td></tr>");
+		}
+	});
+</script>
+</head>
+
+<body>
+<!-- 头部 -->
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link href="/gzxz/struts/dhtml/css/indexStyle.css" rel="stylesheet"
+			type="text/css" />
+		<link href="/gzxz/css/201007/Head.css" rel="stylesheet"
+			type="text/css" />
+		<link href="/gzxz/css/201007/Css_Gwc.css" rel="stylesheet"
+			type="text/css" />
+		<link href="/gzxz/css/201007/base.css" rel="stylesheet"
+			type="text/css" />
+		<link href="/ygjy//portal/mc/order/css/Css_tips.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript"
+			src="/gzxz/js/portal/shopCartAddDiv.js"></script>
+		<script type="text/javascript"
+			src="/gzxz/js/portal/div.js"></script>
+		<script type="text/javascript" src="/gzxz/js/jquery/jquery.blockui.min.js"></script>
+		<script type="text/javascript">
+		if(!jQuery){
+			alert("commondHead.jsp需要使用jQuery库，请在引用页面导入jQuery库");
+			throw "commondHead.jsp需要使用jQuery库，请在引用页面导入jQuery库";
+		}
+	$(document).ready(
+	function(){
+		$("#focusDiv").hover(
+				function(){
+						 
+						var left = $(this).position().left+6;
+		                var top = $(this).position().top;
+		                $("div.cosgy").css({"position":"absolute","top":top+"px","left":left+"px","z-index":"1","display":"block"});
+					}, 
+				function(){
+					});
+
+		$("div.cosgy").hover(
+				function(){
+				}, 
+				function(){
+					$("div.cosgy").css("display", "none");
+				});
+		$.ajax({
+            type:'POST',
+            url: "/gzxz/ebusiness/admin/page!findMerchendiseSort.action",
+            success: function(json){
+	        	var jsonObj=eval("("+json+")");
+	            var content="";
+						      
+					      $.each(jsonObj,function(i,item){
+                        	if(i<10){
+                        	content = content+"<li><span></span><a href=\"#\">"+item.title+"<\/a><div class=\"indexSubMenuContainer\" style=\"display:none;margin-top:1px;_margin-top:-15px;\">"+
+                        					   "<div class=\"SubMenuLeft\" style=\"width:116px;_margin-left:-450px;\">"+item.title+"<\/div>"+
+						    				   "<div class=\"SubMenuRight\" style=\"float:left;margin-left:116px;_margin-left:58px;\">"+
+						                       "<div class=\"titleText\" style=\"height:18px; line-height:18px;\">选择分类<\/div>"+
+						                       "<table width=\"94%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"indexSubSort\">";
+            					if(item.groupPurchaseSecondVOList!=null&&item.groupPurchaseSecondVOList.length>0){
+            					 	$.each(item.groupPurchaseSecondVOList,function(j,child){
+            					 		if (i == 0) {
+											content = content+"<tr><th style=\"height:20px; line-height:20px;text-align:left;\">•&nbsp;"
+											content = content+"<a href=\"/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId="+child.secondCode+"\" style=\"font-size:12px;\">"+child.secondMenuTitle+"<\/th><td style=\"height:20px; line-height:20px;\">";
+											if (child.secondMenuContentVOList != null && child.secondMenuContentVOList.length>0) {
+												$.each(child.secondMenuContentVOList,function(k,subChild){
+													content = content+"| <a href=\"/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId="+subChild.code+"\" style=\"font-size:12px;\">"+subChild.secondMenuChildName+"<\/a>";
+												});
+											}
+											content = content+"<\/td><\/tr>";
+										} else {
+											content = content+"<tr><th style=\"height:20px; line-height:20px;text-align:left;\">•&nbsp;"
+											content = content+"<a href=\"/gzxz/ebusiness/admin/service!ServiceDetail.action?service.type="+child.secondCode+"\" style=\"font-size:12px;\">"+child.secondMenuTitle+"<\/th><td style=\"height:20px; line-height:20px;\">";
+											if (child.secondMenuContentVOList != null && child.secondMenuContentVOList.length>0) {
+												$.each(child.secondMenuContentVOList,function(k,subChild){
+													content = content+"| <a href=\"/gzxz/ebusiness/admin/service!ServiceDetail.action?service.id="+subChild.code+"\" style=\"font-size:12px;\">"+subChild.secondMenuChildName+"<\/a>";
+												});
+											}
+											content = content+"<\/td><\/tr>";
+
+										}
+            					 	});
+            					 	if(i == 0) {
+            					 		content = content+"<tr><th style=\"height:20px; line-height:20px;text-align:left;\">•&nbsp;";
+            					 		content = content+"<a href=\"/gzxz/ebusiness/portal/showgroupbuy!groupbuyList.action\" style=\"font-size:12px;\">团购活动<\/th>";
+            					 	}else{
+            					 		content = content+"<tr><th style=\"height:20px; line-height:20px;text-align:left;\">•&nbsp;";
+            					 		content = content+"<a href=\"/gzxz/ebusiness/admin/vcarservice!CarService.action\" style=\"font-size:12px;\">私车服务<\/th>";
+            					 	}
+            					 }
+            					content = content+"<\/table><\/div><\/div><\/li>";
+                        	}
+                    	});
+            			$("#showSort").html(content);
+            			$("#test").hover(
+	    			            function(){
+	    			                $(".cosgy",this).show();
+	    			            },
+	    			            function(){
+	    			            	$(".cosgy",this).hide();
+	    			            }
+	    			        );
+                	
+    		    	//弹出左边分类菜单的子分类层
+    		    	
+    		        $(".cosgy ul li").hover(
+    		            function(){
+    		            	var left = $(this).position().left;
+    		                var top = $(this).position().top;
+    		                $("a:first",this).addClass("selected");
+    		                $(".indexSubMenuContainer",this).css({"position":"absolute","top":top,"left":left,"z-index":"100"});
+    		                $(".indexSubMenuContainer",this).show();
+    		            },
+    		            function(){
+    		            	 $("a:first",this).removeClass("selected");
+    		            	$(".indexSubMenuContainer",this).hide();
+    		            }
+    		        );
+    		    	
+            },
+            error: function(){
+            	alert('get message error!');
+    		}
+        });
+	      }
+	);
+	function showCompassDiv(){
+		$(".cosgy").css("display","block");
+	}
+	function hideCompassDiv(){
+		$(".cosgy").css("display","none");
+	}
+	function commonHeadSubmit(){
+		var searchStr = $("#commonHead_searchStr").val();
+	var form = "<form style='display:none' action='/gzxz/ebusiness/admin/vmerchandist!executeSearch.action' method='post'>"
+			+  "<input type='hidden' name='svo.name' value='"+searchStr+"'>"
+			+"</form>";	
+			$(form).appendTo($('body')).submit();
+			
+			
+		/*if(searchStr == undefined || searchStr =="") {
+			var url = "/gzxz/ebusiness/admin/vmerchandist!executeSearch.action";
+			location.href=url;
+		} else {
+			var url = "/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?headSearchStr="+searchStr;
+			location.href=url;
+		}*/
+		
+	}
+	function keyDownFn() {
+		if(event.keyCode==13) {
+			commonHeadSubmit();
+		}
+	}
+</script>
+<script type="text/javascript" for="keyDownBtn" event="keyDownFn();">
+	
+</script>
+		<div class="HeadTop">
+			<div class="HeadTopR">
+				<a href="/gzxz/ebusiness/admin/service!ServiceDetail.action"><img border="0"
+						src="/gzxz/images/201106/majordomo.gif" />
+				</a>
+			</div>
+			<div class="HeadTopRB">
+				<a href="/gzxz/index.html"><img border="0"
+						src="/gzxz/images/201106/Employeehome.gif" />
+				</a>
+			</div>
+		</div>
+		<!--头部完-->
+		<div class="searchContainer">
+			<div id="test" style="position:absolute;z-index:999;">
+				<img id="focusDiv" src="/gzxz/images/201106/Navigate.png" alt="站内指南针" class="Standinside_" style="top:4px;left:50px;_left:-500px;"/>
+				<div class="cosgy"
+					style="position:absolute;_left:8px;z-index:1;width:132px;display:none;background-color:#FFF1C7;border:solid 1px #F0E1C0;background-image: url('/gzxz/images/201106/zhinang.gif')"
+					>
+					<ul id="showSort">
+	
+					</ul>
+					<!-- 
+		<input   type="button"  class="shareBuy" />
+		-->
+				</div>
+			</div>
+    <div class="inputContainer" style="margin-left:240px\9;_margin-left:120px;">
+      <div class="inputLeft"><img src="/gzxz/images/portal/searchInputLeft.jpg" width="23" height="30" /></div>
+      <div class="inputCenter"><input id="commonHead_searchStr" name="svo.name" type="text"/></div>
+      <div class="inputRight"><input name="" type="image" src="/gzxz/images/portal/searchButton.jpg" onclick="commonHeadSubmit();"/></div>
+    </div>
+    <div class="loginInfo" style="font-size: 13px;text-align:center;padding-top:-11px;margin-top:-11px;">
+    您好：<span class="fRed">程曜安</span>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/gzxz/ebusiness/admin/vmember!searchById.action" target="_top">个人中心</a> | <a href="/gzxz/ebusiness/portal/shopCartAction!listShopCart.action" target="_top">购物车</a>  | <a href="/gzxz/portal/mc/view/helpCenter.jsp" target="_top">帮助中心</a> | <a  href="/gzxz/ebusiness/admin/vmember!logout.action" target="_top">退出</a>
+    </div>
+
+</div> 
+		<!--导航完-->
+
+<form action="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action" method="post" name="searchmerchandise">
+	<input type="hidden" name="svo.sortId" id="sortId" value="11"/>
+	<input type="hidden" name="svo.orderByPrice" id="orderByPrice" value=""/>
+	<input type="hidden" name="svo.orderByUpFrameDate" id="orderByUpFrameDate" value=""/>
+	
+<div class="containerSF">
+<div class="indexLeftSF">
+	<div class="productTitle">幸福超市</div>
+	<div class="productBox">
+	    <table class="productText" border="0" cellpadding="0" cellspacing="0">
+		    
+		    		<tr>
+					    <td>
+					    	<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=2" target="_blank">
+						    <span class="fdOrange fb">生鲜</span></a><br/>
+						    
+						    	<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=10" style="font-size:12px;">净菜类</a>&nbsp;|
+						    	
+						    
+						    	<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=13" style="font-size:12px;">鲜肉档</a>&nbsp;|
+						    	
+						    
+					    </td>
+				    </tr>
+		    	
+		    		<tr>
+					    <td>
+					    	<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=3" target="_blank">
+						    <span class="fdOrange fb">面点</span></a><br/>
+						    
+						    	<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=11" style="font-size:12px;">点心坊</a>&nbsp;|
+						    	
+						    
+						    	<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=12" style="font-size:12px;">手工面类</a>&nbsp;|
+						    	
+						    
+					    </td>
+				    </tr>
+		    	
+		    		<tr>
+					    <td>
+					    	<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=15" target="_blank">
+						    <span class="fdOrange fb">贺年食品</span></a><br/>
+						    
+					    </td>
+				    </tr>
+		    	
+		    		<tr>
+					    <td>
+					    	<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=16" target="_blank">
+						    <span class="fdOrange fb">营养晚餐</span></a><br/>
+						    
+					    </td>
+				    </tr>
+		    	
+		    	<tr>
+				    <td>
+				    	<a href="/gzxz/ebusiness/portal/showgroupbuy!groupbuyList.action" target="_blank">
+					    <span class="fdOrange fb">团购</span></a><br/>
+				    </td>
+			    </tr>
+	    </table>
+    </div>
+    <div class="productBot"></div>
+    <!--产品分类完-->
+    <!-- 最近浏览商品 -->
+    <div class="productTitleTwo"><span class="fOrange">最近浏览</span></div>
+	
+		<div class="productBox">
+	      <div class="SFTunContainer">
+	         您最近还没有浏览商品
+	      </div>
+	    </div>
+	
+	
+    <div class="productBot"></div>
+    <!--最近浏览完-->
+    <div class="productTitleTwo"><span class="fOrange">最受欢迎商品</span></div>
+    
+    
+    	
+    		<div class="productBox">
+		      <div class="SFTunContainer">
+		        <ul class="SFTun">
+		          <a href="/gzxz/M000001000622.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="100px" height="100px"/></a>
+		          <li class="fb"><a href="/gzxz/M000001000622.html" target="_blank">（金海）蜜汁焗餐包</a></li>
+		          <li class="fb"><span class="fRed">1.0元/个</span></li>
+		          <li><a 
+		          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000622&num=1" 
+		          class="btnShop2" target="_blank"><span class="fOrange">订购</span></a><a disabled
+		          href="javascript:addToShopCartByAjax('M000001000622');"
+		          class="btnCar2">加入购物车</a></li>
+		          <p class="cb"></p>
+		        </ul>
+		      </div>
+		    </div>
+    	
+    		<div class="productBox">
+		      <div class="SFTunContainer">
+		        <ul class="SFTun">
+		          <a href="/gzxz/M000001000625.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="100px" height="100px"/></a>
+		          <li class="fb"><a href="/gzxz/M000001000625.html" target="_blank">（金海）古法鸡蛋糕</a></li>
+		          <li class="fb"><span class="fRed">1.0元/个</span></li>
+		          <li><a 
+		          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000625&num=1" 
+		          class="btnShop2" target="_blank"><span class="fOrange">订购</span></a><a disabled
+		          href="javascript:addToShopCartByAjax('M000001000625');"
+		          class="btnCar2">加入购物车</a></li>
+		          <p class="cb"></p>
+		        </ul>
+		      </div>
+		    </div>
+    	
+    		<div class="productBox">
+		      <div class="SFTunContainer">
+		        <ul class="SFTun">
+		          <a href="/gzxz/M000001000627.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="100px" height="100px"/></a>
+		          <li class="fb"><a href="/gzxz/M000001000627.html" target="_blank">（金海）清香靓花卷</a></li>
+		          <li class="fb"><span class="fRed">0.4元/个</span></li>
+		          <li><a 
+		          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000627&num=1" 
+		          class="btnShop2" target="_blank"><span class="fOrange">订购</span></a><a disabled
+		          href="javascript:addToShopCartByAjax('M000001000627');"
+		          class="btnCar2">加入购物车</a></li>
+		          <p class="cb"></p>
+		        </ul>
+		      </div>
+		    </div>
+    	
+    		<div class="productBox">
+		      <div class="SFTunContainer">
+		        <ul class="SFTun">
+		          <a href="/gzxz/M000001000628.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="100px" height="100px"/></a>
+		          <li class="fb"><a href="/gzxz/M000001000628.html" target="_blank">（金海）新鲜生肉包</a></li>
+		          <li class="fb"><span class="fRed">1.0元/个</span></li>
+		          <li><a 
+		          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000628&num=1" 
+		          class="btnShop2" target="_blank"><span class="fOrange">订购</span></a><a disabled
+		          href="javascript:addToShopCartByAjax('M000001000628');"
+		          class="btnCar2">加入购物车</a></li>
+		          <p class="cb"></p>
+		        </ul>
+		      </div>
+		    </div>
+    	
+    
+    <div class="productBot"></div>
+    </div>
+    <!--大家最喜欢的商品完-->
+    <!--右边开始-->
+    <div class="indexRightSF" style="_margin-top:-6px;">
+    <!-- 面包屑 -->
+    <div class="goodscategoryRight">
+    <a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action">所有分类</a>&gt;&gt;
+    	
+    		
+	    		<!-- <a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=3">面点</a>&gt;&gt; -->
+	    		<a href="/gzxz/ebusiness/admin/vmerchandist!executeSearch.action?svo.sortId=3">面点</a>&gt;&gt;
+    		
+    		
+    	
+    	
+    		点心坊&gt;&gt;
+    	
+    </div>
+    <div class="goodscategoryTop">
+	    <span class="ml10">关键字：&nbsp;<input class="inputKey" name="svo.name" id="svoName" type="text" value=""/></span>
+	    <span class="goodscategoryTop_loup"><img src="/gzxz/images/201106/loup.jpg"/></span>
+	    商家名称：<input class="inputKey" name="svo.merchantName" value=""/>
+	    <span class="goodscategoryTop_seach"><input name="" type="image" src="/gzxz/images/201106/botton/SeachGreen.gif" onclick="javascript:submitSeach('');return false;"/></span>
+    </div>
+   <div class="goodscategoryTopTwo"><span class="ml10" style="position:relative;top:5px;">
+	   <a href="javascript:submitSearch('priceDesc');"><img src="/gzxz/images/201106/botton/PriceTTB.gif" /></a>
+	   <a href="javascript:submitSearch('priceAsc');"><img src="/gzxz/images/201106/botton/PriceBTT.gif" /></a>
+	   <a href="javascript:submitSearch('byTime');"><img src="/gzxz/images/201106/botton/Time.gif"/></a></span>
+   </div>
+   
+	 <!--右边上部完-->
+	 <!-- 查询商品列表 -->
+	 
+	 
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000127000015.html" target="_blank"><img src="/gzxz/uploadfile/merchandise/logo/M000127/201112/5c49bf45-1b1f-43ec-b4d3-7f105166a8d1.jpg" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000127000015.html" target="_blank"><span class="goodscolor">（金海）御品核桃酥</span></a><span class="fRed goodslocation">零售价：0.6元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料：金蜂鸟面粉，安佳奶油，白糖，蛋。制作流程及工艺：1、将面粉、奶油加水和匀
+2、出体造型后扫蛋于表面
+3、入烤炉烤20分钟后取出
+4、完成制作
+
+成品约重：0.8两">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料：金蜂鸟面粉，安佳奶油，白糖，蛋。制作流程及工艺：1、将面粉、奶油加水和匀
+2、出体造型后扫蛋于表面
+3、入烤炉烤20分钟后取出...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000127000015&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a 
+	          href="javascript:addToShopCartByAjax('M000127000015');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000127000015&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000127000017.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000127000017.html" target="_blank"><span class="goodscolor">(金海)燕麦小馒头</span></a><span class="fRed goodslocation">零售价：0.4元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金峰鸟面粉，燕麦粉，幼砂糖。
+
+制作工艺及流程：
+
+1、将面粉、幼砂糖和匀
+2、加入水和匀线滑
+3、造型后静置1.5小时
+4、入蒸柜蒸制15分钟取出即成
+5、制作完成
+
+成品约重：每个1.2两
+ 
+
+【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金峰鸟面粉，燕麦粉，幼砂糖。
+
+制作工艺及流程：
+
+1、将面粉、幼砂糖和匀
+2、加入水和匀线滑
+3、造型后静置...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000127000017&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000127000017');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000127000017&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000001000629.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000001000629.html" target="_blank"><span class="goodscolor">（金海）北方小馒头</span></a><span class="fRed goodslocation">零售价：0.4元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金蜂鸟面粉，鲁王面粉，自发老面粉，幼沙糖。
+
+制作工艺及流程：
+1、将两种面粉与自发面种和匀
+2、水搅拌浅滑
+3、切好造型后放置约1.5小时
+4、放入蒸柜蒸制15分钟取出即可">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金蜂鸟面粉，鲁王面粉，自发老面粉，幼沙糖。
+
+制作工艺及流程：
+1、将两种面粉与自发面种和匀
+2、水搅拌浅滑
+3...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000629&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000001000629');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000001000629&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000127000020.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000127000020.html" target="_blank"><span class="goodscolor">（金海）吐司大面包</span></a><span class="fRed goodslocation">零售价：2.5元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料详细:红燕山面粉、鸡蛋、伊利鲜奶、福临门天然调和油、提子干、白糖，金燕牌酵母0.2%
+
+制作工艺及流程：1、先将面粉与添加剂和匀
+2、加入水、蛋、糖、伊利鲜奶、搅拌至纯滑；
+3、造好型入壳、加入提子干；
+4、入烤炉烤 25分钟；
+5、成品重量350克">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料详细:红燕山面粉、鸡蛋、伊利鲜奶、福临门天然调和油、提子干、白糖，金燕牌酵母0.2%
+
+制作工艺及流程：1、先将面粉与添加剂和匀...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000127000020&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000127000020');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000127000020&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000127000022.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000127000022.html" target="_blank"><span class="goodscolor">（金海）牛角包</span></a><span class="fRed goodslocation">零售价：0.9元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料:红燕山面粉、南桥起酥油、白糖、蛋、福临门天然调和油、金燕牌发酵母0.6%。制作流程及工艺：1、将面粉加入酵母后和匀，后加水、白糖、蛋、油，搅拌和匀
+2、将面团和起酥油切薄造型，发酵2小时
+3、入烘炉25分钟后取出
+4、完成制作
+">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料:红燕山面粉、南桥起酥油、白糖、蛋、福临门天然调和油、金燕牌发酵母0.6%。制作流程及工艺：1、将面粉加入酵母后和匀，后加水、白糖、...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000127000022&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000127000022');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000127000022&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000001000631.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000001000631.html" target="_blank"><span class="goodscolor">（金海）燕麦大馒头</span></a><span class="fRed goodslocation">零售价：0.7元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金峰鸟面粉，燕麦粉，幼砂糖。
+
+制作工艺及流程：
+
+1、将面粉、幼砂糖和匀
+2、加入水和匀线滑
+3、造型后静置1.5小时
+4、入蒸柜蒸制15分钟取出即成
+5、每个2.4两
+">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金峰鸟面粉，燕麦粉，幼砂糖。
+
+制作工艺及流程：
+
+1、将面粉、幼砂糖和匀
+2、加入水和匀线滑
+3、造型后静置...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000631&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000001000631');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000001000631&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000001000622.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000001000622.html" target="_blank"><span class="goodscolor">（金海）蜜汁焗餐包</span></a><span class="fRed goodslocation">零售价：1.0元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：红燕山面粉，幼砂糖，安佳奶油，叉烧。
+
+制作工艺及流程：
+
+1、将面粉与糖、蛋和匀
+2、放入水后搅拌均匀，线滑
+3、放入馅料后造型，静发15分钟
+4、入烘炉15分钟后取出
+5、每个2.5两
+">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：红燕山面粉，幼砂糖，安佳奶油，叉烧。
+
+制作工艺及流程：
+
+1、将面粉与糖、蛋和匀
+2、放入水后搅拌均匀，线滑
+...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000622&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000001000622');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000001000622&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000127000005.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000127000005.html" target="_blank"><span class="goodscolor">（金海）酥皮包</span></a><span class="fRed goodslocation">零售价：0.6元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：红燕山面粉，鸡蛋，白糖，安佳奶油。
+
+制作工艺及流程：
+
+1、将面粉和匀
+2、加入蛋、糖、水、奶油搅拌线滑
+3、出体造型静置1.5小时
+4、入烘炉15分钟
+5、每个2两
+">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：红燕山面粉，鸡蛋，白糖，安佳奶油。
+
+制作工艺及流程：
+
+1、将面粉和匀
+2、加入蛋、糖、水、奶油搅拌线滑
+3...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000127000005&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000127000005');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000127000005&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000127000023.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000127000023.html" target="_blank"><span class="goodscolor">（金海）糯米鸡</span></a><span class="fRed goodslocation">零售价：2.5元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【注意！！！：因食堂供应有限，每人每天限订二个！！】【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：糯米，猪肉，沙葛，冬菇，光鸡，咸蛋，干何叶。
+制作流程：
+1、将糯米蒸熟备用
+2、猪肉，沙葛，冬菇，鸡，咸蛋切件炒熟
+3、将熟料用糯米饭包好，再用荷味包好造型
+4、放入蒸柜30分钟后取出即可
+5、制作完成
+
+成品重约：3两
+
+【注意！！！：因食堂供应有限，一人每天只能订购二个哦！！】">
+	          	
+	          		【注意！！！：因食堂供应有限，每人每天限订二个！！】【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：糯米，猪肉，沙葛，冬菇，光鸡，咸蛋，干何叶。
+制作流程：
+1、将糯...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000127000023&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000127000023');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000127000023&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000001000625.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000001000625.html" target="_blank"><span class="goodscolor">（金海）古法鸡蛋糕</span></a><span class="fRed goodslocation">零售价：1.0元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料：鸡蛋，幼砂糖，福临门天然调和油，金蜂鸟面粉。制作流程及工艺：1、先将蛋白和蛋黄分开
+2、将蛋白入机打至轻浮
+3、将蛋黄、糖、油、水、和面粉和匀
+4、将打起蛋白和已和匀的蛋黄一起搅拌
+5、入烘炉约25分钟后取出">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料：鸡蛋，幼砂糖，福临门天然调和油，金蜂鸟面粉。制作流程及工艺：1、先将蛋白和蛋黄分开
+2、将蛋白入机打至轻浮
+3、将蛋黄、糖、油...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000625&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000001000625');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000001000625&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000001000627.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000001000627.html" target="_blank"><span class="goodscolor">（金海）清香靓花卷</span></a><span class="fRed goodslocation">零售价：0.4元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金蜂鸟面粉，幼砂糖，葱花，红萝卜粒。
+
+制作流程及工艺：
+
+1、将面粉与糖和匀
+2、加入水搅拌后线滑
+3、包入馅料后造型，静置1.5小时
+4、放入整柜16分钟后取出即可
+5：每个1.5两
+">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金蜂鸟面粉，幼砂糖，葱花，红萝卜粒。
+
+制作流程及工艺：
+
+1、将面粉与糖和匀
+2、加入水搅拌后线滑
+3、包入...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000627&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000001000627');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000001000627&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000001000628.html" target="_blank"><img src="/gzxz/images/web/seller.png" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000001000628.html" target="_blank"><span class="goodscolor">（金海）新鲜生肉包</span></a><span class="fRed goodslocation">零售价：1.0元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金蜂鸟面粉，马蹄肉4两，草菇2两，木耳1两，冬菇1两，幼沙糖。
+
+制作工艺及流程：
+1、将面粉与糖和匀
+2、加入水搅拌后纯滑
+3、包入馅料后造型，静置1.5小时
+4、放入整柜15分钟后取出即可
+5、制作完成。
+
+成品重约：3两">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】
+
+原料：金蜂鸟面粉，马蹄肉4两，草菇2两，木耳1两，冬菇1两，幼沙糖。
+
+制作工艺及流程：
+1、将面粉与糖和匀
+2、加入水...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000001000628&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a disabled
+	          href="javascript:addToShopCartByAjax('M000001000628');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000001000628&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000127000011.html" target="_blank"><img src="/gzxz/uploadfile/merchandise/logo/M000127/201112/60a76427-0c2a-4c14-9a73-0ab067c1ac39.jpg" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000127000011.html" target="_blank"><span class="goodscolor">（金海）东北大馒头</span></a><span class="fRed goodslocation">零售价：0.7元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料：金蜂鸟面粉，鲁王面粉，自发老面粉，幼沙糖。制作工艺及流程：1、将两种面粉与自发面种和匀
+2、水搅拌浅滑
+3、切好造型后放置约1.5小时
+4、放入蒸柜蒸制15分钟取出即可
+5、每个重约2.4两">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料：金蜂鸟面粉，鲁王面粉，自发老面粉，幼沙糖。制作工艺及流程：1、将两种面粉与自发面种和匀
+2、水搅拌浅滑
+3、切好造型后放置约1...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000127000011&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a 
+	          href="javascript:addToShopCartByAjax('M000127000011');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000127000011&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 		<div class="goodsList">
+	    <div class="goodsListContainer">
+	        <ul class="goodsListSF">
+	          <a href="/gzxz/M000127000025.html" target="_blank"><img src="/gzxz/uploadfile/merchandise/logo/M000127/201112/3594dc20-a173-43d6-9d9a-f37f61bb1b8b.jpg" width="130" height="130"/></a>
+	          <li class="fb f14 ml10"><a href="/gzxz/M000127000025.html" target="_blank"><span class="goodscolor">(金海)风味川西饼</span></a><span class="fRed goodslocation">零售价：1.0元/个</span></li>
+	          <li class="ml10" style="height:55px;" title="【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料：金蜂鸟面粉，白糖，瘦肉，芫茜，盐焗。制作工艺及流程：1、将面粉与糖加水和匀2、放入水搅至纯滑3、开薄，上芝麻、静置1.5小时4、入蒸柜蒸15分钟取出，5、包入馅料，煎至金黄色即成6、每个1.3两">
+	          	
+	          		【温馨提标：因食堂点心坊商品制作时间的限制，当日网上订购在14：00截止，14：00后可以预定次日的点心，谢谢！】原料：金蜂鸟面粉，白糖，瘦肉，芫茜，盐焗。制作工艺及流程：1、将面粉与糖加水和匀2、放入水搅至纯滑3、开薄，上芝麻、静置1.5小时4、入...
+	          	
+	          	
+	          	</li>
+	          <li><span class="goodslocationTwo"><a 
+	          href="/gzxz/ebusiness/portal/directbuy!toBirectbuyInfoPage.action?merchandiseCode=M000127000025&num=1" 
+	          class="btnShop1" target="_blank">订购</a><a 
+	          href="javascript:addToShopCartByAjax('M000127000025');" 
+	          class="btnCar1">加入购物车</a></span></li>
+	          <!-- /gzxz/ebusiness/portal/orderViewAction!addShopCart.action?merchandiseCode=M000127000025&num=1 -->
+	      </ul>
+	      <ul class="line"><img src="/gzxz/images/201106/line.jpg" /></ul>
+	     </div>
+	    </div>
+ 	
+ 
+    
+ <!--查询商品列表完--> 
+     <div class="pageDown">
+	    
+			
+			<script>document.forms[0].action='/gzxz/ebusiness/admin/vmerchandist!executeSearch.action'</script><div class="pageDown">
+<span class="">
+第1页/共:1页&nbsp;&nbsp;&nbsp;&nbsp;共14条记录/</span>
+<a href="javascript:;" class="first" title="首页">首页</a>
+<a href="javascript:;">上一页</a>
+<a href="javascript:;">下一页</a>
+<a href="javascript:;" class="end" title="尾页">尾页</a>
+<span class="pageSkip">至<input name="page" id="page" type="text" value="1"/><a href='javascript:;' class="go"  onclick="if(document.forms[0].page.value=='') { alert('页码必须输入！');return false;} else if(!/^\d$/.test(document.forms[0].page.value)) {alert('您输入的页码不是数字!'); return false;}else if(parseInt(document.forms[0].page.value)<1||parseInt(document.forms[0].page.value)>1){ alert('页码超出范围，请重新输入！');return false;} else {document.forms[0].submit();window.event.returnValue=false;}">Go</a></span>
+		
+     </div>
+  <!--翻页 end-->    
+    
+    </div>
+ </div>
+<!--内容完-->
+<iframe style="border: 0; width: 100%; height: 50px; padding-top:10px;" frameborder="0"
+			scrolling="no" src="/gzxz/portal/common/commonFoot.jsp"></iframe>
+<!--底部版权-->
+</form>
+</body>
+</html>
