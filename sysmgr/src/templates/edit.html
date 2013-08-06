@@ -1,0 +1,111 @@
+$def with(cvalue,dvalue,ovalue)
+$var title: 系统编辑 
+
+<a href="javascript:history.back()">返回</a>
+<p></p>
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne"> 公共属性 </a>
+	</div>
+	<div id="collapseOne" class="accordion-body collapse in">
+		<div class="accordion-inner row">
+			<form action="post">
+				<div class="span3">
+					<label>ID</label>
+					<input type="text" name="id" value="$cvalue['id']" readonly="readonly">
+					<label>名称</label>
+					<input type="text" name="name" value="$cvalue['name']">
+					<label>英文标识</label>
+					<input type="text" name="ename" value="$cvalue['ename']" readonly="readonly">
+					<label>内外网互联</label>
+					<input type="text" name="web" value="$cvalue['web']">
+					<label>访问方式</label>
+					<textarea style="width:600px" >$cvalue['urls']</textarea>
+					<label>简要说明</label>
+					<textarea rows="3" style="width:600px" >$cvalue['description']</textarea>
+				</div>
+				<div class="span3">
+					<label>开发商</label>
+					<input type="text" name="dev" value="$cvalue['dev']">
+					<label>子类</label>
+					<input type="text" name="clazz" value="$cvalue['clazz']">
+					<label>昵称</label>
+					<textarea rows="3">$cvalue['cname']</textarea>
+				</div>
+				<div class="span3">
+					<label>上线时间</label>
+					<input type="text" name="online" value="$cvalue['online']">
+					<label>下线时间</label>
+					<input type="text" name="offline" value="$cvalue['offline']">
+				</div>
+		</form>
+	</div>
+</div>
+</div>
+<div class="accordion-group">
+	<div class="accordion-heading">
+		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo"> 规划室信息 </a>
+	</div>
+	<div id="collapseTwo" class="accordion-body collapse in">
+		<div class="accordion-inner row">
+			<div class="span3">
+				<label>名称</label>
+				<input type="text" name="dev_name" value="$dvalue['dev_name']">
+				<label>开发系统等级</label>
+				<input type="text" name="dev_level" value="$dvalue['dev_level']">
+				<label>现状</label>
+				<textarea rows="3">$dvalue['dev_now']</textarea>
+			</div>
+			<div class="span3">
+				<label>主要使用部门</label>
+				<input type="text" name="dev_dept" value="$dvalue['dev_dept']">
+				<label>简易步骤</label>
+				<textarea rows="3">$dvalue['dev_step']</textarea>
+			</div>
+			<div class="span3">
+				<label>开发合作方</label>
+				<input type="text" name="dev_dev" value="$dvalue['dev_dev']">
+				<label>备注</label>
+				<input type="text" name="dev_comment" value="$dvalue['dev_comment']">
+				<label>生命周期</label>
+				<input type="text" name="dev_lifecycle" value="$dvalue['dev_lifecycle']">
+				<label>源代码管理</label>
+				<input type="text" name="dev_src" value="$dvalue['dev_src']">
+			</div>
+		</div>
+	</div>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseThree"> 支持室信息 </a>
+		</div>
+		<div id="collapseThree" class="accordion-body collapse in">
+			<div class="accordion-inner row">
+				<div class="span3">
+					<label>名称</label>
+					<input type="text" name="opp_name" value="$dvalue['opp_name']">
+					<label>维护系统等级</label>
+					<input type="text" name="opp_level" value="$dvalue['opp_level']">
+					<label>账号管理部门</label>
+					<input type="text" name="opp_dept" value="$dvalue['opp_dept']">
+					<label>账号管理科室</label>
+					<input type="text" name="opp_room" value="$dvalue['opp_room']">
+				</div>
+				<div class="span3">
+					<label>支持室系统负责人</label>
+					<input type="text" name="opp_oper" value="$dvalue['opp_oper']">
+					<label>数据库备份情况</label>
+					<input type="text" name="opp_backup" value="$dvalue['opp_backup']">
+					<label>源代码完整性</label>
+					<input type="text" name="opp_src" value="$dvalue['opp_src']">
+					<label>开发商联系人</label>
+					<input type="text" name="opp_dever" value="$dvalue['opp_dever']">
+				</div>
+				<div class="span3">
+					<label>已有自动业务监控点</label>
+					<input type="text" name="opp_monitor" value="$dvalue['opp_monitor']">
+					<label>涉及服务器</label>
+					<textarea rows="5">$dvalue['opp_server']</textarea>
+				</div>
+			</div>
+		</div>
+	</div>

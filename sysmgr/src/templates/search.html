@@ -1,0 +1,47 @@
+$def with (sysinfo,page,pagesize,keyword)
+$var title: 系统查询
+<form class="form-search" method="get">
+	<input name="keyword" type="text" class="input-medium search-query" value="$keyword" style="width:250px">
+	<button type="submit" class="btn">
+		&nbsp;&nbsp;查询&nbsp;&nbsp;
+	</button>
+</form>
+<table class="table table-bordered table-striped table-hover">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>名称</th>
+			<th>英文标识</th>
+			<th>访问方式</th>
+			<th>状态</th>
+		</tr>
+	</thead>
+	<tbody>
+		$for sys in sysinfo:
+		<tr>
+			<td>$int(sys[0])</td>
+			<td><a href="edit?en=$sys[2]">$sys[1]</a></td>
+			<td >$sys[2]</td>
+			<td >$sys[3]</td>
+			$if sys[5] == u'下线':
+				<td><span class="label label-inverse">下线</span></td>
+			$elif sys[4] is None or sys[4] == '':
+			 	<td><span class="label label-warning">规划室</span></td>
+			$else:
+				<td><span class="label label-success">运行中</span></td>
+		</tr>
+	</tbody>
+</table>
+<div class="pagination">
+	<ul>
+		$for i in range(1,pagesize+1):
+			$if i != page:
+				<li>
+					<a href="?keyword=$keyword&page=$i">$i</a>
+				</li>
+			$else:
+				<li class="disabled">
+					<a href="#">$i</a>
+				</li>
+	</ul>
+</div>
