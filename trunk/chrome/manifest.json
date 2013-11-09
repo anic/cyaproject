@@ -12,12 +12,8 @@
 		{
 			"matches": ["http://xqp2.gz.gmcc.net/*"],
 			"all_frames": true,
-			"js": ["js/log.js", "inject/xqp/inject_xqp_search.js", "js/jquery.js", "inject/xqp/inject_xqp_common.js"]
-		}, {
-			"matches": ["http://xqp2.gz.gmcc.net/*"],
-			"all_frames": true,
 			"run_at": "document_start",
-			"js": ["js/jquery.js", "inject/xqp/inject_xqp_common.js"],
+			"js": ["js/jquery.js", "inject/xqp/inject_xqp_common.js", "js/log.js", "inject/xqp/inject_xqp_search.js"],
 			"css": ["inject/xqp/inject_xqp_css.css"]
 		}, {
 			"matches": ["http://clgl.gz.gmcc.net/application/recordtaxiedit"],
@@ -62,6 +58,10 @@
 			"matches": ["http://portal-app3.gmcc.net/ApplicationWebModule2/appaccess/appaccess-publish.html*"],
 			"all_frames": true,
 			"css": ["inject/portal/inject_appaccess.css"]
+		}, {
+			"matches": ["http://isite.gz.gmcc.net/Visit/Visit/Edit_*"],
+			"all_frames": true,
+			"js": ["js/jquery.js", "inject/isite/inject_edit.js"]
 		}
 	],
 	"icons": {
