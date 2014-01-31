@@ -1,11 +1,21 @@
-$def with (sysinfo,page,pagesize,keyword)
+$def with (sysinfo,page,pagesize,keyword,ver)
 $var title: 系统查询
-<form class="form-search" method="get">
-	<input name="keyword" type="text" class="input-medium search-query" value="$keyword" style="width:250px">
+<form class="form-search" method="get" id='frmsearch'>
+	<input name="keyword" id="keyword" type="text" class="input-medium search-query" value="$keyword" style="width:250px">
 	<button type="submit" class="btn">
 		&nbsp;&nbsp;查询&nbsp;&nbsp;
 	</button>
+	<button class="btn" onclick="$$('#keyword').val('');frmsearch.submit()">
+		&nbsp;&nbsp;重置&nbsp;&nbsp;
+	</button>
 </form>
+<div style="width:100%">
+	<p>
+	当前版本: $ver['version'] &nbsp;&nbsp;
+	最后修改人：$ver['modifier']  &nbsp;&nbsp;
+	最后修改时间：$ver['modifytime']  &nbsp;&nbsp;
+	</p>
+</div>
 <table class="table table-bordered table-striped table-hover">
 	<thead>
 		<tr>
@@ -20,15 +30,12 @@ $var title: 系统查询
 		$for sys in sysinfo:
 		<tr>
 			<td>$int(sys[0])</td>
-			<td><a href="edit?en=$sys[2]">$sys[1]</a></td>
+			<td><a href="edit?ename=$sys[2]">$sys[1]</a></td>
 			<td >$sys[2]</td>
 			<td >$sys[3]</td>
-			$if sys[5] == u'下线':
-				<td><span class="label label-inverse">下线</span></td>
-			$elif sys[4] is None or sys[4] == '':
-			 	<td><span class="label label-warning">规划室</span></td>
-			$else:
-				<td><span class="label label-success">运行中</span></td>
+			$if sys[5] == u'下线': <td><span class="label label-inverse">下线</span></td>
+			$elif sys[4] is None or sys[4] == '': <td><span class="label label-warning">规划室</span></td>
+			$else: <td><span class="label label-success">运行中</span></td>
 		</tr>
 	</tbody>
 </table>

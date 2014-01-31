@@ -1,37 +1,45 @@
 # -*- coding: utf-8 -*-
 import web
-import connector, configer, dao, syssearch, sysedit
+import syssearch, sysedit, syshistory, sysvars
 
-urls = ('/', 'sysmgrapp',
-        '/sys/', syssearch.search,
-        '/sys/edit', sysedit.edit
-        )
 
-class sysmgrapp(web.application):
+
+class StaticFile():
+    def GET(self, file):
+        web.seeother('/static/' + file); #重定向  
+
+class SysmgrApp(web.application):
+    
     def run(self, port=8080, *middleware):
         func = self.wsgifunc(*middleware)
         return web.httpserver.runsimple(func, ('0.0.0.0', port))
 
     def GET(self):
         web.redirect('/sys/')
+    
+urls = (
+        '/', 'SysmgrApp',
+        
+        '/(.*.ico)', StaticFile, #处理ico文件  
+        '/(.*.html)', StaticFile,
+        '/(.*.js)', StaticFile,
+        '/(.*.css)', StaticFile,
+        
+        '/sys/', syssearch.search,
+        '/sys/edit', sysedit.edit,
+        '/sys/history', syshistory.history
+        )
         
 if __name__ == "__main__":
     
-    conn = connector.fsconnection()
-    cf = configer.instance().param
+    import facade
+    f = facade.Facade()
+    f.prepare_network(localOnly=True)
     
-    #在内网环境
-#    if conn.check_netuse(cf['remotepath'], 'GZIAP\\' + cf['username'], cf['password']):
-#        print u'无法连接目标'
-#        mydatabase = cf['remotepath'] + "\\" + cf['location'].decode('gbk').encode('utf-8')
-#    else:
-#        mydatabase = cf['localpath']
-    mydatabase = cf['localpath']
+    sysvars._LOGIN_USER = 'chengyaoan'
+    sysvars._EDITABLE = True
+    sysvars._MODE = "remote"
     
-    dao._DATABASE = mydatabase
-    myport = conn.check_port()
-    cf['port'] = myport
-    
-    app = sysmgrapp(urls, globals())
-    app.run(port=myport)
+    app = SysmgrApp(urls, globals())
+    app.run(port=f.port)
 

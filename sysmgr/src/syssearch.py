@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import web, dao, math, string
+import web, dao, math, string, sysvars
 
-class search:
+class search(sysvars.SysBase):
     PAGE_SIZE = 10
     WHERE_CLAUSE = 'where 名称  like ? or 英文标识 like ? or 中文别称 like ?'
     SQL_LEN = u'select count(*) from systable '
@@ -15,13 +15,17 @@ class search:
         else:
             page = 1
         result, pagesize = self.search_sys(keyword, page)
-        render = web.template.render('templates/', base='layout')
-        return render.search(result, page, pagesize, keyword)
+        
+        #获得版本信息
+        db = dao.Database()
+        version = db.getGlobalVersion()
+        
+        return self.render().search(result, page, pagesize, keyword, version)
     
     def search_sys(self, keyword, pageindex):
-        db = dao.dao()
+        db = dao.Database()
         if keyword is not None:
-            keyword = string.strip(keyword)
+            keyword = keyword.strip()
         
         if keyword is None or keyword == '':
             
