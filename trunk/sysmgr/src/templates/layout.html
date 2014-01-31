@@ -5,13 +5,21 @@ $def with (content)
 		<title>$content.title</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- Le styles -->
-		<link href="../static/css/bootstrap.css" rel="stylesheet">
+		<link href="../css/bootstrap.css" rel="stylesheet">
 		<style>
 			body {
 				padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
 			}
+			
+			.footer {
+				margin-top: 45px;
+				padding: 35px 0 36px;
+				border-top: 1px solid #e5e5e5;
+			}
 		</style>
-		<link href="../static/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="../css/bootstrap-responsive.css" rel="stylesheet">
+		<script src="../js/jquery.js"></script>
+		<script src="../js/bootstrap.js"></script>
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top">
@@ -22,17 +30,27 @@ $def with (content)
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="brand" href="#">信息化系统信息管理</a>
+					<a class="brand" href="/">信息化系统信息管理</a>
 					<div class="nav-collapse collapse">
 						<ul class="nav">
 							<li class="active">
-								<a href="./">首页</a>
+								<a href="/">首页</a>
 							</li>
 							<li>
-								<a href="./about/">关于</a>
+								<a href="history">历史</a>
 							</li>
 							<li>
-								<a href="./contact">联系</a>
+								<a href="about/">关于</a>
+							</li>
+						</ul>
+						<ul class="nav pull-right">
+							
+							<li>
+								
+								<a href="#"><i class="icon-user icon-white"></i>$LOGIN_USER</a>
+							</li>
+							<li>
+								<a href="#">$MODE [$EDITABLE]</a>
 							</li>
 						</ul>
 					</div><!--/.nav-collapse -->
@@ -41,14 +59,17 @@ $def with (content)
 		</div>
 		<div class="container">
 			$:content
+			
+			
+			<footer class="footer">
+				<p class="pull-right">
+					<a href="#">顶部</a>
+				</p>
+				<p>
+					更方便、更快捷地维护和共享信息化系统的信息  by<a href="mailto:yaoancheng@139.com">@chengyaoan</a>
+				</p>
+			</footer>
 		</div>
-		<footer class="footer">
-			<div class="container">
-				<p>中国移动通信集团广东有限公司 广州分公司</p>
-			</div>
-		</footer>
 		<!-- /container -->
-		<script src="../static/js/jquery.js"></script>
-		<script src="../static/js/bootstrap.js"></script>
 	</body>
 </html>

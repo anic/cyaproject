@@ -1,76 +1,145 @@
-$def with(cvalue,dvalue,ovalue)
-$var title: 系统编辑 
-
-<a href="javascript:history.back()">返回</a>
-<p></p>
-<div class="accordion-group">
-	<div class="accordion-heading">
-		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne"> 公共属性 </a>
-	</div>
-	<div id="collapseOne" class="accordion-body collapse in">
-		<div class="accordion-inner row">
-			<form action="post">
-				<div class="span3">
-					<label>ID</label>
-					<input type="text" name="id" value="$cvalue['id']" readonly="readonly">
-					<label>名称</label>
-					<input type="text" name="name" value="$cvalue['name']">
-					<label>英文标识</label>
-					<input type="text" name="ename" value="$cvalue['ename']" readonly="readonly">
-					<label>内外网互联</label>
-					<input type="text" name="web" value="$cvalue['web']">
-					<label>访问方式</label>
-					<textarea style="width:600px" >$cvalue['urls']</textarea>
-					<label>简要说明</label>
-					<textarea rows="3" style="width:600px" >$cvalue['description']</textarea>
-				</div>
-				<div class="span3">
-					<label>开发商</label>
-					<input type="text" name="dev" value="$cvalue['dev']">
-					<label>子类</label>
-					<input type="text" name="clazz" value="$cvalue['clazz']">
-					<label>昵称</label>
-					<textarea rows="3">$cvalue['cname']</textarea>
-				</div>
-				<div class="span3">
-					<label>上线时间</label>
-					<input type="text" name="online" value="$cvalue['online']">
-					<label>下线时间</label>
-					<input type="text" name="offline" value="$cvalue['offline']">
-				</div>
-		</form>
+$def with(sysinfo,ver,showtip,backurl)
+$var title: 编辑系统信息
+<div style="margin-bottom: 30px">
+	<a href="$backurl">&lt;&lt;返回</a>
+	| <a href="edit?ename=$sysinfo['ename']">刷新</a>
+	| <a href="history?ename=$sysinfo['ename']">历史</a>
+	| <a href="#" onclick="preSumbit()">保存</a>
+	<div class="alert alert-success" id="msgbox" style="float:right;width: 150px;display:$showtip">
+		保存成功
 	</div>
 </div>
-</div>
-<div class="accordion-group">
-	<div class="accordion-heading">
-		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo"> 规划室信息 </a>
+<form action="edit?action=save" method="post" id="detailForm">
+	<div class="modal hide" id="myModal">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">
+				×
+			</button>
+			<h4>保存</h4>
+		</div>
+		<div class="modal-body">
+			<p id="presubmit_result">
+				加载中，请稍后...
+			</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" data-dismiss="modal" class="btn" onclick="cancelSubmit()">
+				取消
+			</button>
+			<button type="submit" class="btn btn-primary" id="btnSave">
+				确认
+			</button>
+		</div>
 	</div>
-	<div id="collapseTwo" class="accordion-body collapse in">
-		<div class="accordion-inner row">
-			<div class="span3">
-				<label>名称</label>
-				<input type="text" name="dev_name" value="$dvalue['dev_name']">
-				<label>开发系统等级</label>
-				<input type="text" name="dev_level" value="$dvalue['dev_level']">
-				<label>现状</label>
-				<textarea rows="3">$dvalue['dev_now']</textarea>
+	<div>
+		系统版本：$ver['version'] &nbsp;&nbsp;
+		<input type="hidden" name="sys_version" value="$ver['version']"/>
+		最后修改人：$ver['modifier']  &nbsp;&nbsp;
+		最后修改时间：$ver['modifytime']  &nbsp;&nbsp;
+	</div>
+	<div class="accordion-group" >
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne"> 公共属性 </a>
+		</div>
+		<div id="collapseOne" class="accordion-body collapse in">
+			<div class="accordion-inner row">
+				<div class="span3">
+					<label class="control-label">ID</label>
+					<input type="text" name="identify" value="$sysinfo['identify']" readonly="readonly">
+					<label class="control-label">英文标识</label>
+					<input type="text" name="ename" value="$sysinfo['ename']" readonly="readonly">
+					<fieldset class="control-group">
+						<label class="control-label">名称</label>
+						<input type="text" name="name" value="$sysinfo['name']" >
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">内外网互联</label>
+						<input type="text" name="web" value="$sysinfo['web']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">访问方式</label>
+						<textarea style="width:600px" name="urls">$sysinfo['urls']</textarea>
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">简要说明</label>
+						<textarea rows="3" style="width:600px" name="description">$sysinfo['description']</textarea>
+					</fieldset>
+				</div>
+				<div class="span3">
+					<fieldset class="control-group">
+						<label class="control-label">开发商</label>
+						<input type="text" name="dev" value="$sysinfo['dev']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">子类</label>
+						<input type="text" name="clazz" value="$sysinfo['clazz']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">昵称</label>
+						<textarea rows="3" name="cname">$sysinfo['cname']</textarea>
+					</fieldset>
+				</div>
+				<div class="span3">
+					<fieldset class="control-group">
+						<label class="control-label">上线时间</label>
+						<input type="text" name="online" value="$sysinfo['online']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">下线时间</label>
+						<input type="text" name="offline" value="$sysinfo['offline']">
+					</fieldset>
+				</div>
 			</div>
-			<div class="span3">
-				<label>主要使用部门</label>
-				<input type="text" name="dev_dept" value="$dvalue['dev_dept']">
-				<label>简易步骤</label>
-				<textarea rows="3">$dvalue['dev_step']</textarea>
-			</div>
-			<div class="span3">
-				<label>开发合作方</label>
-				<input type="text" name="dev_dev" value="$dvalue['dev_dev']">
-				<label>备注</label>
-				<input type="text" name="dev_comment" value="$dvalue['dev_comment']">
-				<label>生命周期</label>
-				<input type="text" name="dev_lifecycle" value="$dvalue['dev_lifecycle']">
-				<label>源代码管理</label>
-				<input type="text" name="dev_src" value="$dvalue['dev_src']">
+		</div>
+	</div>
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo"> 规划室信息 </a>
+		</div>
+		<div id="collapseTwo" class="accordion-body collapse in">
+			<div class="accordion-inner row">
+				<div class="span3">
+					<fieldset class="control-group">
+						<label class="control-label">名称</label>
+						<input type="text" name="dev_name" value="$sysinfo['dev_name']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">开发系统等级</label>
+						<input type="text" name="dev_level" value="$sysinfo['dev_level']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">现状</label>
+						<textarea rows="3" name="dev_now">$sysinfo['dev_now']</textarea>
+					</fieldset>
+				</div>
+				<div class="span3">
+					<fieldset class="control-group">
+						<label class="control-label">主要使用部门</label>
+						<input type="text" name="dev_dept" value="$sysinfo['dev_dept']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">简易步骤</label>
+						<textarea rows="3" name="dev_step">$sysinfo['dev_step']</textarea>
+					</fieldset>
+				</div>
+				<div class="span3">
+					<fieldset class="control-group">
+						<label class="control-label">开发合作方</label>
+						<input type="text" name="dev_dev" value="$sysinfo['dev_dev']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">生命周期</label>
+						<input type="text" name="dev_lifecycle" value="$sysinfo['dev_lifecycle']">
+						<label class="control-label">源代码管理</label>
+						<input type="text" name="dev_src" value="$sysinfo['dev_src']">
+					</fieldset>
+				</div>
+				<div class="span9">
+					<fieldset class="control-group">
+						<label class="control-label">备注</label>
+						<textarea rows="5" name="dev_comment" style="width:600px">$sysinfo['dev_comment']</textarea>
+					</fieldset>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -78,34 +147,95 @@ $var title: 系统编辑
 		<div class="accordion-heading">
 			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#collapseThree"> 支持室信息 </a>
 		</div>
-		<div id="collapseThree" class="accordion-body collapse in">
+		<div id="collapseThree" class="accordion-body collapse">
 			<div class="accordion-inner row">
-				<div class="span3">
-					<label>名称</label>
-					<input type="text" name="opp_name" value="$dvalue['opp_name']">
-					<label>维护系统等级</label>
-					<input type="text" name="opp_level" value="$dvalue['opp_level']">
-					<label>账号管理部门</label>
-					<input type="text" name="opp_dept" value="$dvalue['opp_dept']">
-					<label>账号管理科室</label>
-					<input type="text" name="opp_room" value="$dvalue['opp_room']">
+				<div class="span9">
+					<div class="alert alert-block">
+						支持室信息定期进行更新，如做修改会在更新时覆盖。
+					</div>
 				</div>
 				<div class="span3">
-					<label>支持室系统负责人</label>
-					<input type="text" name="opp_oper" value="$dvalue['opp_oper']">
-					<label>数据库备份情况</label>
-					<input type="text" name="opp_backup" value="$dvalue['opp_backup']">
-					<label>源代码完整性</label>
-					<input type="text" name="opp_src" value="$dvalue['opp_src']">
-					<label>开发商联系人</label>
-					<input type="text" name="opp_dever" value="$dvalue['opp_dever']">
+					<fieldset class="control-group">
+						<label class="control-label">名称</label>
+						<input type="text" name="opp_name" value="$sysinfo['opp_name']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">维护系统等级</label>
+						<input type="text" name="opp_level" value="$sysinfo['opp_level']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">账号管理部门</label>
+						<input type="text" name="opp_dept" value="$sysinfo['opp_dept']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">账号管理科室</label>
+						<input type="text" name="opp_room" value="$sysinfo['opp_room']">
+					</fieldset>
 				</div>
 				<div class="span3">
-					<label>已有自动业务监控点</label>
-					<input type="text" name="opp_monitor" value="$dvalue['opp_monitor']">
-					<label>涉及服务器</label>
-					<textarea rows="5">$dvalue['opp_server']</textarea>
+					<fieldset class="control-group">
+						<label class="control-label">支持室系统负责人</label>
+						<input type="text" name="opp_oper" value="$sysinfo['opp_oper']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">数据库备份情况</label>
+						<input type="text" name="opp_backup" value="$sysinfo['opp_backup']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">源代码完整性</label>
+						<input type="text" name="opp_src" value="$sysinfo['opp_src']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">开发商联系人</label>
+						<input type="text" name="opp_dever" value="$sysinfo['opp_dever']">
+					</fieldset>
+				</div>
+				<div class="span3">
+					<fieldset class="control-group">
+						<label class="control-label">已有自动业务监控点</label>
+						<input type="text" name="opp_monitor" value="$sysinfo['opp_monitor']">
+					</fieldset>
+					<fieldset class="control-group">
+						<label class="control-label">涉及服务器</label>
+						<textarea rows="5" name="opp_server">$sysinfo['opp_server']</textarea>
+					</fieldset>
 				</div>
 			</div>
 		</div>
 	</div>
+</form>
+<script type="text/javascript">
+	function preSumbit() {
+		$$("#msgbox").hide();
+		$$('#myModal').modal('show');
+		// $$('#submitDiv').show();
+		data = $$("#detailForm").serializeArray();
+		$$.post("/sys/edit?action=presubmit", data, function(result) {
+			//更新提示
+			$$("#presubmit_result").text(result.msg + result.label.join('，'));
+
+			if(result.code == 0) {
+				if(result.field.length > 0) {
+					for(var i = 0, len = result.field.length; i < len; ++i) {
+						$$("[name='" + result.field[i] + "']").parent().addClass("info");
+					}
+					$$("#btnSave").removeAttr("disabled", "disabled");
+				} else {
+					//禁用提交按钮
+					$$("#btnSave").attr("disabled", "disabled");
+
+				}
+			}
+			else
+			{
+				//禁用提交按钮
+				$$("#btnSave").attr("disabled", "disabled");
+			}
+		}, "json");
+	}
+
+	$$(function() {
+		$$("#msgbox").delay(2000).fadeOut();
+	});
+
+</script>

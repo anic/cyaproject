@@ -1,0 +1,45 @@
+$def with (logs,page,pagesize,keyword)
+$var title: 系统历史
+<div>
+	<a href="javascript:history.back()">&lt;&lt;返回</a> | 
+	$if keyword:
+		<a href="history">全部系统</a> | 
+		筛选: $keyword
+	$else:
+		全部系统
+	<p></p>
+</div>
+
+$if len(logs) > 0:
+	<table class="table table-bordered table-striped table-hover">
+		<thead>
+			<tr>
+				<th style="width:30px">版本</th>
+				<th style="width:150px">时间</th>
+				<th>记录</th>
+			</tr>
+		</thead>
+		<tbody>
+			$for sys in logs:
+			<tr>
+				<td>$int(sys[0])</td>
+				<td>$sys[1]</td>
+				<td>$sys[2] 将 <a href='history?ename=$sys[3]'>$sys[3] [$sys[4]]</a>的字段[$sys[5]]修改为：$sys[6]</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="pagination">
+		<ul>
+			$for i in range(1,pagesize+1):
+				$if i != page:
+					<li>
+						<a href="?ename=$keyword&page=$i">$i</a>
+					</li>
+				$else:
+					<li class="disabled">
+						<a href="#">$i</a>
+					</li>
+		</ul>
+	</div>
+$else:
+	没有找到数据
