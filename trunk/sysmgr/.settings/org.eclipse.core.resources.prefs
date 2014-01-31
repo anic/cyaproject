@@ -1,12 +1,18 @@
-#Tue Aug 06 23:03:54 CST 2013
+#Fri Jan 31 15:48:55 CST 2014
 eclipse.preferences.version=1
+encoding//src/Ui_main.py=utf-8
 encoding//src/configer.py=utf-8
 encoding//src/connector.py=utf8
 encoding//src/dao.py=utf-8
+encoding//src/daotest.py=utf-8
+encoding//src/encrypt.py=utf-8
 encoding//src/facade.py=utf-8
+encoding//src/login.py=utf-8
+encoding//src/main.py=utf-8
 encoding//src/setup.py=utf-8
 encoding//src/sysedit.py=utf-8
+encoding//src/syshistory.py=utf-8
 encoding//src/sysmain.py=utf-8
 encoding//src/syssearch.py=utf-8
-encoding//src/wrapper/Ui_main.py=utf-8
-encoding//src/wrapper/test.py=utf-8
+encoding//src/sysvars.py=utf-8
+encoding//src/test/test.py=utf-8
