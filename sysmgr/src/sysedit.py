@@ -40,9 +40,9 @@ class edit(sysvars.SysBase):
             result = {'code':0, 'msg':'', 'field':[], 'label':[]}
             #file:///D:/Program/Reference/twitter-bootstrap/docs/components.html
 
-            if not self.editable():
+            if not self.isEditable():
                 result['code'] = 1
-                result['msg'] = '匿名登录  或 使用离线库时 无法修改'
+                result['msg'] = '数据库无法修改（可能由于离线、匿名登录或数据库不可写）'
             elif ename == '':
                 result['code'] = 1
                 result['msg'] = '格式错误'
@@ -63,8 +63,8 @@ class edit(sysvars.SysBase):
         elif action == 'save':
             if ename == '':
                 return self.render().error('操作失败失败')
-            elif not self.editable():
-                return self.render().error('匿名登录  或 使用离线库时 无法修改')
+            elif not self.isEditable(): #检查是否可写
+                return self.render().error('数据库无法修改（可能由于离线、匿名登录或数据库不可写）')
             
             after = data
             before = self.getsysdetail(ename)

@@ -12,7 +12,7 @@ class SysBase():
     
     #获得render
     def render(self):
-        if self.editable():
+        if self.isEditable():
             str_editable = '可写'
         else:
             str_editable = '只读'
@@ -38,7 +38,8 @@ class SysBase():
         except:
             return "local"
     
-    def editable(self):
+    #数据库是否可写
+    def isEditable(self):
         try:
             return _EDITABLE
         except:

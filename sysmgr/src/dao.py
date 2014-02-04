@@ -29,6 +29,23 @@ class Database:
         cursor.execute(sql, *args)
         rows = cursor.fetchall()
         return rows
+    
+    #尝试写入日志
+    def writeLoginLog(self,user):
+        try:
+            cursor = self._cursor()
+            cursor.execute("insert into log(logtime,user,action) values(now(),?,?)",user,u'登录')
+            self.conn.commit()
+            return 1
+        except Exception,ex:
+            self.error(ex)
+            return -1
+    
+    #执行一个插入、更新和删除命令
+    def execute(self, sql, *args):
+        cursor = self._cursor()
+        cursor.execute(sql, *args)
+        self.conn.commit()
         
     #更新系统信息
     def updateSystemInfo(self, after, before, modifier, fields, labels, curVersion):

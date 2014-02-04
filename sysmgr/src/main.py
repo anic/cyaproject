@@ -84,22 +84,28 @@ class MainDlg(QDialog, Ui_Dialog):
         self.lblUser.setText(str_user)
         
         
-        #TODO：应该有8种状态：(匿名，非匿名)*(在线，离线)*(数据库可用,数据库不可用)
+        #TODO：应该有N种状态：(匿名，非匿名)*(在线，离线)*(数据库可读,数据库不可写,不可用)
         
         #更新数据库方面的信息
         self.facade.msg('正在检查数据库完整性')
-        dbCheck, version = self.facade.checkDatabase()
-        if dbCheck:
+        dbRead, dbWrite, version = self.facade.checkDatabase(mode == 'local')
+        
+        if dbRead:
             #设置编辑属性
             self.lblVersion.setText(u'版本{0}，最后修改：{1}'.format(version['version'], version['modifytime']))
             self.btnEdit.setEnabled(True)
             self.btnExport.setEnabled(True)
             
             if  mode == 'remote':
-                str_editable = u'编辑状态：[可写]'
+                #远程连接时，还要看看是否可写
+                if dbWrite:
+                    str_editable = u'编辑状态：[可写]'
+                else:
+                    str_editable = u'编辑状态：[只读]'
+                    
                 #登录   成功后立刻同步
                 self.facadeThread.startAction('synchronize', [])
-            else:
+            else: #local
                 str_editable = u'编辑状态：[只读]'
             self.lblEditable.setText(str_editable)
         else:

@@ -24,6 +24,9 @@ class Facade(QObject):
     isAnonymouseUser = True
     #是否远程连接
     mode = 'none'
+    #记录数据库是否可读可写
+    dbReadable = False
+    dbEditable = False
     
     #配置信息
     config = None
@@ -63,7 +66,10 @@ class Facade(QObject):
             self.isAnonymouseUser = False 
         
         self.logonUser = user
-        user_with_scope = self.config.param['scope'] + '\\' + user
+        if self.config.param['scope'] != '':
+            user_with_scope = self.config.param['scope'] + '\\' + user
+        else:
+            user_with_scope = user
         
         
         
@@ -92,26 +98,33 @@ class Facade(QObject):
     
     def thread_startserver(self, no, interval):
         #初始化全局变量
+        sysvars._EDITABLE = self.dbEditable
         if self.mode == 'remote':
             sysvars._LOGIN_USER = self.logonUser
-            sysvars._EDITABLE = True
         else:
             sysvars._LOGIN_USER = '匿名用户'
-            sysvars._EDITABLE = False
         sysvars._MODE = self.mode
         
         self.app = sysmain.SysmgrApp(sysmain.urls, globals())
         self.app.run(port=self.port)
     
     #检查数据库是否能够正常访问
-    def checkDatabase(self):
+    #第一个参数是readable，第二个参数是editable，第三个参数是版本
+    def checkDatabase(self, readOnly):
+        db = dao.Database()
         try:
-            db = dao.Database()
             version = db.getGlobalVersion()
-            return True, version
+            self.dbReadable = True
+            if not readOnly:
+                logId = db.writeLoginLog(self.logonUser)
+                self.dbEditable = logId > 0
+            else:
+                self.dbEditable = False
+                
+            return self.dbReadable, self.dbEditable, version
         except Exception, ex:
-            print ex
-            return False, {}
+            db.error(ex)
+            return False, False, {}
     
     #输出日志
     def msg(self, text):
@@ -207,7 +220,7 @@ class FacadeThread(QThread):
             if self.action == 'login':
                 if len(self.params) == 1:
                     localOnly = self.params[0]
-                    mode = self.facade.prepare_network(localOnly = localOnly)
+                    mode = self.facade.prepare_network(localOnly=localOnly)
                 else:
                     localOnly = self.params[0]
                     user = self.params[1]
