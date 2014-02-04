@@ -1,4 +1,4 @@
-#Fri Jan 31 15:48:55 CST 2014
+#Tue Feb 04 10:51:26 CST 2014
 eclipse.preferences.version=1
 encoding//src/Ui_main.py=utf-8
 encoding//src/configer.py=utf-8
@@ -10,6 +10,7 @@ encoding//src/facade.py=utf-8
 encoding//src/login.py=utf-8
 encoding//src/main.py=utf-8
 encoding//src/setup.py=utf-8
+encoding//src/sysabout.py=utf-8
 encoding//src/sysedit.py=utf-8
 encoding//src/syshistory.py=utf-8
 encoding//src/sysmain.py=utf-8

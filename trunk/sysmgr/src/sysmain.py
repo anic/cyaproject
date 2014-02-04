@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import web
-import syssearch, sysedit, syshistory, sysvars
-
-
+import syssearch, sysedit, syshistory, sysvars, sysabout
 
 class StaticFile():
     def GET(self, file):
@@ -27,14 +25,15 @@ urls = (
         
         '/sys/', syssearch.search,
         '/sys/edit', sysedit.edit,
-        '/sys/history', syshistory.history
+        '/sys/history', syshistory.history,
+        '/sys/about', sysabout.about
         )
         
 if __name__ == "__main__":
     
     import facade
     f = facade.Facade()
-    f.prepare_network(localOnly=True)
+    f.prepare_network()
     
     sysvars._LOGIN_USER = 'chengyaoan'
     sysvars._EDITABLE = True
