@@ -20,8 +20,6 @@ class Facade(QObject):
     #登录信息
     #登录用户
     logonUser = ''
-    #是否系统用户
-    isAnonymouseUser = True
     #是否远程连接
     mode = 'none'
     #记录数据库是否可读可写
@@ -57,20 +55,18 @@ class Facade(QObject):
         
         #用户无保存信息
         if self.config.param['user'] == '': 
-            user = self.config.param['sysuser']
-            password = self.config.param['syspassword']
-            self.isAnonymouseUser = True
+            localOnly = True
+            self.logonUser = '匿名用户'
         else:
             user = self.config.param['user']
             password = self.config.param['password']
-            self.isAnonymouseUser = False 
+            self.logonUser = user
         
-        self.logonUser = user
-        if self.config.param['scope'] != '':
+        if self.config.param['scope'] != '' and user:
             user_with_scope = self.config.param['scope'] + '\\' + user
         else:
             user_with_scope = user
-        
+            
         
         
         self.msg('开始检查网络')

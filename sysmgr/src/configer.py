@@ -20,10 +20,6 @@ class Config:
             
             self.param['remotepath'] = config.get("Database", "remotepath")
             self.param['localpath'] = config.get("Database", "localpath")
-    
-                   
-            self.param['sysuser'] = config.get("Connection", "sysuser")
-            self.param['syspassword'] = config.get("Connection", "syspassword")
             self.param['scope'] = config.get("Connection", "scope")
         except Exception, ex:
             self.facade.msg(ex)
