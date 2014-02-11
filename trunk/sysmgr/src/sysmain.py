@@ -16,7 +16,7 @@ class SysmgrApp(web.application):
         web.redirect('/sys/')
     
 urls = (
-        '/', 'SysmgrApp',
+        '/', SysmgrApp,
         
         '/(.*.ico)', StaticFile, #处理ico文件  
         '/(.*.html)', StaticFile,

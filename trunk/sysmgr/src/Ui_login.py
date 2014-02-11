@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'D:\Program\python\sysmgr\src\login.ui'
 #
-# Created: Tue Jan 28 13:27:09 2014
+# Created: Fri Feb 07 20:40:15 2014
 #      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
@@ -63,8 +63,8 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "登录信息", None))
-        self.txtPassword.setPlaceholderText(_translate("Dialog", "Portal账号", None))
-        self.txtUser.setPlaceholderText(_translate("Dialog", "Portal密码", None))
+        self.txtPassword.setPlaceholderText(_translate("Dialog", "Portal密码", None))
+        self.txtUser.setPlaceholderText(_translate("Dialog", "Portal账号", None))
         self.label.setText(_translate("Dialog", "用户名", None))
         self.label_2.setText(_translate("Dialog", "密码", None))
         self.cbxSave.setText(_translate("Dialog", "本地保存用户名密码", None))

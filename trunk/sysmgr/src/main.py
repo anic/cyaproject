@@ -27,8 +27,8 @@ class MainDlg(QDialog, Ui_Dialog):
         #这种方法信号槽会被触发2次，见
         #http://hi.baidu.com/kxw102/item/cffc9e0ef1eadbcb75cd3c0c
         #self.btnEdit.released.connect(self.on_btnEdit_pressed)
-        self.connect(self.btnEdit, QtCore.SIGNAL("released"), self.on_btnEdit_pressed)
-        self.connect(self.btnExport, QtCore.SIGNAL("released"), self.on_btnExport_pressed)
+        self.connect(self.btnEdit, SIGNAL("released"), self.on_btnEdit_pressed)
+        self.connect(self.btnExport, SIGNAL("released"), self.on_btnExport_pressed)
 
                 
         #构造后台逻辑线程
@@ -134,9 +134,8 @@ class MainDlg(QDialog, Ui_Dialog):
         loginDlg.setModal(True)
         loginConfirm = loginDlg.exec_()
         if loginConfirm:
-            user = loginDlg.txtUser.text()
-            print user
-            password = loginDlg.txtPassword.text()
+            user = str(loginDlg.txtUser.text())
+            password = str(loginDlg.txtPassword.text())
             bSave = loginDlg.cbxSave.isChecked()
             if bSave:
                 config.saveUserToIni({'user':user, 'password':password})

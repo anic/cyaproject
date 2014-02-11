@@ -36,7 +36,7 @@
     <enum>QLineEdit::Password</enum>
    </property>
    <property name="placeholderText">
-    <string>Portal账号</string>
+    <string>Portal密码</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="txtUser">
@@ -49,7 +49,7 @@
     </rect>
    </property>
    <property name="placeholderText">
-    <string>Portal密码</string>
+    <string>Portal账号</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
